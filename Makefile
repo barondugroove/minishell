@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
+#    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/11/30 18:20:05 by bchabot          ###   ########.fr        #
+#    Updated: 2022/12/07 17:56:37 by rlaforge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,9 +33,16 @@ $(LIBFT) :
 		make -sC libft
 		@echo "\033[92mLibft compiled."
 
-$(NAME): $(OBJS) $(LIBFT)
+minish :
+	@echo "\n\e[0;95m┏━┓\e[96m╋\e[95m┏┓┏┳┓\e[96m╋\e[95m┏━┓\e[96m╋╋╋╋╋\e[0;95m┏┓           "
+	@echo "\e[0;95m┃\e[5;96m╋\e[0;95m┣━┫┗╋┫┗┓┃┏╋━┳━┳┳╋╋┓┏┓┏━┓┏━┳━┓"
+	@echo "\e[0;95m┃┏┫┻┫┏┫┃┏┫┃┗┫\e[5;96m╋\e[0;95m┃\e[5;96m╋\e[0;95m┃┃┃┃┗┫┗┫\e[5;96m╋\e[0;95m┗┫\e[5;96m╋\e[0;95m┃┻┫"
+	@echo "\e[0;95m┗┛┗━┻━┻┻━┛┗━┻━┻┓┣━┻┻━┻━┻━━╋┓┣━┛"
+	@echo "\e[0;96m╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋\e[95m┗┛\e[96m╋╋╋╋╋╋╋╋╋\e[0;95m┗━┛\n"
+
+$(NAME): minish $(OBJS) $(LIBFT)
 	$(CC) $(OBJS) $(CFLAGS) $(LIBFT) -o $(NAME)
-	@echo "\033[100m\033[1m\033[92mWelcome to the new bash v51.2."
+
 
 clean :
 	rm -f $(OBJS)
