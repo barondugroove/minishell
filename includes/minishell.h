@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/11/30 18:19:44 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/07 17:50:41 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,21 @@
 # include <readline/history.h>
 # include "../libft/libft.h"
 
+typedef struct s_env_node {
+	char *key;
+	char *value;
+	void *next;
+} t_env_node;
+
 // CHECK_ERRORS
 
 // LEXER
-int	ft_lexer(char *prompt);
+void	ft_lexer(char *prompt);
 
 // PARSER
+
+// INIT_DATA
+void	init_env(char **envp);
 
 // UTILS
 char	*ft_strtok(char *str, char *delimiters);

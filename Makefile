@@ -6,13 +6,14 @@
 #    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/11/30 18:20:05 by bchabot          ###   ########.fr        #
+#    Updated: 2022/12/07 17:34:22 by bchabot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = srcs/main.c \
 		srcs/parsing/lexer.c \
-		ft_strtok.c
+		srcs/parsing/environment_variables.c \
+		ft_strtok.c \
 
 CC = gcc
 

@@ -6,13 +6,13 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/11/30 20:21:39 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/07 17:33:45 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_lexer(char *prompt)
+void	ft_lexer(char *prompt)
 {
 	int		i;
 	char	*str;
@@ -41,5 +41,4 @@ int	ft_lexer(char *prompt)
 		str = ft_strtok(prompt, sep);
 	}
 	free(str);
-	return (0);
 }
