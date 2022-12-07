@@ -6,19 +6,17 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/11/30 19:55:40 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/07 17:33:07 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	main(int ac, char **av, char **envp)
+void minishell(char **envp)
 {
 	char	*prompt;
 
-	(void)ac;
-	(void)av;
-	(void)envp;
+	init_env(envp);
 	while (1)
 	{
 		prompt = readline("\033[0;34m 🐚 minishell \001\e[0m\002");
@@ -39,5 +37,13 @@ int	main(int ac, char **av, char **envp)
 			ft_lexer(prompt);
 		free(prompt);
 	}
-	exit(EXIT_SUCCESS);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	(void)av;
+	if (ac != 1)
+		return (1);
+	minishell(envp);
+	return (0);
 }
