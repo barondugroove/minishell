@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 18:11:47 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/08 18:19:09 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/08 18:56:02 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@ int	ft_strcspn(char *str, const char *delim)
 
 	len = 0;
 	quote = 0;
-	while ((*str && !ft_strchr(delim, *str)))
+	while (*str && (!ft_strchr(delim, *str) || quote))
 	{
 		if (*str == '"' && !quote)
 			quote = 1;
-		if (*str == '"' && str[1] == ' ' && quote)
+		else if (*str == '"' && quote)
+			quote = 0;
+		else if (*str == '"' && (str[1] == ' ' || !str[1]) && quote)
 			return (len + 1);
 		len++;
 		str++;
@@ -50,12 +52,3 @@ char	*ft_strtok(char *str, const char *delim)
 		save++;
 	return (tok);
 }
-
-/*
-strspn;
-strcspn;
-static char *
-
-Appel de fonction avec une str = reset de la str sur la quelle on travaille. Donc :
-appelle de fonction avec null la deuxieme fois pour ne pas reinitialiser la str d'entrée.access
-*/
