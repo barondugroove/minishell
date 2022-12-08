@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/08 16:54:51 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/08 20:18:05 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,19 @@
 
 void	ft_lexer(char *prompt)
 {
-	int		i;
 	char	*str;
 	char	sep[] = {' ', '<', '>', '|'};
+	t_tok	*tok_head;
 
-	i = 0;
-	printf("starting prompt is : %s\n\n", prompt);
-	while (prompt[i])
-	{
-		if (prompt[i] == '<' || prompt[i] == '>')
-			printf("token is redir\n");
-		else if (prompt[i] == '|')
-			printf("token is pipe\n");
-		else if (prompt[i] == 39 || prompt[i] == '"')
-			printf("token is quote\n");
-		else if (prompt[i] <= 32)
-			printf("token is sep\n");
-		else
-			printf("token is literal\n");
-		i++;
-	}
+	tok_head = NULL;
+	printf("Prompt is :%s\n\n", prompt);
 	str = ft_strtok(prompt, sep);
+	newnode(&tok_head, str, "lol");
 	while (str)
 	{
-		printf("Token's str is :%s:\n", str);
 		str = ft_strtok(NULL, sep);
+		newnode(&tok_head, str, "lol");
 	}
 	free(str);
+	print_list(&tok_head);
 }

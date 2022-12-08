@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/08 16:33:45 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/08 20:19:22 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
 # include <readline/history.h>
 # include "../libft/libft.h"
 
-typedef struct s_env_node {
-	char *key;
-	char *value;
-	void *next;
-} t_env_node;
+typedef struct s_tok {
+	char	*key;
+	char	*value;
+	void	*next;
+}	t_tok;
 
 // CHECK_ERRORS
 
@@ -42,5 +42,7 @@ void	init_env(char **envp);
 
 // UTILS
 char	*ft_strtok(char *str, const char *delim);
+void	newnode(t_tok **head, char *data, char *key);
+void	print_list(t_tok **head);
 
 #endif

@@ -6,13 +6,14 @@
 #    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/07 18:11:36 by rlaforge         ###   ########.fr        #
+#    Updated: 2022/12/08 20:15:09 by rlaforge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = srcs/main.c \
 		srcs/parsing/lexer.c \
 		srcs/parsing/ft_strtok.c \
+		srcs/utils/utils.c \
 		srcs/parsing/environment_variables.c
 
 CC = gcc

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/30 18:11:47 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/08 18:56:02 by rlaforge         ###   ########.fr       */
+/*   Created: 2022/11/30 18:11:47 by rlaforge          #+#    #+#             */
+/*   Updated: 2022/12/08 20:05:40 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,14 @@ char	*ft_strtok(char *str, const char *delim)
 		return (NULL);
 	len = ft_strcspn(save, delim);
 	tok = malloc((sizeof(char) * len) + 1);
+	if (!tok)
+		return (NULL);
 	memcpy(tok, save, len);
 	tok[len] = '\0';
 	save += len;
 	if (*save != '\0')
 		save++;
+	if (!tok)
+		return (NULL);
 	return (tok);
 }
