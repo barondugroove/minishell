@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/07 17:33:45 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/08 16:54:51 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	ft_lexer(char *prompt)
 	str = ft_strtok(prompt, sep);
 	while (str)
 	{
-		printf("str is :%s\n", str);
-		str = ft_strtok(prompt, sep);
+		printf("Token's str is :%s:\n", str);
+		str = ft_strtok(NULL, sep);
 	}
 	free(str);
 }
