@@ -6,26 +6,30 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 18:11:47 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/08 20:05:40 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/12 19:31:03 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_strcspn(char *str, const char *delim)
+int	ft_strcspn(char *str)
 {
 	int	len;
 	int	quote;
+	int	squote;
 
 	len = 0;
 	quote = 0;
-	while (*str && (!ft_strchr(delim, *str) || quote))
+	squote = 0;
+	while ((*str && !(*str <= 32)) || (quote || squote))
 	{
-		if (*str == '"' && !quote)
-			quote = 1;
-		else if (*str == '"' && quote)
-			quote = 0;
-		else if (*str == '"' && (str[1] == ' ' || !str[1]) && quote)
+		if (*str == '"' && !squote)
+			quote = !quote;
+		else if (*str == '\'' && !quote)
+			squote = !squote;
+		else if (*str == '"' && (*str <= 32 || !*str) && quote)
+			return (len + 1);
+		else if (*str == '\'' && (*str <= 32 || !*str) && squote)
 			return (len + 1);
 		len++;
 		str++;
@@ -33,7 +37,7 @@ int	ft_strcspn(char *str, const char *delim)
 	return (len);
 }
 
-char	*ft_strtok(char *str, const char *delim)
+char	*ft_strtok(char *str)
 {
 	int			len;
 	char		*tok;
@@ -43,11 +47,11 @@ char	*ft_strtok(char *str, const char *delim)
 		save = str;
 	if (*save == '\0')
 		return (NULL);
-	len = ft_strcspn(save, delim);
+	len = ft_strcspn(save);
 	tok = malloc((sizeof(char) * len) + 1);
 	if (!tok)
 		return (NULL);
-	memcpy(tok, save, len);
+	ft_memcpy(tok, save, len);
 	tok[len] = '\0';
 	save += len;
 	if (*save != '\0')
