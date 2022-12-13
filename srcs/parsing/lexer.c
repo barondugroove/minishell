@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/13 16:02:16 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/13 18:45:52 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_lexer(char *prompt)
 	t_tok	*tok_head;
 
 	tok_head = NULL;
-	printf("Prompt is :%s\n\n", prompt);
+	//split sur les |, les cmd sont dans un tableau, ensuite on tokenize chaques cmd.
 	str = ft_strtok(prompt);
 	newnode(&tok_head, str, NULL);
 	while (str)

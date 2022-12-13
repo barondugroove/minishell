@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 18:11:47 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/13 18:18:33 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/13 18:39:01 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	ft_strcspn(char *str)
 
 	len = 0;
 	quote = '\0';
+	//while (*str && (!(*str <= 32) || quote != '\0'))
 	while (*str && (!(*str <= 32) || quote != '\0'))
 	{
 		if ((*str == '"' || *str == '\'') && quote == '\0')
@@ -30,6 +31,11 @@ int	ft_strcspn(char *str)
 			return (len + 1);
 		len++;
 		str++;
+	}
+	if (quote != '\0')
+	{
+		printf("Error: quotes not closed");
+		exit(1);
 	}
 	str++;
 	return (len);

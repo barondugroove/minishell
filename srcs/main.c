@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/07 17:33:07 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/13 18:45:40 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void minishell(char **envp)
+void	minishell(char **envp)
 {
 	char	*prompt;
 
 	init_env(envp);
 	while (1)
 	{
-		prompt = readline("\033[0;34m 🐚 minishell \001\e[0m\002");
+		prompt = readline("\033[0;34m🐚 Minishell \001\e[0m\002");
 		if (!prompt)
 			exit(EXIT_SUCCESS);
 		else if (prompt[0] == '\0' || ft_strncmp(prompt, "\n", 1) == 0)
