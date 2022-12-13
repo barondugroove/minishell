@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 18:11:47 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/12 19:31:03 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/13 18:05:12 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,21 @@ int	ft_strcspn(char *str)
 	len = 0;
 	quote = 0;
 	squote = 0;
-	while ((*str && !(*str <= 32)) || (quote || squote))
+	while (*str && (!(*str <= 32) || (quote || squote)))
 	{
 		if (*str == '"' && !squote)
 			quote = !quote;
+		else if (*str == '|' && (!quote || !squote))
+			return (len);
 		else if (*str == '\'' && !quote)
 			squote = !squote;
-		else if (*str == '"' && (*str <= 32 || !*str) && quote)
-			return (len + 1);
-		else if (*str == '\'' && (*str <= 32 || !*str) && squote)
+		else if ((*str == '"' || *str == '\'') && (*str <= 32 || !*str)
+			&& (quote || squote))
 			return (len + 1);
 		len++;
 		str++;
 	}
+	str++;
 	return (len);
 }
 
