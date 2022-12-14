@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/12 19:31:17 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/14 18:29:21 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_lexer(char *prompt);
 void	init_env(char **envp);
 
 // UTILS
-char	*ft_strtok(char *str);
+char	*ft_strtok(char *str, char *sep);
 void	newnode(t_tok **head, char *data, char *key);
 void	print_list(t_tok **head);
 
