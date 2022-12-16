@@ -6,19 +6,18 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/14 18:55:12 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/16 15:26:43 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-/*
+
 void	ft_lexer(char *prompt)
 {
 	char	*str;
 	char	**cmd;
 	int		i;
 	t_tok	*tok_head;
-	char	sep[] = {' ', '<', '>', '|'};
 
 	tok_head = NULL;
 	i = 0;
@@ -26,35 +25,45 @@ void	ft_lexer(char *prompt)
 	cmd = ft_split(prompt, '|');
 	while (cmd[i])
 	{
-		str = ft_strtok(cmd[i], sep);
-		newnode(&tok_head, str, NULL);
+		if (i >= 1)
+			newnode(&tok_head, "|", "pipe");
+		str = tokenizer(cmd[i], " 	");
+		newnode(&tok_head, str, "cmd");
 		while (str)
 		{
-			str = ft_strtok(NULL, sep);
-			newnode(&tok_head, str, NULL);
+			str = tokenizer(NULL, " 	");
+			if (str)
+				newnode(&tok_head, str, "arg");
 		}
-		free(str);
-		free(cmd[i++]);
+		i++;
 	}
-	free(cmd);
 	print_list(&tok_head);
-}*/
+}
 
 
+
+
+
+/*
 void	ft_lexer(char *prompt)
 {
 	char	*str;
+	char	*cmd;
 	t_tok	*tok_head;
-	char	sep[] = {'<', '>', '|'};
 
 	tok_head = NULL;
-	str = ft_strtok(prompt, sep);
-	newnode(&tok_head, str, NULL);
-	while (str)
+	cmd = tokenizer(prompt, "<>|");
+	while (cmd)
 	{
-		str = ft_strtok(NULL, sep);
-		newnode(&tok_head, str, NULL);
+		str = tokenizer(cmd, " 	");
+		newnode(&tok_head, str, "cmd");
+		while (str)
+		{
+			str = tokenizer(NULL, " 	");
+			newnode(&tok_head, str, "arg");
+		}
+		cmd = tokenizer(prompt, "<>|");
 	}
-	free(str);
 	print_list(&tok_head);
 }
+*/

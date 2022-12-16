@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/13 18:45:40 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/16 13:30:44 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	minishell(char **envp)
 {
 	char	*prompt;
 
-	init_env(envp);
+	//init_env(envp);
+	(void)envp;
 	while (1)
 	{
 		prompt = readline("\033[0;34m🐚 Minishell \001\e[0m\002");

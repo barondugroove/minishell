@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/08 20:14:46 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/16 15:10:43 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	print_list(t_tok **head)
 	tok = *head;
 	while (tok)
 	{
-		if (tok->value)
-			printf("%s\n", tok->value);
+		printf("%s$  %s\n", tok->value, tok->key);
 		tok = tok->next;
 	}
 }
