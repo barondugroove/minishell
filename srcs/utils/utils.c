@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/16 15:10:43 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/17 14:23:27 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	newnode(t_tok **head, char *data, char *key)
 	tok = malloc(sizeof(t_tok));
 	if (tok)
 	{
-		tok->value = data;
+		tok->value = ft_strdup(data);
 		tok->key = key;
 		tok->next = NULL;
 	}

@@ -6,11 +6,12 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/16 15:26:43 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/17 14:31:24 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
 
 void	ft_lexer(char *prompt)
 {
@@ -21,7 +22,6 @@ void	ft_lexer(char *prompt)
 
 	tok_head = NULL;
 	i = 0;
-	//split sur les |, les cmd sont dans un tableau, ensuite on tokenize chaques cmd.
 	cmd = ft_split(prompt, '|');
 	while (cmd[i])
 	{
@@ -35,16 +35,48 @@ void	ft_lexer(char *prompt)
 			if (str)
 				newnode(&tok_head, str, "arg");
 		}
-		i++;
+		free(cmd[i++]);
 	}
+	free(cmd);
 	print_list(&tok_head);
+	//clear_list(&tok_head);
 }
 
 
 
 
+/* Only tokenizer but chelou
+void	ft_lexer(char *prompt)
+{
+	char *token;
+	char *copy;
+	//char *token_copy;
+	t_tok	*tok_head;
 
-/*
+	copy = strdup(prompt);
+	tok_head = NULL;
+	// Découper la chaîne en utilisant " " comme délimiteur
+	token = tokenizer(copy, "|");
+	while (token) {
+		token_copy = ft_strdup(token);
+		char *subtoken = tokenizer(NULL, " 	");
+		while (subtoken)
+		{
+			newnode(&tok_head, ft_strdup(subtoken), "arg");
+			subtoken = tokenizer(NULL, " 	");
+		}
+		free(token_copy);
+		token = tokenizer(NULL, "|");
+	}
+	free(copy);
+
+	print_list(&tok_head);
+}
+*/
+
+
+
+/* Only tokenizer but loosing static when tokenizing cmd
 void	ft_lexer(char *prompt)
 {
 	char	*str;
