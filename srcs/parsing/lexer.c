@@ -6,96 +6,65 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/17 14:31:24 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/17 16:10:02 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+void	clean_list(t_tok **head)
+{
+	t_tok	*tok;
+	char	*buf;
+
+	tok = *head;
+	while (tok)
+	{
+		if (tok->value[0] == '|')
+		{
+			tok->key = "pipe";
+			tok = tok->next;
+			tok->key = "cmd";
+		}
+		else if (tok->value[0] == '"' || tok->value[0] == '\'')
+		{
+			if (tok->value[0] == '"')
+				tok->key = "dquote";
+			else if (tok->value[0] == '\'')
+				tok->key = "quote";
+			buf = ft_substr(tok->value, 1, ft_strlen(tok->value) - 2);
+			free (tok->value);
+			tok->value = ft_strdup(buf);
+			free (buf);
+		}
+		else
+			tok->key = "arg";
+		tok = tok->next;
+	}
+}
+
 
 void	ft_lexer(char *prompt)
 {
 	char	*str;
-	char	**cmd;
-	int		i;
 	t_tok	*tok_head;
 
 	tok_head = NULL;
-	i = 0;
-	cmd = ft_split(prompt, '|');
-	while (cmd[i])
+	str = tokenizer(prompt);
+	newnode(&tok_head, str, "cmd");
+	while (str)
 	{
-		if (i >= 1)
-			newnode(&tok_head, "|", "pipe");
-		str = tokenizer(cmd[i], " 	");
-		newnode(&tok_head, str, "cmd");
-		while (str)
-		{
-			str = tokenizer(NULL, " 	");
-			if (str)
-				newnode(&tok_head, str, "arg");
-		}
-		free(cmd[i++]);
+		str = tokenizer(NULL);
+		if (str)
+			newnode(&tok_head, str, NULL);
 	}
-	free(cmd);
+	printf("\nLIST DIRTY :\n\n");
 	print_list(&tok_head);
-	//clear_list(&tok_head);
-}
 
+	clean_list(&tok_head);
 
-
-
-/* Only tokenizer but chelou
-void	ft_lexer(char *prompt)
-{
-	char *token;
-	char *copy;
-	//char *token_copy;
-	t_tok	*tok_head;
-
-	copy = strdup(prompt);
-	tok_head = NULL;
-	// Découper la chaîne en utilisant " " comme délimiteur
-	token = tokenizer(copy, "|");
-	while (token) {
-		token_copy = ft_strdup(token);
-		char *subtoken = tokenizer(NULL, " 	");
-		while (subtoken)
-		{
-			newnode(&tok_head, ft_strdup(subtoken), "arg");
-			subtoken = tokenizer(NULL, " 	");
-		}
-		free(token_copy);
-		token = tokenizer(NULL, "|");
-	}
-	free(copy);
-
+	printf("\nLIST CLEAN :\n\n");
 	print_list(&tok_head);
 }
-*/
 
-
-
-/* Only tokenizer but loosing static when tokenizing cmd
-void	ft_lexer(char *prompt)
-{
-	char	*str;
-	char	*cmd;
-	t_tok	*tok_head;
-
-	tok_head = NULL;
-	cmd = tokenizer(prompt, "<>|");
-	while (cmd)
-	{
-		str = tokenizer(cmd, " 	");
-		newnode(&tok_head, str, "cmd");
-		while (str)
-		{
-			str = tokenizer(NULL, " 	");
-			newnode(&tok_head, str, "arg");
-		}
-		cmd = tokenizer(prompt, "<>|");
-	}
-	print_list(&tok_head);
-}
-*/
+// cd toto| ls -la |grep "c'est trop cool" | wc -l | echo "voici un pipe : |"  mais il est entre '"' du coup il est pas pipe.
