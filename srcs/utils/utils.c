@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/17 15:31:48 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/17 21:36:00 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,9 @@ void	print_list(t_tok **head)
 	}
 }
 
-void	newnode(t_tok **head, char *data, char *key)
+t_tok	*newnode(char *data, char *key)
 {
 	t_tok	*tok;
-	t_tok	*tmp;
 
 	tok = malloc(sizeof(t_tok));
 	if (tok)
@@ -36,6 +35,15 @@ void	newnode(t_tok **head, char *data, char *key)
 		tok->key = key;
 		tok->next = NULL;
 	}
+	return (tok);
+}
+
+void	newnode_back(t_tok **head, char *data, char *key)
+{
+	t_tok	*tok;
+	t_tok	*tmp;
+
+	tok = newnode(data, key);
 	if (!*head || !head)
 	{
 		*head = tok;

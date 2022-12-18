@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/17 15:30:58 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/17 21:36:14 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	init_env(char **envp);
 
 // UTILS
 char	*tokenizer(char *str);
-void	newnode(t_tok **head, char *data, char *key);
+t_tok	*newnode(char *data, char *key);
+void	newnode_back(t_tok **head, char *data, char *key);
 void	print_list(t_tok **head);
 
 #endif
