@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 18:11:47 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/17 20:59:52 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:27:36 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,7 @@ int	ft_tokenizer_ext(char *str)
 		str++;
 	}
 	if (quote != '\0')
-	{
-		//printf("Error: quote not closed");
-	}
+		return (-1);
 	str++;
 	return (len);
 }
@@ -73,6 +71,7 @@ int	ft_tokenizer_ext(char *str)
 char	*tokenizer(char *str)
 {
 	static char	*save;
+	int			i;
 
 	if (str)
 		save = str;
@@ -83,7 +82,10 @@ char	*tokenizer(char *str)
 	str = save;
 	if (!*str)
 		return (NULL);
-	save += ft_tokenizer_ext(save);
+	i = ft_tokenizer_ext(save);
+	if (i == -1)
+		*str = ERROR_CHAR;
+	save += i;
 	if (*save)
 		*save++ = 0;
 	if (*save == 0)

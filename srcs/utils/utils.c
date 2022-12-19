@@ -6,21 +6,35 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/17 21:36:00 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:52:11 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	print_list(t_tok **head)
+
+
+
+void	print_list(t_tok *head)
 {
 	t_tok	*tok;
 
-	tok = *head;
+	tok = head;
 	while (tok)
 	{
 		printf("%s$  %s\n", tok->value, tok->key);
 		tok = tok->next;
+	}
+}
+
+void	free_list(t_tok *head)
+{
+	while (head)
+	{
+		printf("%s$ LOL  %s\n", head->value, head->key);
+		free(head->value);
+		free(head);
+		head = head->next;
 	}
 }
 

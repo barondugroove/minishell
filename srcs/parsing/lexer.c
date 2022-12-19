@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/18 15:27:40 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:50:57 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,47 @@ void	clean_tokens(t_tok **head)
 	}
 }
 
+void	add_pipe_token(t_tok *tok_head, char *str)
+{
+	int i;
+
+	i = 0;
+	if (str[ft_strlen(str) - 1] == '|')
+	{
+		newnode_back(&tok_head, ft_substr(str, 0, ft_strlen(str) - 1), "arg");
+		newnode_back(&tok_head, ft_strdup("|"), "pipe");
+	}
+	else if (str[0] == '|')
+	{
+		newnode_back(&tok_head, ft_strdup("|"), "pipe");
+		newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str)), "arg");
+	}
+	else
+	{
+		while (str[i] != '|')
+			i++;
+		newnode_back(&tok_head, ft_substr(str, 0, i ), "arg");
+		newnode_back(&tok_head, ft_strdup("|"), "pipe");
+		newnode_back(&tok_head, ft_substr(str, i + 1, ft_strlen(str)), "arg");
+	}
+}
+
+void	add_token(t_tok *tok_head, char *str)
+{
+	if (str[0] == '"' || str[0] == '\'')
+	{
+		if (str[0] == '"')
+			newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str) - 2), "dquote");
+		else if (str[0] == '\'')
+			newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str) - 2), "quote");
+	}
+	else if (str[0] == '|' && !str[1])
+		newnode_back(&tok_head, ft_strdup("|"), "pipe");
+	else if (ft_strchr(str, '|'))
+		add_pipe_token(tok_head, str);
+	else
+		newnode_back(&tok_head, str, "arg");
+}
 
 void	ft_lexer(char *prompt)
 {
@@ -89,16 +130,19 @@ void	ft_lexer(char *prompt)
 	while (str)
 	{
 		str = tokenizer(NULL);
+		if (str && *str == ERROR_CHAR)
+		{
+			printf("Error: quote not closed\n");
+			free(prompt);
+			return ;
+		}
 		if (str && *str)
-			newnode_back(&tok_head, str, NULL);
+			add_token(tok_head, str);
 	}
-	printf("\nLIST DIRTY :\n\n");
-	print_list(&tok_head);
-
-	clean_tokens(&tok_head);
-
-	printf("\nLIST CLEAN :\n\n");
-	print_list(&tok_head);
+	free(str);
+	free(prompt);
+	print_list(tok_head);
+	free_list(tok_head);
 }
 
 // cd toto| ls -la |grep "c'est trop cool" | wc -l | echo "voici un pipe : |"  mais il est entre '"' du coup il est pas pi|pe.
