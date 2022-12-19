@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/19 17:28:31 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/19 18:32:28 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,15 @@ void	print_export(t_tok **head)
 	}
 }
 
-void	free_struct(t_tok **head)
+void	free_struct(t_tok *head)
 {
 	t_tok	*tmp;
 
-	while (*head)
+	tmp = head;
+	while (head)
 	{
-		tmp = *head;
-		*head = (*head)->next;
+		tmp = head;
+		head = head->next;
 		free(tmp->key);
 		free(tmp->value);
 		free(tmp);
@@ -69,7 +70,7 @@ void	export(t_tok **head, char **args)
 			i++;
 		}
 	}
-	free_struct(&env_copy);
+	free_struct(env_copy);
 }
 
 // PENSER A GERER LE += qui concatene la nouvelle chaine

@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/19 17:42:30 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/19 18:33:59 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,15 @@ void	minishell(char **envp)
 		prompt = readline("\033[0;34m🐚 Minishell \001\e[0m\002");
 		if (!prompt)
 			break ;
+		else if (prompt[0] == '\0')
+			continue ;
 		else
 		{
 			add_history(prompt);
 			ft_lexer(prompt);
 		}
 	}
-	free_list(env);
+	free_struct(env);
 }
 
 int	main(int ac, char **av, char **envp)

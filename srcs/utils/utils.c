@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/19 16:01:08 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/19 18:29:31 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_tok	*newnode(char *data, char *key)
 	if (tok)
 	{
 		tok->value = ft_strdup(data);
-		tok->key = key;
+		tok->key = ft_strdup(key);
 		tok->next = NULL;
 	}
 	return (tok);

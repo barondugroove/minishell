@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/19 17:28:40 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/19 18:26:23 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ t_tok	*newnode(char *data, char *key);
 void	newnode_back(t_tok **head, char *data, char *key);
 void	print_list(t_tok *head);
 void	free_list(t_tok *head);
+void	free_struct(t_tok *head);
 
 #endif
