@@ -3,18 +3,25 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
+#    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/12 19:39:41 by rlaforge         ###   ########.fr        #
+#    Updated: 2022/12/19 16:04:06 by bchabot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = srcs/main.c \
 		srcs/parsing/lexer.c \
-		srcs/parsing/ft_strtok.c \
+		srcs/parsing/tokenizer.c \
 		srcs/utils/utils.c \
-		srcs/parsing/environment_variables.c
+		srcs/parsing/init_env.c \
+		srcs/builtins/export.c \
+		srcs/builtins/export_utils.c \
+		srcs/builtins/unset.c \
+		srcs/builtins/print_working_dir.c \
+		srcs/builtins/change_dir.c \
+		srcs/builtins/env.c
+
 
 CC = gcc
 

@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/18 20:52:11 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:01:08 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-
-
 
 void	print_list(t_tok *head)
 {
@@ -33,6 +30,8 @@ void	free_list(t_tok *head)
 	{
 		printf("%s$ LOL  %s\n", head->value, head->key);
 		free(head->value);
+		if (head->key)
+			free(head->key);
 		free(head);
 		head = head->next;
 	}

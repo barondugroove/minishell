@@ -1,42 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strcspn.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/19 17:32:43 by bchabot          ###   ########.fr       */
+/*   Created: 2022/12/19 15:52:31 by bchabot           #+#    #+#             */
+/*   Updated: 2022/12/19 16:03:23 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-void	minishell(char **envp)
+int	ft_strcspn(char *s, const char *rejects)
 {
-	char	*prompt;
-	t_tok	*env;
+	char	*tmp;
 
-	env = init_env(envp);
-	while (1)
+	tmp = s;
+	while (*tmp)
 	{
-		prompt = readline("\033[0;34m🐚 Minishell \001\e[0m\002");
-		if (!prompt)
-			break ;
-		else
-		{
-			add_history(prompt);
-			ft_lexer(prompt);
-		}
+		if (ft_strchr(rejects, *tmp))
+			return (tmp - s);
+		tmp++;
 	}
-	free_list(env);
-}
-
-int	main(int ac, char **av, char **envp)
-{
-	(void)av;
-	if (ac != 1)
-		return (1);
-	minishell(envp);
-	return (0);
+	return (tmp - s);
 }

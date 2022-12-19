@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 15:42:41 by bchabot           #+#    #+#             */
-/*   Updated: 2022/10/19 15:40:04 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/19 15:54:07 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 char	**ft_split(char const *s, char c);
-
+int		ft_strspn(char *s, const char *accepts);
+int		ft_strcspn(char *s, const char *accepts);
+char	*ft_strtok(char *str, char *token);
 void	*ft_memset(void *s, int c, int n);
 void	ft_bzero(void *s, int n);
 void	*ft_memcpy(void *dest, const void *src, int n);

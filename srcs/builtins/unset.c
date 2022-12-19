@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   environment_variables.c                            :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/07 17:26:43 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/07 17:43:41 by bchabot          ###   ########.fr       */
+/*   Created: 2022/12/12 18:41:41 by bchabot           #+#    #+#             */
+/*   Updated: 2022/12/12 18:45:43 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	init_env(char **envp)
+void	unset(t_tok **env_head, char *key)
 {
-//	t_env	env;
-	int	i;
+	t_tok	*tmp;
 
-	i = 0;
-	while (envp[i])
-		printf("%s\n", envp[i++]);
+	tmp = *env_head;
+	while (tmp->next->key)
+	{
+		if (ft_strncmp(tmp->next->key, key, ft_strlen(key)) == 0)
+		{
+			tmp->next = tmp->next->next;
+			return ;
+		}
+		tmp = tmp->next;
+	}
 }

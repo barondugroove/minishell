@@ -6,7 +6,7 @@
 #    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/31 14:29:55 by bchabot           #+#    #+#              #
-#    Updated: 2022/10/19 15:29:00 by bchabot          ###   ########.fr        #
+#    Updated: 2022/12/19 16:05:27 by bchabot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,9 @@ SRCS =	ft_isalpha.c \
 		ft_substr.c \
 		ft_strjoin.c \
 		ft_strtrim.c \
+		ft_strtok.c \
+		ft_strspn.c \
+		ft_strcspn.c \
 		ft_split.c \
 		ft_itoa.c \
 		ft_strmapi.c \
