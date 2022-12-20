@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/20 14:31:50 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/20 16:06:02 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ void	minishell(char **envp)
 		else
 		{
 			add_history(prompt);
-			ft_lexer(prompt);
+			exec(env, prompt);
+		//	ft_lexer(prompt);
 		}
 	}
-	(void)env;
+	free_struct(env);
 }
 
 int	main(int ac, char **av, char **envp)

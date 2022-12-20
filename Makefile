@@ -6,7 +6,7 @@
 #    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/19 16:04:06 by bchabot          ###   ########.fr        #
+#    Updated: 2022/12/20 15:29:46 by bchabot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,8 @@ SRCS = srcs/main.c \
 		srcs/builtins/unset.c \
 		srcs/builtins/print_working_dir.c \
 		srcs/builtins/change_dir.c \
-		srcs/builtins/env.c
-
+		srcs/builtins/env.c \
+		srcs/execution/executions.c
 
 CC = gcc
 
@@ -64,5 +64,5 @@ fclean : clean
 
 re : fclean all
 
-.PHONY : all re clean fclean
+.PHONY : all re clean fclean minish
 .SILENT :

@@ -6,11 +6,25 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:23:41 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/19 17:28:34 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 15:59:58 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	free_struct(t_tok *head)
+{
+	t_tok	*tmp;
+
+	tmp = head;
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		free(tmp);
+	}
+	free(head);
+}
 
 int	is_sorted(t_tok **env_head)
 {
@@ -58,13 +72,13 @@ t_tok	*dup_env(t_tok **env_head)
 	export = ft_calloc(sizeof(t_tok), 1);
 	if (!export)
 		return (NULL);
-	export->key = ft_strdup(tmp->key);
-	export->value = ft_strdup(tmp->value);
+	export->key = tmp->key;
+	export->value = tmp->value;
 	export->next = NULL;
 	tmp = tmp->next;
 	while (tmp->next)
 	{
-		newnode_back(&export, ft_strdup(tmp->value), ft_strdup(tmp->key));
+		addback_envnode(&export, tmp->value, tmp->key);
 		tmp = tmp->next;
 	}
 	return (export);

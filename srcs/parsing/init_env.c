@@ -6,11 +6,42 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 17:26:43 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/19 17:42:32 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 16:06:13 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+t_tok	*create_node(char *data, char *key)
+{
+	t_tok	*tok;
+
+	tok = malloc(sizeof(t_tok));
+	if (tok)
+	{
+		tok->value = data;
+		tok->key = key;
+		tok->next = NULL;
+	}
+	return (tok);
+}
+
+void	addback_envnode(t_tok **head, char *data, char *key)
+{
+	t_tok	*tok;
+	t_tok	*tmp;
+
+	tok = create_node(data, key);
+	if (!head || !*head)
+	{
+		*head = tok;
+		return ;
+	}
+	tmp = *head;
+	while (tmp && tmp->next)
+		tmp = tmp->next;
+	tmp->next = tok;
+}
 
 t_tok	*init_env(char **envp)
 {
@@ -28,7 +59,7 @@ t_tok	*init_env(char **envp)
 	{
 		key = ft_strtok(envp[i], "=");
 		value = ft_strtok(NULL, "\0");
-		newnode_back(&env_head, value, key);
+		addback_envnode(&env_head, value, key);
 		i++;
 	}
 	return (env_head);

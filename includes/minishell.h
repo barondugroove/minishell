@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/19 18:26:23 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 15:56:13 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ int		cd(char *path, t_tok *head);
 void	set_pwd(t_tok *head, char *key, char *path);
 char	*ft_getenv(t_tok *env_head, char *key);
 
+// EXECUTIONS
+void	exec(t_tok *env, char *prompt);
+
 // LEXER
-void	ft_lexer(char *prompt);
+t_tok	*ft_lexer(char *prompt);
 
 // PARSER
 
@@ -60,5 +63,6 @@ void	newnode_back(t_tok **head, char *data, char *key);
 void	print_list(t_tok *head);
 void	free_list(t_tok *head);
 void	free_struct(t_tok *head);
+void	addback_envnode(t_tok **head, char *data, char *key);
 
 #endif

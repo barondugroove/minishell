@@ -6,13 +6,11 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 20:08:33 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/19 17:29:42 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 16:06:11 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-
 
 void	set_pwd(t_tok *head, char *key, char *path)
 {

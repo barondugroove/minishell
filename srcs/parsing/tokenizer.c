@@ -6,16 +6,13 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 18:11:47 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/19 17:36:58 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 15:27:05 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
-
 /*
-
 int	ft_tokenizer_ext(char *str)
 {
 	int		len;
@@ -41,7 +38,6 @@ int	ft_tokenizer_ext(char *str)
 	//str++;
 	return (len);
 }
-
 */
 
 int	ft_tokenizer_ext(char *str)

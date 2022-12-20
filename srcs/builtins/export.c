@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/20 14:31:59 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/20 16:06:09 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,6 @@ void	print_export(t_tok **head)
 		}
 		tok = tok->next;
 	}
-}
-
-void	free_struct(t_tok *head)
-{
-	t_tok	*tmp;
-
-	tmp = head;
-	while (head)
-	{
-		tmp = head;
-		head = head->next;
-		free(tmp->key);
-		free(tmp->value);
-		free(tmp);
-	}
-	free(head);
 }
 
 void	export(t_tok **head, char **args)
