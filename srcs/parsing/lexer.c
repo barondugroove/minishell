@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/19 17:28:22 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 14:40:28 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	clean_tokens(t_tok **head)
 
 void	add_pipe_token(t_tok *tok_head, char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (str[ft_strlen(str) - 1] == '|')
@@ -126,7 +126,8 @@ void	ft_lexer(char *prompt)
 
 	tok_head = NULL;
 	str = tokenizer(prompt);
-	newnode_back(&tok_head, str, "cmd");
+	if (str)
+		newnode_back(&tok_head, str, "cmd");
 	while (str)
 	{
 		str = tokenizer(NULL);
@@ -142,7 +143,7 @@ void	ft_lexer(char *prompt)
 	free(str);
 	free(prompt);
 	print_list(tok_head);
-	//free_list(tok_head);
+	free_list(tok_head);
 }
 
 // cd toto| ls -la |grep "c'est trop cool" | wc -l | echo "voici un pipe : |"  mais il est entre '"' du coup il est pas pi|pe.

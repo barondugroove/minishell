@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/19 18:33:59 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 14:31:50 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	minishell(char **envp)
 			ft_lexer(prompt);
 		}
 	}
-	free_struct(env);
+	(void)env;
 }
 
 int	main(int ac, char **av, char **envp)

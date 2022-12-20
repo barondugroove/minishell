@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/19 18:29:31 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 14:37:24 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,18 @@ void	print_list(t_tok *head)
 
 void	free_list(t_tok *head)
 {
+	t_tok	*tmp;
+
+	tmp = head;
 	while (head)
 	{
-		printf("%s$ LOL  %s\n", head->value, head->key);
-		free(head->value);
-		if (head->key)
-			free(head->key);
-		free(head);
+		tmp = head;
 		head = head->next;
+		free(tmp->key);
+		free(tmp->value);
+		free(tmp);
 	}
+	free(head);
 }
 
 t_tok	*newnode(char *data, char *key)
@@ -57,7 +60,7 @@ void	newnode_back(t_tok **head, char *data, char *key)
 	t_tok	*tmp;
 
 	tok = newnode(data, key);
-	if (!*head || !head)
+	if (!head || !*head)
 	{
 		*head = tok;
 		return ;
