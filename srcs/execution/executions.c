@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/21 19:32:11 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/21 19:50:05 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	exec(t_tok *env, char *prompt)
 
 	cmds = ft_lexer(prompt);
 	tmp = cmds;
-	//print_list(tmp);
+	print_list(tmp);
 	while (tmp)
 	{
 		if (*tmp->key == *K_CMD)
