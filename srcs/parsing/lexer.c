@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/21 19:20:08 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/21 19:34:52 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,21 @@ void	add_pipe_token(t_tok *tok_head, char *str)
 	i = 0;
 	if (str[ft_strlen(str) - 1] == '|')
 	{
-		newnode_back(&tok_head, ft_substr(str, 0, ft_strlen(str) - 1), K_ARG);
-		newnode_back(&tok_head, ft_strdup("|"), K_PIPE);
+		newnode_back(&tok_head, ft_substr(str, 0, ft_strlen(str) - 1), ft_strdup(K_ARG));
+		newnode_back(&tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
 	}
 	else if (str[0] == '|')
 	{
-		newnode_back(&tok_head, ft_strdup("|"), K_PIPE);
-		newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str)), K_ARG);
+		newnode_back(&tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
+		newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str)), ft_strdup(K_ARG));
 	}
 	else
 	{
 		while (str[i] != '|')
 			i++;
-		newnode_back(&tok_head, ft_substr(str, 0, i), K_ARG);
-		newnode_back(&tok_head, ft_strdup("|"), K_PIPE);
-		newnode_back(&tok_head, ft_substr(str, i + 1, ft_strlen(str)), K_CMD);
+		newnode_back(&tok_head, ft_substr(str, 0, i), ft_strdup(K_ARG));
+		newnode_back(&tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
+		newnode_back(&tok_head, ft_substr(str, i + 1, ft_strlen(str)), ft_strdup(K_CMD));
 	}
 }
 
@@ -43,17 +43,17 @@ void	add_token(t_tok *tok_head, char *str)
 	{
 		if (str[0] == '"')
 			newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str) - 2), \
-			K_DQUO);
+			ft_strdup(K_DQUO));
 		else if (str[0] == '\'')
 			newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str) - 2), \
-			K_QUO);
+			ft_strdup(K_QUO));
 	}
 	else if (str[0] == '|' && !str[1])
-		newnode_back(&tok_head, ft_strdup("|"), K_PIPE);
+		newnode_back(&tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
 	else if (ft_strchr(str, '|'))
 		add_pipe_token(tok_head, str);
 	else
-		newnode_back(&tok_head, ft_strdup(str), K_ARG);
+		newnode_back(&tok_head, ft_strdup(str), ft_strdup(K_ARG));
 }
 
 t_tok	*ft_lexer(char *prompt)
@@ -64,7 +64,7 @@ t_tok	*ft_lexer(char *prompt)
 	tok_head = NULL;
 	str = tokenizer(prompt);
 	if (str)
-		newnode_back(&tok_head, ft_strdup(str), K_CMD);
+		newnode_back(&tok_head, ft_strdup(str), ft_strdup(K_CMD));
 	while (str)
 	{
 		str = tokenizer(NULL);
