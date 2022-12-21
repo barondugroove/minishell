@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/21 16:44:57 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/21 19:20:08 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,21 @@ void	add_pipe_token(t_tok *tok_head, char *str)
 	i = 0;
 	if (str[ft_strlen(str) - 1] == '|')
 	{
-		newnode_back(&tok_head, ft_substr(str, 0, ft_strlen(str) - 1), "arg");
-		newnode_back(&tok_head, "|", "pipe");
+		newnode_back(&tok_head, ft_substr(str, 0, ft_strlen(str) - 1), K_ARG);
+		newnode_back(&tok_head, ft_strdup("|"), K_PIPE);
 	}
 	else if (str[0] == '|')
 	{
-		newnode_back(&tok_head, "|", "pipe");
-		newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str)), "arg");
+		newnode_back(&tok_head, ft_strdup("|"), K_PIPE);
+		newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str)), K_ARG);
 	}
 	else
 	{
 		while (str[i] != '|')
 			i++;
-		newnode_back(&tok_head, ft_substr(str, 0, i), "arg");
-		newnode_back(&tok_head, "|", "pipe");
-		newnode_back(&tok_head, ft_substr(str, i + 1, ft_strlen(str)), "arg");
+		newnode_back(&tok_head, ft_substr(str, 0, i), K_ARG);
+		newnode_back(&tok_head, ft_strdup("|"), K_PIPE);
+		newnode_back(&tok_head, ft_substr(str, i + 1, ft_strlen(str)), K_CMD);
 	}
 }
 
@@ -43,17 +43,17 @@ void	add_token(t_tok *tok_head, char *str)
 	{
 		if (str[0] == '"')
 			newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str) - 2), \
-			"dquote");
+			K_DQUO);
 		else if (str[0] == '\'')
 			newnode_back(&tok_head, ft_substr(str, 1, ft_strlen(str) - 2), \
-			"quote");
+			K_QUO);
 	}
 	else if (str[0] == '|' && !str[1])
-		newnode_back(&tok_head, "|", "pipe");
+		newnode_back(&tok_head, ft_strdup("|"), K_PIPE);
 	else if (ft_strchr(str, '|'))
 		add_pipe_token(tok_head, str);
 	else
-		newnode_back(&tok_head, str, "arg");
+		newnode_back(&tok_head, ft_strdup(str), K_ARG);
 }
 
 t_tok	*ft_lexer(char *prompt)
@@ -64,7 +64,7 @@ t_tok	*ft_lexer(char *prompt)
 	tok_head = NULL;
 	str = tokenizer(prompt);
 	if (str)
-		newnode_back(&tok_head, str, "cmd");
+		newnode_back(&tok_head, ft_strdup(str), K_CMD);
 	while (str)
 	{
 		str = tokenizer(NULL);
@@ -79,9 +79,7 @@ t_tok	*ft_lexer(char *prompt)
 	}
 	free(str);
 	free(prompt);
-	print_list(tok_head);
 	return (tok_head);
-//	free_list(tok_head);
 }
 
 // cd toto| ls -la |grep "c'est trop cool" | wc -l | echo "voici un pipe : |"  mais il est entre '"' du coup il est pas pi|pe.

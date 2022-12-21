@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/20 20:10:06 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/21 19:16:42 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ void	exec(t_tok *env, char *prompt)
 
 	cmds = ft_lexer(prompt);
 	tmp = cmds;
+	//print_list(tmp);
 	while (tmp)
 	{
-		if (ft_strncmp(tmp->key, "cmd", 4) == 0)
+		if (*tmp->key == *K_CMD)
 		{
 			execute_builtins(env, tmp->value);
 		}
 		tmp = tmp->next;
 	}
+	free_list(cmds);
 	return ;
 }

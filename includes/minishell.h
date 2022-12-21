@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/20 15:56:13 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/21 18:50:39 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@
 # include "../libft/libft.h"
 
 # define ERROR_CHAR '\x7F'
+# define K_CMD "C"
+# define K_ARG "A"
+# define K_QUO "'"
+# define K_DQUO "\""
+# define K_PIPE "|"
 
 typedef struct s_tok {
 	char			*key;
