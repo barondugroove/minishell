@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/20 16:06:02 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/21 16:43:07 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,9 @@ void	minishell(char **envp)
 		{
 			add_history(prompt);
 			exec(env, prompt);
-		//	ft_lexer(prompt);
 		}
 	}
-	free_struct(env);
+	free_list(env);
 }
 
 int	main(int ac, char **av, char **envp)

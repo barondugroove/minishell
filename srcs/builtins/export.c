@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/20 16:06:09 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/21 16:36:50 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,47 +15,42 @@
 void	print_export(t_tok **head)
 {
 	t_tok	*tok;
+	t_tok	*env_copy;
 
 	tok = *head;
+	env_copy = dup_env(head);
 	sort_export(head);
 	while (tok)
 	{
-		if (tok->key && ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0))
-		{
-			if (!tok->value)
-				printf("declare -x %s\n", tok->key);
-			else
-				printf("declare -x %s=\"%s\"\n", tok->key, tok->value);
-		}
+		if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0))
+			printf("declare -x %s=\"%s\"\n", tok->key, tok->value);
 		tok = tok->next;
 	}
+	free_list(env_copy);
 }
 
-void	export(t_tok **head, char **args)
+void	export(t_tok **env, char **args)
 {
-	t_tok	*env_copy;
 	char	*key;
 	char	*value;
+	char	*arg_copy;
 	int		i;
 
 	i = 0;
-	env_copy = dup_env(head);
 	if (!args)
-		print_export(&env_copy);
+		print_export(env);
 	else
 	{
 		while (args[i])
 		{
-			key = ft_strtok(args[i], "=");
+			arg_copy = ft_strdup(args[i]);
+			key = ft_strtok(arg_copy, "=");
 			value = ft_strtok(NULL, "\0");
-			if (!value)
-				newnode_back(head, NULL, key);
-			else
-				newnode_back(head, value, key);
+			newnode_back(env, ft_strdup(value), ft_strdup(key));
+			free(arg_copy);
 			i++;
 		}
 	}
-	free_struct(env_copy);
 }
 
 // PENSER A GERER LE += qui concatene la nouvelle chaine

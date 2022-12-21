@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:32:47 by bchabot           #+#    #+#             */
-/*   Updated: 2022/10/19 15:26:42 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 19:47:39 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_strlen(const char *s)
 	int	i;
 
 	i = 0;
+	if (!s)
+		return (0);
 	while (s[i++])
 		;
 	return (--i);

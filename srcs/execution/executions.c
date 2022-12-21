@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/20 16:06:07 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 20:10:06 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	execute_builtins(t_tok *env, char *cmd)
 		pwd();
 	else if (ft_strncmp(cmd, "env", 7) == 0)
 		print_env(&env);
-
 }
 
 void	exec(t_tok *env, char *prompt)

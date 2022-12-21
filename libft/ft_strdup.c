@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 16:15:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/10/19 15:29:44 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/20 20:14:05 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_strdup(const char *s)
 	int		i;
 	char	*dest;
 
+	if (!s)
+		return (NULL);
 	i = ft_strlen(s);
 	dest = malloc(sizeof(char) * i + 1);
 	if (dest == NULL)
