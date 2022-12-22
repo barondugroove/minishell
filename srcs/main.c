@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/22 01:02:48 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/22 15:08:56 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,3 +42,5 @@ int	main(int ac, char **av, char **envp)
 	minishell(envp);
 	return (0);
 }
+
+//valgrind --suppressions=.vsupp --leak-check=full --show-leak-kinds=all ./minishell

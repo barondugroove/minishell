@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 20:08:33 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/20 16:06:11 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/22 15:20:56 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ void	set_pwd(t_tok *head, char *key, char *path)
 	tmp = head;
 	while (tmp && ft_strncmp(tmp->key, key, ft_strlen(key)) != 0)
 		tmp = tmp->next;
-	tmp->value = path;
+	free(tmp->value);
+	tmp->value = ft_strdup(path);
 }
 
 int	cd(char *path, t_tok *head)
 {
-	char	str[1024];
+	char	str[4096];
 
 	if (!path)
 		return (1);
