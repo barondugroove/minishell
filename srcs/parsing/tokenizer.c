@@ -3,42 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 18:11:47 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/20 15:27:05 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/22 00:44:31 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/*
-int	ft_tokenizer_ext(char *str)
-{
-	int		len;
-	char	quote;
-
-	len = 0;
-	quote = '\0';
-	while (*str && ((*str > 32 && *str != '|') || quote != '\0'))
-	{
-		if ((*str == '"' || *str == '\'') && quote == '\0')
-			quote = *str;
-		else if (*str == quote && quote != '\0')
-			quote = '\0';
-		//else if (*str == '|' && quote == '\0')
-		//	return (len + 1);
-		len++;
-		str++;
-	}
-	if (quote != '\0')
-	{
-		//printf("Error: quote not closed");
-	}
-	//str++;
-	return (len);
-}
-*/
 
 int	ft_tokenizer_ext(char *str)
 {
@@ -80,7 +52,10 @@ char	*tokenizer(char *str)
 		return (NULL);
 	i = ft_tokenizer_ext(save);
 	if (i == -1)
+	{
 		*str = ERROR_CHAR;
+		return (str);
+	}
 	save += i;
 	if (*save)
 		*save++ = 0;

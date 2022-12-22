@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:23:41 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/21 19:50:15 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/22 01:20:57 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ t_tok	*dup_env(t_tok **env_head)
 	t_tok	*export;
 
 	tmp = *env_head;
-	export = newnode(ft_strdup(tmp->key), ft_strdup(tmp->value));
+	export = newtoken(ft_strdup(tmp->key), ft_strdup(tmp->value));
 	tmp = tmp->next;
 	while (tmp)
 	{
-		newnode_back(&export, ft_strdup(tmp->value), ft_strdup(tmp->key));
+		newtoken_back(&export, ft_strdup(tmp->value), ft_strdup(tmp->key));
 		tmp = tmp->next;
 	}
 	return (export);

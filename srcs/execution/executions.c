@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/21 19:50:05 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/22 01:15:22 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,28 @@ void	execute_builtins(t_tok *env, char *cmd)
 		print_env(&env);
 }
 
-void	exec(t_tok *env, char *prompt)
+void	execute_cmd(t_tok *env, t_tok *cmds)
 {
-	t_tok	*cmds;
-	t_tok	*tmp;
+	execute_builtins(env, cmds->value);
+	//Execve avec les args dans cmds
+	
+}
 
-	cmds = ft_lexer(prompt);
-	tmp = cmds;
-	print_list(tmp);
-	while (tmp)
+void	execution(t_tok *env, char *prompt)
+{
+	t_tok	*tok_head;
+	t_tok	*cmds;
+
+	tok_head = parser(prompt);
+	cmds = tok_head;
+	print_list(cmds);
+	while (cmds)
 	{
-		if (*tmp->key == *K_CMD)
-			execute_builtins(env, tmp->value);
-		tmp = tmp->next;
+		if (*cmds->key == *K_CMD)
+			execute_cmd(env, tok_head);
+		cmds = cmds->next;
 	}
-	free_list(cmds);
+	free(prompt);
+	free_list(tok_head);
 	return ;
 }

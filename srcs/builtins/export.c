@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/21 16:36:50 by bchabot          ###   ########.fr       */
+/*   Updated: 2022/12/22 01:20:35 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	export(t_tok **env, char **args)
 			arg_copy = ft_strdup(args[i]);
 			key = ft_strtok(arg_copy, "=");
 			value = ft_strtok(NULL, "\0");
-			newnode_back(env, ft_strdup(value), ft_strdup(key));
+			newtoken_back(env, ft_strdup(value), ft_strdup(key));
 			free(arg_copy);
 			i++;
 		}

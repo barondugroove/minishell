@@ -3,16 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
+#    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/20 15:29:46 by bchabot          ###   ########.fr        #
+#    Updated: 2022/12/22 01:17:06 by rlaforge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = srcs/main.c \
-		srcs/parsing/lexer.c \
+		srcs/parsing/parser.c \
 		srcs/parsing/tokenizer.c \
+		srcs/parsing/add_pipe_token.c \
 		srcs/utils/utils.c \
 		srcs/parsing/init_env.c \
 		srcs/builtins/export.c \
