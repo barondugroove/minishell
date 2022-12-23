@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/23 17:12:55 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/23 17:21:01 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	add_token(t_tok *tok_head, char *str)
 		newtoken_back(&tok_head, ft_strdup(str), ft_strdup(K_ARG));
 }
 
-t_tok	*parser(char *prompt)
+t_tok	*parsing_controller(char *prompt)
 {
 	char	*str;
 	t_tok	*tok_head;

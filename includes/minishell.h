@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/22 01:20:57 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/23 17:23:02 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void	set_pwd(t_tok *head, char *key, char *path);
 char	*ft_getenv(t_tok *env_head, char *key);
 
 // EXECUTION
-void	execution(t_tok *env, char *prompt);
+void	execution_controller(t_tok *env, char *prompt);
 
 // PARSING
-t_tok	*parser(char *prompt);
+t_tok	*parsing_controller(char *prompt);
 void	add_pipe_token(t_tok *tok_head, char *str);
 
 // INIT_DATA
