@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/24 00:42:45 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/24 02:52:44 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	execution_controller(t_tok *env, char *prompt);
 
 // PARSING
 t_tok	*parsing_controller(char *prompt);
-int	add_pipe_token(t_tok *tok_head, char *str);
+int	add_pipe_token(t_tok **tok_head, char *str);
 
 // INIT_DATA
 t_tok	*init_env(char **envp);

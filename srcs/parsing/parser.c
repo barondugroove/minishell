@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/24 02:21:55 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/24 02:54:30 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void add_quote_token(t_tok *tok_head, char *str)
 */
 
 
-void add_quote_token(t_tok *tok_head, char *str)
+void add_quote_token(t_tok **tok_head, char *str)
 {
     char quote = '\0';
     int i = 0;
@@ -123,7 +123,7 @@ void add_quote_token(t_tok *tok_head, char *str)
         else
             i++;
     }
-    newtoken_back(&tok_head, ft_strdup(str), ft_strdup(K_ARG));
+    newtoken_back(tok_head, ft_strdup(str), ft_strdup(K_ARG));
 }
 
 
@@ -172,14 +172,14 @@ void	remove_quotes(t_tok *tok_head, char *str)
 }
 */
 
-void	add_token(t_tok *tok_head, char *str)
+void	add_token(t_tok **tok_head, char *str)
 {
 	if (ft_strchr(str, '"') || ft_strchr(str, '\''))
 		add_quote_token(tok_head, str);
 	else if (ft_strchr(str, '|'))
 		add_pipe_token(tok_head, str);
 	else
-		newtoken_back(&tok_head, ft_strdup(str), ft_strdup(K_ARG));
+		newtoken_back(tok_head, ft_strdup(str), ft_strdup(K_ARG));
 }
 
 t_tok	*parsing_controller(char *prompt)
@@ -189,11 +189,8 @@ t_tok	*parsing_controller(char *prompt)
 
 	tok_head = NULL;
 	str = tokenizer(prompt);
-	if (str)
-		newtoken_back(&tok_head, ft_strdup(str), ft_strdup(K_CMD));
 	while (str)
 	{
-		str = tokenizer(NULL);
 		if (str && *str == ERROR_CHAR)
 		{
 			printf("Parsing error: quote not closed\n");
@@ -201,13 +198,14 @@ t_tok	*parsing_controller(char *prompt)
 			return (NULL);
 		}
 		if (str && *str)
-			add_token(tok_head, str);
+			add_token(&tok_head, str);
 		if (str && *str == ERROR_CHAR)
 		{
 			printf("Parsing error: consecutive pipe\n");
 			free_list(tok_head);
 			return (NULL);
 		}
+		str = tokenizer(NULL);
 	}
 	clean_token_list(tok_head);
 	return (tok_head);
