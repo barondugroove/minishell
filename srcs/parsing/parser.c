@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/23 17:21:01 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/24 02:21:55 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,6 @@ void	remove_quotes(t_tok *tok_head, char *tok)
 		str = ft_strtok(NULL, "\"'");
 	}
 	free(buf);
-	
-
-// Retire les quotes du début et de la fin.
-	if (str[0] == '"')
-		newtoken_back(&tok_head, ft_substr(str, 1, ft_strlen(str) - 2), \
-		ft_strdup(K_DQUO));
-	else if (str[0] == '\'')
-		newtoken_back(&tok_head, ft_substr(str, 1, ft_strlen(str) - 2), \
-		ft_strdup(K_QUO));
-
 }
 */
 
@@ -58,6 +48,86 @@ void	clean_token_list(t_tok *head)
 	}
 }
 
+
+/*
+void add_quote_token(t_tok *tok_head, char *str)
+{
+    char quote = '\0';
+    int i = 0;
+    int len = strlen(str);
+    while (i < len)
+    {
+        if ((str[i] == '"' || str[i] == '\'') && quote == '\0')
+        {
+            quote = str[i];
+            ft_memmove(str + i, str + i + 1, len - i);
+            len--;
+        }
+        else if (str[i] == quote && quote != '\0')
+        {
+            quote = '\0';
+            ft_memmove(str + i, str + i + 1, len - i);
+            len--;
+        }
+        else
+            i++;
+    }
+    newtoken_back(&tok_head, ft_strdup(str), ft_strdup(K_ARG));
+}
+*/
+
+/*
+void add_quote_token(t_tok *tok_head, char *str)
+{
+    char quote = '\0';
+    int i = 0;
+    int len = strlen(str);
+    while (i < len)
+    {
+        if (str[i] == quote)
+            quote = '\0';
+        else if (str[i] == '"' || str[i] == '\'')
+            quote = str[i];
+        if (quote != '\0')
+        {
+            ft_memmove(str + i, str + i + 1, len - i);
+            len--;
+        }
+        else
+            i++;
+    }
+    newtoken_back(&tok_head, ft_strdup(str), ft_strdup(K_ARG));
+}
+*/
+
+
+void add_quote_token(t_tok *tok_head, char *str)
+{
+    char quote = '\0';
+    int i = 0;
+    int len = strlen(str);
+    while (i < len)
+    {
+        if ((str[i] == '"' || str[i] == '\'') && quote == '\0')
+        {
+            quote = str[i];
+            ft_memmove(str + i, str + i + 1, len - i);
+            len--;
+        }
+        else if (str[i] == quote && quote != '\0')
+        {
+            quote = '\0';
+            ft_memmove(str + i, str + i + 1, len - i);
+            len--;
+        }
+        else
+            i++;
+    }
+    newtoken_back(&tok_head, ft_strdup(str), ft_strdup(K_ARG));
+}
+
+
+/*
 void	remove_quotes(t_tok *tok_head, char *str)
 {
     int len;
@@ -74,36 +144,38 @@ void	remove_quotes(t_tok *tok_head, char *str)
 		{
 			quote = str[i];	
             j = i;
-            while (j < len - 1) {
+            while (j < len - 1)
+			{
                 str[j] = str[j + 1];
                 j++;
             }
             str[j] = '\0';
-            len = strlen(str);
-            i--;
+            len--;
         }
 		else if (str[i] == quote && quote != '\0')
 		{
 			quote = '\0';
             j = i;
-            while (j < len - 1) {
+            while (j < len - 1)
+			{
                 str[j] = str[j + 1];
                 j++;
             }
             str[j] = '\0';
-            len = strlen(str);
-            i--;
+            len--;
         }
-        i++;
+		else
+        	i++;
     }
 	newtoken_back(&tok_head, ft_strdup(str), \
 		ft_strdup(K_ARG));
 }
+*/
 
 void	add_token(t_tok *tok_head, char *str)
 {
 	if (ft_strchr(str, '"') || ft_strchr(str, '\''))
-		remove_quotes(tok_head, str);
+		add_quote_token(tok_head, str);
 	else if (ft_strchr(str, '|'))
 		add_pipe_token(tok_head, str);
 	else
@@ -124,15 +196,21 @@ t_tok	*parsing_controller(char *prompt)
 		str = tokenizer(NULL);
 		if (str && *str == ERROR_CHAR)
 		{
-			printf("Error: quote not closed\n");
+			printf("Parsing error: quote not closed\n");
 			free_list(tok_head);
 			return (NULL);
 		}
 		if (str && *str)
 			add_token(tok_head, str);
+		if (str && *str == ERROR_CHAR)
+		{
+			printf("Parsing error: consecutive pipe\n");
+			free_list(tok_head);
+			return (NULL);
+		}
 	}
 	clean_token_list(tok_head);
 	return (tok_head);
 }
 
-// parse test| ls -la |grep "c'est trop cool" | wc -l | e"c"ho "voici un pipe : |"  mais il est entre '"' du coup il est pas pi|pe.
+// parse test| ls -la |grep "c'est trop cool" | wc -l | e"c"'h'o "voici un pipe : |"  mais il est entre '"' du coup il est pas pi|pe.

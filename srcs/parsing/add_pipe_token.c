@@ -12,6 +12,23 @@
 
 #include "../../includes/minishell.h"
 
+int	pipe_error(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '|' && str[i + 1] == '|')
+		{
+			*str = ERROR_CHAR;
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 void	add_pipe_token_ext(t_tok *tok_head, char *str)
 {
 	int	i;
@@ -34,8 +51,10 @@ void	add_pipe_token_ext(t_tok *tok_head, char *str)
 	}
 }
 
-void	add_pipe_token(t_tok *tok_head, char *str)
+int	add_pipe_token(t_tok *tok_head, char *str)
 {
+	if (pipe_error(str))
+		return (1);
 	if (str[0] == '|' && !str[1])
 		newtoken_back(&tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
 	else if (str[ft_strlen(str) - 1] == '|')
@@ -46,4 +65,5 @@ void	add_pipe_token(t_tok *tok_head, char *str)
 	}
 	else
 		add_pipe_token_ext(tok_head, str);
+	return (0);
 }

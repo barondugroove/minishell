@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/23 18:56:58 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/24 01:03:01 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void	execution_controller(t_tok *env, char *prompt)
 	t_tok	*cmds;
 
 	tok_head = parsing_controller(prompt);
+	if (!tok_head)
+		return ;
 	cmds = tok_head;
 	print_list(cmds);
 	while (cmds)
@@ -89,11 +91,10 @@ void	execution_controller(t_tok *env, char *prompt)
 		if (*cmds->key == *K_CMD)
 		{
 			execute_builtins(env, cmds->value);
-			execute_cmd(env, cmds);
+			//execute_cmd(env, cmds);
 		}
 		cmds = cmds->next;
 	}
 	free(prompt);
 	free_list(tok_head);
-	return ;
 }
