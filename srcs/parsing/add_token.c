@@ -82,8 +82,24 @@ void add_quote_token(t_tok *tok_head, char *str)
 }
 */
 
+int	pipe_error(char *str)
+{
+	int i;
 
-void    remove_quotes(t_tok **tok_head, char *str)
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '|' && str[i + 1] == '|')
+		{
+			*str = ERROR_CHAR;
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+void    clean_token(t_tok **tok_head, char *str)
 {
     char quote;
     int i;
@@ -119,18 +135,20 @@ void    remove_quotes(t_tok **tok_head, char *str)
     }
 }
 
-
-
-void add_quote_token(t_tok **tok_head, char *str)
+void	add_token(t_tok **tok_head, char *str)
 {
-	if (pipe_error(str))
-		return ;
-    if (str[0] == '|')
-	{
-		newtoken_back(tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
-		ft_memmove(str, str + 1, strlen(str));
-	}
-    remove_quotes(tok_head, str);
+    
+	if (ft_strchr(str, '"') || ft_strchr(str, '\'') || ft_strchr(str, '|'))
+    {
+        if (pipe_error(str))
+            return ;
+        if (str[0] == '|')
+        {
+            newtoken_back(tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
+            ft_memmove(str, str + 1, strlen(str));
+        }
+        clean_token(tok_head, str);
+    }
     if (*str)
         newtoken_back(tok_head, ft_strdup(str), ft_strdup(K_ARG));
 }

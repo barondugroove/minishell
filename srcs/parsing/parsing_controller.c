@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/25 15:23:37 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/25 15:45:39 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,6 @@ int	clean_token_list(t_tok *head)
 		tok = tok->next;
 	}
 	return (0);
-}
-
-void	add_token(t_tok **tok_head, char *str)
-{
-	if (ft_strchr(str, '"') || ft_strchr(str, '\''))
-		add_quote_token(tok_head, str);
-	else if (ft_strchr(str, '|'))
-		add_pipe_token(tok_head, str);
-	else
-		newtoken_back(tok_head, ft_strdup(str), ft_strdup(K_ARG));
 }
 
 t_tok	*parsing_controller(char *prompt)
