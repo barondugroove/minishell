@@ -6,12 +6,13 @@
 #    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/24 18:01:26 by rlaforge         ###   ########.fr        #
+#    Updated: 2022/12/25 15:30:38 by rlaforge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = srcs/main.c \
-		srcs/parsing/parser.c \
+		srcs/parsing/parsing_controller.c \
+		srcs/execution/execution_controller.c \
 		srcs/parsing/tokenizer.c \
 		srcs/parsing/add_pipe_token.c \
 		srcs/parsing/add_quote_token.c \
@@ -22,8 +23,7 @@ SRCS = srcs/main.c \
 		srcs/builtins/unset.c \
 		srcs/builtins/print_working_dir.c \
 		srcs/builtins/change_dir.c \
-		srcs/builtins/env.c \
-		srcs/execution/executions.c
+		srcs/builtins/env.c
 
 CC = gcc
 

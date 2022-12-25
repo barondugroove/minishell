@@ -82,12 +82,16 @@ void add_quote_token(t_tok *tok_head, char *str)
 }
 */
 
-/*
-char    *remove_quotes(t_tok *tok_head, char *str)
+
+void    remove_quotes(t_tok **tok_head, char *str)
 {
-    char quote = '\0';
-    int i = 0;
-    int len = strlen(str);
+    char quote;
+    int i;
+    int len;
+
+    quote = '\0';
+    len = strlen(str);
+    i = 0;
     while (i < len)
     {
         if ((str[i] == '"' || str[i] == '\'') && quote == '\0')
@@ -102,19 +106,23 @@ char    *remove_quotes(t_tok *tok_head, char *str)
             ft_memmove(str + i, str + i + 1, len - i);
             len--;
         }
+        else if  (str[i] == '|' && quote == '\0')
+        {
+            newtoken_back(tok_head, ft_substr(str, 0, i), ft_strdup(K_ARG));
+            newtoken_back(tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
+            ft_memmove(str, str + i + 1, len - i);
+            i = 0;
+            len = strlen(str);
+        }
         else
             i++;
     }
-    return (str);
-}*/
+}
+
+
 
 void add_quote_token(t_tok **tok_head, char *str)
 {
-    char quote = '\0';
-    int i;
-    int len;
-
-
 	if (pipe_error(str))
 		return ;
     if (str[0] == '|')
@@ -122,26 +130,7 @@ void add_quote_token(t_tok **tok_head, char *str)
 		newtoken_back(tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
 		ft_memmove(str, str + 1, strlen(str));
 	}
-    i = 0;
-    len = strlen(str);
-    while (i < len)
-    {
-        if ((str[i] == '"' || str[i] == '\'') && quote == '\0')
-        {
-            quote = str[i];
-            ft_memmove(str + i, str + i + 1, len - i);
-            len--;
-        }
-        else if (str[i] == quote && quote != '\0')
-        {
-            quote = '\0';
-            ft_memmove(str + i, str + i + 1, len - i);
-            len--;
-        }
-        else
-            i++;
-    }
-    newtoken_back(tok_head, ft_strdup(str), ft_strdup(K_ARG));
-    if (str[ft_strlen(str) - 1] == '|')
-		newtoken_back(tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
+    remove_quotes(tok_head, str);
+    if (*str)
+        newtoken_back(tok_head, ft_strdup(str), ft_strdup(K_ARG));
 }
