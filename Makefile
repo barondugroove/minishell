@@ -6,9 +6,11 @@
 #    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/25 19:17:13 by rlaforge         ###   ########.fr        #
+#    Updated: 2022/12/25 20:57:38 by rlaforge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+NAME = minishell
 
 SRCS = srcs/main.c \
 		srcs/parsing/parsing_controller.c \
@@ -26,24 +28,23 @@ SRCS = srcs/main.c \
 
 CC = @gcc
 
-LIBFT = libft/libft.a
-
 CFLAGS = -lreadline -Wall -Wextra -Werror -g
 
-NAME = minishell
+LIBFT = libft/libft.a
 
 OBJS = $(SRCS:.c=.o)
 
-all : minish message $(NAME)
-	@echo "\e[1A\e[91m                                                 \033[0m"
+all : logo message $(NAME)
+	@echo "\e[2A\e[91m                                                                    \033[0m"
 
 %.o : %.c
+	@echo "\033[1A\e[1mCompiling $<\033[0m"
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT) :
 		@make -sC libft
 
-minish :
+logo :
 	@echo "\n\e[0;95m┏━┓\e[96m╋\e[95m┏┓┏┳┓\e[96m╋\e[95m┏━┓\e[96m╋╋╋╋╋\e[0;95m┏┓           "
 	@echo "\e[0;95m┃\e[5;96m╋\e[0;95m┣━┫┗╋┫┗┓┃┏╋━┳━┳┳╋╋┓┏┓┏━┓┏━┳━┓"
 	@echo "\e[0;95m┃┏┫┻┫┏┫┃┏┫┃┗┫\e[5;96m╋\e[0;95m┃\e[5;96m╋\e[0;95m┃┃┃┃┗┫┗┫\e[5;96m╋\e[0;95m┗┫\e[5;96m╋\e[0;95m┃┻┫"
@@ -52,10 +53,10 @@ minish :
 
 $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(OBJS) $(CFLAGS) $(LIBFT) -o $(NAME)
-	@echo "\033[1A\e[1;32m📦 $(NAME) compiled!     \n\033[0m"
+	@echo "\e[2A\e[1;32m📦 $(NAME) compiled!                                           \n\n\033[0m"
 
 message:
-	@echo "\e[1;5m🗜️  $(NAME) compiling...\033[0m"
+	@echo "\e[1;5m🗜️  $(NAME) compiling...\n\033[0m"
 
 clean :
 	@rm -f $(OBJS)
@@ -69,4 +70,4 @@ fclean : clean
 
 re : fclean all
 
-.PHONY : all re clean fclean minish message
+.PHONY : all re clean fclean logo message
