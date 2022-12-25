@@ -6,7 +6,7 @@
 #    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/22 01:17:06 by rlaforge         ###   ########.fr        #
+#    Updated: 2022/12/24 18:01:26 by rlaforge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ SRCS = srcs/main.c \
 		srcs/parsing/parser.c \
 		srcs/parsing/tokenizer.c \
 		srcs/parsing/add_pipe_token.c \
+		srcs/parsing/add_quote_token.c \
 		srcs/utils/utils.c \
 		srcs/parsing/init_env.c \
 		srcs/builtins/export.c \
