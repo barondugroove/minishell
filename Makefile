@@ -6,7 +6,7 @@
 #    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/25 15:49:13 by rlaforge         ###   ########.fr        #
+#    Updated: 2022/12/25 19:17:13 by rlaforge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ SRCS = srcs/main.c \
 		srcs/builtins/change_dir.c \
 		srcs/builtins/env.c
 
-CC = gcc
+CC = @gcc
 
 LIBFT = libft/libft.a
 
@@ -34,36 +34,39 @@ NAME = minishell
 
 OBJS = $(SRCS:.c=.o)
 
-all : $(NAME)
+all : minish message $(NAME)
+	@echo "\e[1A\e[91m                                                 \033[0m"
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT) :
-		make -sC libft
-		@echo "\033[92mLibft compiled."
+		@make -sC libft
 
 minish :
 	@echo "\n\e[0;95m┏━┓\e[96m╋\e[95m┏┓┏┳┓\e[96m╋\e[95m┏━┓\e[96m╋╋╋╋╋\e[0;95m┏┓           "
 	@echo "\e[0;95m┃\e[5;96m╋\e[0;95m┣━┫┗╋┫┗┓┃┏╋━┳━┳┳╋╋┓┏┓┏━┓┏━┳━┓"
 	@echo "\e[0;95m┃┏┫┻┫┏┫┃┏┫┃┗┫\e[5;96m╋\e[0;95m┃\e[5;96m╋\e[0;95m┃┃┃┃┗┫┗┫\e[5;96m╋\e[0;95m┗┫\e[5;96m╋\e[0;95m┃┻┫"
 	@echo "\e[0;95m┗┛┗━┻━┻┻━┛┗━┻━┻┓┣━┻┻━┻━┻━━╋┓┣━┛"
-	@echo "\e[0;96m╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋\e[95m┗┛\e[96m╋╋╋╋╋╋╋╋╋\e[0;95m┗━┛\n"
+	@echo "\e[0;96m╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋\e[95m┗┛\e[96m╋╋╋╋╋╋╋╋╋\e[0;95m┗━┛\033[0m\n"
 
-$(NAME): minish $(OBJS) $(LIBFT)
+$(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(OBJS) $(CFLAGS) $(LIBFT) -o $(NAME)
+	@echo "\033[1A\e[1;32m📦 $(NAME) compiled!     \n\033[0m"
 
+message:
+	@echo "\e[1;5m🗜️  $(NAME) compiling...\033[0m"
 
 clean :
-	rm -f $(OBJS)
-	make -sC libft fclean
-	@echo "\033[91mObjects cleaned."
+	@rm -f $(OBJS)
+	@make -sC libft fclean
+	@echo "\033[91m🧹 Binary files cleaned!\033[0m"
 
 fclean : clean
-	rm -rf $(NAME)
-	@echo "\033[91mObjects and program cleaned."
+	@rm -rf $(NAME)
+	@echo "\e[1A\e[91m🧹 Binary files and executable cleaned!\033[0m"
+
 
 re : fclean all
 
-.PHONY : all re clean fclean minish
-.SILENT :
+.PHONY : all re clean fclean minish message
