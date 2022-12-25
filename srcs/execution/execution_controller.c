@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executions.c                                       :+:      :+:    :+:   */
+/*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/24 01:03:01 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/25 16:22:38 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,14 @@ char	**get_cmd(t_tok *cmds)
 		nb++;
 		tok = tok->next;
 	}
-	args = malloc(sizeof(char*) * nb);
+	args = malloc(sizeof(char*) * (nb + 1));
+	tok = cmds;
 	while (i != nb)
 	{
-		tok = cmds;
-		cmds = cmds->next;
 		args[i++] = ft_strdup(tok->value);
+		tok = tok->next;
 	}
+	args[nb] = NULL;
 	return (args);
 }
 
@@ -61,12 +62,12 @@ void	execute_cmd(t_tok *env, t_tok *cmds)
 
 	(void)env;
 	args = get_cmd(cmds);
-	i = 0;
-	printf("[%d]: %s\n", i, args[i]);
-	i++;
+	printf("\nEXECUTE\nCMD: %s\n", args[0]);
+	free(args[0]);
+	i = 1;
 	while (args[i])
 	{
-		printf("[%d]: %s\n", i, args[i]);
+		printf("Arg%d: %s\n", i, args[i]);
 		free(args[i++]);
 	}
 	free(args);
@@ -91,7 +92,7 @@ void	execution_controller(t_tok *env, char *prompt)
 		if (*cmds->key == *K_CMD)
 		{
 			execute_builtins(env, cmds->value);
-			//execute_cmd(env, cmds);
+			execute_cmd(env, cmds);
 		}
 		cmds = cmds->next;
 	}
