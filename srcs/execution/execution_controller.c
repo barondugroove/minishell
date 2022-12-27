@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/27 19:31:25 by benjamincha      ###   ########.fr       */
+/*   Updated: 2022/12/27 20:34:58 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ void	execute_cmd(t_tok *env, t_tok *cmds)
 
 	tmp = env;
 	args = get_cmd(cmds);
-	printf("\nEXECUTE\nCMD: %s\n", args[0]);
-//	free(args[0]);
 	while (tmp)
 	{
 		if (ft_strncmp(tmp->key, "PATH=", ft_strlen(tmp->key)) == 0)
@@ -120,30 +118,51 @@ void	execute_cmd(t_tok *env, t_tok *cmds)
 		}
 		tmp = tmp->next;
 	}
-//	free(args);
 	if (!path || (execve(path, args, env_path) == -1))
 		printf ("Error\n");
+}
+
+int is_builtin(char *cmd)
+{
+	char 	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit", NULL};
+	int		i;
+
+	i = 0;
+	while (builtins[i])
+	{
+		if (ft_strncmp(cmd, builtins[i], ft_strlen(cmd)) == 0)
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 void	execution_controller(t_tok *env, char *prompt)
 {
 	t_tok	*tok_head;
 	t_tok	*cmds;
+	int		pid;
 
 	tok_head = parsing_controller(prompt);
 	if (!tok_head)
 		return ;
 	cmds = tok_head;
 	print_list(cmds);
+	pid = fork();
+	if (pid == -1)
+		return ;
 	while (cmds)
 	{
 		if (*cmds->key == *K_CMD)
 		{
-			execute_builtins(env, cmds->value);
-			execute_cmd(env, cmds);
+			if (!is_builtin && pid == 0) 
+				execute_cmd(env, cmds);
+			else
+				execute_builtins(env, cmds->value);
 		}
 		cmds = cmds->next;
 	}
+	waitpid(pid, NULL, 0);
 	free(prompt);
 	free_list(tok_head);
 }
