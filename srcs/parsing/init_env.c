@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 17:26:43 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/22 01:20:57 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/27 15:40:03 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

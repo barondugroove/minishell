@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/25 16:22:38 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/27 19:31:25 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,51 @@ void	execute_builtins(t_tok *env, char *cmd)
 		pwd();
 	else if (ft_strncmp(cmd, "env", 7) == 0)
 		print_env(&env);
+}
+
+char	*strjoin_pipex(char *s1, char *s2)
+{
+	char	*str;
+	int		length;
+
+	if (!s1 || !s2)
+		return (NULL);
+	length = ft_strlen(s1) + ft_strlen(s2) + 2;
+	str = malloc(sizeof(char) * length);
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, s1, length);
+	ft_strlcat(str, "/", length);
+	ft_strlcat(str, s2, length);
+	return (str);
+}
+
+char	*get_path(char **env, char *cmd)
+{
+	char	*str;
+	int	i;
+
+	i = 0;
+	if (!cmd)
+		return (NULL);
+	if (cmd[0] == '/' || cmd[0] == '.')
+	{
+		str = ft_strdup(cmd);
+		if (!access(str, X_OK))
+			return (str);
+	}
+	else
+	{
+		while (env[i])
+		{
+			str = strjoin_pipex(env[i], cmd);
+			if (!access(str, X_OK))
+				return (str);
+			free(str);
+			i++;
+		}
+	}
+	return (NULL);
 }
 
 char	**get_cmd(t_tok *cmds)
@@ -57,24 +102,27 @@ char	**get_cmd(t_tok *cmds)
 void	execute_cmd(t_tok *env, t_tok *cmds)
 {
 	char	**args;
-	//char	*path;
-	int		i;
+	char	*path;
+	t_tok	*tmp;
+	char	**env_path;
 
-	(void)env;
+	tmp = env;
 	args = get_cmd(cmds);
 	printf("\nEXECUTE\nCMD: %s\n", args[0]);
-	free(args[0]);
-	i = 1;
-	while (args[i])
+//	free(args[0]);
+	while (tmp)
 	{
-		printf("Arg%d: %s\n", i, args[i]);
-		free(args[i++]);
+		if (ft_strncmp(tmp->key, "PATH=", ft_strlen(tmp->key)) == 0)
+		{
+			env_path = ft_split(tmp->value, ':');
+			path = get_path(env_path, args[0]);
+			break ;
+		}
+		tmp = tmp->next;
 	}
-	free(args);
-
-	//path = get_path(env);
-	//if (!path || (execve(path, args, env)) == -1)
-	//	printf ("Error\n");
+//	free(args);
+	if (!path || (execve(path, args, env_path) == -1))
+		printf ("Error\n");
 }
 
 void	execution_controller(t_tok *env, char *prompt)

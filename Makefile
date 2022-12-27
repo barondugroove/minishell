@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
+#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/25 20:57:38 by rlaforge         ###   ########.fr        #
+#    Updated: 2022/12/27 17:02:44 by benjamincha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ all : logo message $(NAME)
 	@echo "\e[2A\e[91m                                                                    \033[0m"
 
 %.o : %.c
-	@echo "\033[1A\e[1mCompiling $<\033[0m"
+	@echo "\033[1A\e[1mCompiling $<                                                       \033[0m"
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT) :

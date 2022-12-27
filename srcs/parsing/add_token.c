@@ -106,7 +106,7 @@ void    clean_token(t_tok **tok_head, char *str)
     int len;
 
     quote = '\0';
-    len = strlen(str);
+    len = ft_strlen(str);
     i = 0;
     while (i < len)
     {
@@ -128,7 +128,7 @@ void    clean_token(t_tok **tok_head, char *str)
             newtoken_back(tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
             ft_memmove(str, str + i + 1, len - i);
             i = 0;
-            len = strlen(str);
+            len = ft_strlen(str);
         }
         else
             i++;
@@ -145,7 +145,7 @@ void	add_token(t_tok **tok_head, char *str)
         if (str[0] == '|')
         {
             newtoken_back(tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
-            ft_memmove(str, str + 1, strlen(str));
+            ft_memmove(str, str + 1, ft_strlen(str));
         }
         clean_token(tok_head, str);
     }
