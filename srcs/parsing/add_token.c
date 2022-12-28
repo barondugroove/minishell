@@ -89,7 +89,7 @@ int	pipe_error(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '|' && str[i + 1] == '|')
+		if (str[i] == '|' && str[i + 1] == '|' && str[i + 2] == '|')
 		{
 			*str = ERROR_CHAR;
 			return (1);
@@ -130,6 +130,22 @@ void    clean_token(t_tok **tok_head, char *str)
             i = 0;
             len = ft_strlen(str);
         }
+        else if  (str[i] == '<' && quote == '\0')
+        {
+            newtoken_back(tok_head, ft_substr(str, 0, i), ft_strdup(K_ARG));
+            newtoken_back(tok_head, ft_strdup("<"), ft_strdup(K_REDIR));
+            ft_memmove(str, str + i + 1, len - i);
+            i = 0;
+            len = ft_strlen(str);
+        }
+        else if  (str[i] == '>' && quote == '\0')
+        {
+            newtoken_back(tok_head, ft_substr(str, 0, i), ft_strdup(K_ARG));
+            newtoken_back(tok_head, ft_strdup(">"), ft_strdup(K_REDIR));
+            ft_memmove(str, str + i + 1, len - i);
+            i = 0;
+            len = ft_strlen(str);
+        }
         else
             i++;
     }
@@ -138,13 +154,25 @@ void    clean_token(t_tok **tok_head, char *str)
 void	add_token(t_tok **tok_head, char *str)
 {
     
-	if (ft_strchr(str, '"') || ft_strchr(str, '\'') || ft_strchr(str, '|'))
+	if (ft_strchr(str, '"') || ft_strchr(str, '\'') || ft_strchr(str, '|') || ft_strchr(str, '<') || ft_strchr(str, '>'))
     {
         if (pipe_error(str))
             return ;
-        if (str[0] == '|')
+        while (str[0] == '|')
         {
             newtoken_back(tok_head, ft_strdup("|"), ft_strdup(K_PIPE));
+            ft_memmove(str, str + 1, ft_strlen(str));
+        }
+        while (str[0] == '<')
+        {
+            printf("SUPER\n");
+            newtoken_back(tok_head, ft_strdup("<"), ft_strdup(K_REDIR));
+            ft_memmove(str, str + 1, ft_strlen(str));
+        }
+        while (str[0] == '>')
+        {
+            printf("SUPER\n");
+            newtoken_back(tok_head, ft_strdup(">"), ft_strdup(K_REDIR));
             ft_memmove(str, str + 1, ft_strlen(str));
         }
         clean_token(tok_head, str);

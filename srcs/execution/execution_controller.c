@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/28 00:59:15 by benjamincha      ###   ########.fr       */
+/*   Updated: 2022/12/28 18:23:28 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,6 @@ int is_builtin(char *cmd)
 
 char **convert_envp(t_tok *head) 
 {
-    // Count the number of nodes in the linked list
     t_tok *node = head;
 	char **envp;
 	int count;
@@ -162,7 +161,6 @@ char **convert_envp(t_tok *head)
     }
     envp = malloc((count + 1) * sizeof(char *));
 
-    // Iterate through the linked list and add each key-value pair to the array
     int i = 0;
     node = head;
     while (node != NULL)
@@ -174,6 +172,7 @@ char **convert_envp(t_tok *head)
         strncpy(str, node->key, key_len);
         str[key_len] = '=';
         strncpy(str + key_len + 1, node->value, value_len);
+		str[value_len + key_len] = '\0';
 		envp[i++] = str;
         node = node->next;
     }
@@ -192,7 +191,7 @@ void	execution_controller(t_tok *env, char *prompt)
 	if (!tok_head)
 		return ;
 	cmds = tok_head;
-//	print_list(cmds);
+	print_list(cmds);
 	envp = convert_envp(env);
 	while (cmds)
 	{
