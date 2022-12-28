@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 17:26:43 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/27 15:40:03 by benjamincha      ###   ########.fr       */
+/*   Updated: 2022/12/28 18:10:15 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ t_tok	*init_env(char **envp)
 	char	*value;
 	int		i;
 
-	i = 0;
-	key = ft_strtok(envp[i], "=");
+	i = 1;
+	key = ft_strtok(envp[0], "=");
 	value = ft_strtok(NULL, "\0");
 	env_head = newtoken(ft_strdup(value), ft_strdup(key));
 	while (envp[i])
