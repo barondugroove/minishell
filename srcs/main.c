@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/27 15:55:39 by benjamincha      ###   ########.fr       */
+/*   Updated: 2022/12/28 01:01:09 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,12 @@ void	minishell(char **envp)
 	env = init_env(envp);
 	while (1)
 	{
-		prompt = readline("\033[0;34m🐚 Minishell \001\e[0m\002");
+		prompt = readline("\033[0;34m🐚 Minishell \e[0m");
 		if (!prompt)
+		{
+			printf("exit\n");
 			break ;
+		}
 		else if (prompt[0] == '\0')
 			continue ;
 		else

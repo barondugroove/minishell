@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/22 01:20:35 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/27 22:22:57 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	export(t_tok **env, char **args)
 	char	*arg_copy;
 	int		i;
 
-	i = 0;
-	if (!args)
+	i = 1;
+	if (!args[i])
 		print_export(env);
 	else
 	{

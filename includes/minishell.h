@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/25 15:50:23 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/27 23:36:38 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,10 @@ void	print_env(t_tok **head);
 t_tok	*dup_env(t_tok **env_head);
 void	sort_export(t_tok **env_head);
 void	pwd(void);
-int		cd(char *path, t_tok *head);
+int		cd(char **args, t_tok *head);
 void	set_pwd(t_tok *head, char *key, char *path);
 char	*ft_getenv(t_tok *env_head, char *key);
+int 	echo(char **args);
 
 // EXECUTION
 void	execution_controller(t_tok *env, char *prompt);

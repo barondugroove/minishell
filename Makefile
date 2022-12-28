@@ -6,7 +6,7 @@
 #    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/27 17:02:44 by benjamincha      ###   ########.fr        #
+#    Updated: 2022/12/27 23:34:59 by benjamincha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRCS = srcs/main.c \
 		srcs/builtins/unset.c \
 		srcs/builtins/print_working_dir.c \
 		srcs/builtins/change_dir.c \
-		srcs/builtins/env.c
+		srcs/builtins/env.c \
+		srcs/builtins/echo.c
 
 CC = @gcc
 

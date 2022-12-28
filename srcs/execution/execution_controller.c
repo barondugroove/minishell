@@ -6,22 +6,73 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/27 20:34:58 by benjamincha      ###   ########.fr       */
+/*   Updated: 2022/12/28 00:59:15 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	execute_builtins(t_tok *env, char *cmd)
+void    free_char_tab(char **tab)
 {
-	if (ft_strncmp(cmd, "export", 7) == 0)
-		export(&env, NULL);
-	else if (ft_strncmp(cmd, "cd", 7) == 0)
-		cd("/tmp", env);
-	else if (ft_strncmp(cmd, "pwd", 7) == 0)
+  int   i;
+
+  if (tab == NULL)
+    return ;
+  i = 0;
+  while (tab[i] != NULL)
+  {
+    free(tab[i]);
+    i++;
+  }
+  free(tab);
+}
+
+char	**get_cmd(t_tok *cmds)
+{
+	char	**args;
+	t_tok	*tok;
+	int		nb;
+	int		i;
+
+	tok = cmds;
+	nb = 0;
+	i = 0;
+	if (!cmds)
+		return (NULL);
+	while (tok)
+	{
+		if(*tok->key == '|')
+			break;
+		nb++;
+		tok = tok->next;
+	}
+	args = malloc(sizeof(char*) * (nb + 1));
+	tok = cmds;
+	while (i != nb)
+	{
+		args[i++] = ft_strdup(tok->value);
+		tok = tok->next;
+	}
+	args[nb] = NULL;
+	return (args);
+}
+
+void	execute_builtins(t_tok *env, t_tok *cmds)
+{
+	char	**args;
+	
+	args = get_cmd(cmds);
+	if (ft_strncmp(cmds->value, "export", 7) == 0)
+		export(&env, args);
+	else if (ft_strncmp(cmds->value, "cd", 7) == 0)
+		cd(args, env);
+	else if (ft_strncmp(cmds->value, "pwd", 7) == 0)
 		pwd();
-	else if (ft_strncmp(cmd, "env", 7) == 0)
+	else if (ft_strncmp(cmds->value, "env", 7) == 0)
 		print_env(&env);
+	else if (ft_strncmp(cmds->value, "echo", 7) == 0)
+		echo(args);
+	free_char_tab(args);
 }
 
 char	*strjoin_pipex(char *s1, char *s2)
@@ -69,62 +120,21 @@ char	*get_path(char **env, char *cmd)
 	return (NULL);
 }
 
-char	**get_cmd(t_tok *cmds)
-{
-	char	**args;
-	t_tok	*tok;
-	int		nb;
-	int		i;
-
-	tok = cmds;
-	nb = 0;
-	i = 0;
-	if (!cmds)
-		return (NULL);
-	while (tok)
-	{
-		if(*tok->key == '|')
-			break;
-		nb++;
-		tok = tok->next;
-	}
-	args = malloc(sizeof(char*) * (nb + 1));
-	tok = cmds;
-	while (i != nb)
-	{
-		args[i++] = ft_strdup(tok->value);
-		tok = tok->next;
-	}
-	args[nb] = NULL;
-	return (args);
-}
-
-void	execute_cmd(t_tok *env, t_tok *cmds)
+void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 {
 	char	**args;
 	char	*path;
-	t_tok	*tmp;
-	char	**env_path;
 
-	tmp = env;
 	args = get_cmd(cmds);
-	while (tmp)
-	{
-		if (ft_strncmp(tmp->key, "PATH=", ft_strlen(tmp->key)) == 0)
-		{
-			env_path = ft_split(tmp->value, ':');
-			path = get_path(env_path, args[0]);
-			break ;
-		}
-		tmp = tmp->next;
-	}
-	if (!path || (execve(path, args, env_path) == -1))
+	path = get_path(ft_split(ft_getenv(env, "PATH"), ':'), args[0]);
+	if (!path || (execve(path, args, envp) == -1))
 		printf ("Error\n");
+	free_char_tab(args);
 }
 
 int is_builtin(char *cmd)
 {
-	char 	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit", NULL};
+	char 	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", NULL};
 	int		i;
 
 	i = 0;
@@ -137,32 +147,72 @@ int is_builtin(char *cmd)
 	return (0);
 }
 
+char **convert_envp(t_tok *head) 
+{
+    // Count the number of nodes in the linked list
+    t_tok *node = head;
+	char **envp;
+	int count;
+
+	count = 0;
+    while (node)
+	{
+        count++;
+        node = node->next;
+    }
+    envp = malloc((count + 1) * sizeof(char *));
+
+    // Iterate through the linked list and add each key-value pair to the array
+    int i = 0;
+    node = head;
+    while (node != NULL)
+	{
+        int key_len = ft_strlen(node->key);
+        int value_len = ft_strlen(node->value);
+        char *str = malloc(key_len + value_len + 2);
+
+        strncpy(str, node->key, key_len);
+        str[key_len] = '=';
+        strncpy(str + key_len + 1, node->value, value_len);
+		envp[i++] = str;
+        node = node->next;
+    }
+    envp[i] = NULL;
+    return (envp);
+}
+
 void	execution_controller(t_tok *env, char *prompt)
 {
 	t_tok	*tok_head;
 	t_tok	*cmds;
+	char	**envp;
 	int		pid;
 
 	tok_head = parsing_controller(prompt);
 	if (!tok_head)
 		return ;
 	cmds = tok_head;
-	print_list(cmds);
-	pid = fork();
-	if (pid == -1)
-		return ;
+//	print_list(cmds);
+	envp = convert_envp(env);
 	while (cmds)
 	{
 		if (*cmds->key == *K_CMD)
 		{
-			if (!is_builtin && pid == 0) 
-				execute_cmd(env, cmds);
-			else
-				execute_builtins(env, cmds->value);
+			if (is_builtin(cmds->value)) 	
+				execute_builtins(env, cmds);
+			else	
+			{
+				pid = fork();
+				if (pid == -1)
+					return ;
+				if (pid == 0)
+					execute_cmd(env, envp, cmds);
+				waitpid(pid, NULL, 0);
+			}
 		}
 		cmds = cmds->next;
 	}
-	waitpid(pid, NULL, 0);
+	free_char_tab(envp);
 	free(prompt);
 	free_list(tok_head);
 }
