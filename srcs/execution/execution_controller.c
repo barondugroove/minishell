@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/28 19:04:07 by benjamincha      ###   ########.fr       */
+/*   Updated: 2022/12/28 19:30:19 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,11 +134,10 @@ void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 
 int	is_builtin(char *cmd)
 {
-	char	*builtins[];
+	char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", NULL};
 	int		i;
 
-	builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", NULL};
-	i = 0;
+	i = 0;	
 	while (builtins[i])
 	{
 		if (ft_strncmp(cmd, builtins[i], ft_strlen(cmd)) == 0)
@@ -147,6 +146,7 @@ int	is_builtin(char *cmd)
 	}
 	return (0);
 }
+
 char	*fill_tab(t_tok *node)
 {
 	char	*str;
