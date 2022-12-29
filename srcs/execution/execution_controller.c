@@ -6,13 +6,13 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/29 01:29:19 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/29 13:54:37 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	free_char_tab(char **tab)
+void	free_tab(char **tab)
 {
 	int	i;
 
@@ -69,7 +69,22 @@ void	execute_builtins(t_tok *env, t_tok *cmds)
 		print_env(&env);
 	else if (ft_strncmp(cmds->value, "echo", 7) == 0)
 		echo(args);
-	free_char_tab(args);
+	free_tab(args);
+}
+
+int	is_builtin(char *cmd)
+{
+	char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", NULL};
+	int		i;
+
+	i = 0;	
+	while (builtins[i])
+	{
+		if (ft_strncmp(cmd, builtins[i], ft_strlen(cmd)) == 0)
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 char	*strjoin_pipex(char *s1, char *s2)
@@ -89,61 +104,37 @@ char	*strjoin_pipex(char *s1, char *s2)
 	return (str);
 }
 
-char	*get_path(char **env, char *cmd)
+char	*get_path(t_tok *env_tok, char *cmd)
 {
+	char	**env;
 	char	*str;
 	int		i;
 
-	i = 0;
-	if (!cmd)
+	if (!cmd || !env_tok)
 		return (NULL);
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
 		str = ft_strdup(cmd);
 		if (!access(str, X_OK))
 			return (str);
+		free(str);
 	}
 	else
 	{
+		i = 0;
+		env = ft_split(ft_getenv(env_tok, "PATH"), ':');
 		while (env[i])
 		{
-			str = strjoin_pipex(env[i], cmd);
+			str = strjoin_pipex(env[i++], cmd);
 			if (!access(str, X_OK))
 				return (str);
 			free(str);
-			i++;
 		}
 	}
 	return (NULL);
 }
 
-void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
-{
-	char	**args;
-	char	*path;
-
-	args = get_cmd(cmds);
-	path = get_path(ft_split(ft_getenv(env, "PATH"), ':'), args[0]);
-	if (!*path || (execve(path, args, envp) == -1))
-		printf("Error\n");
-	free_char_tab(args);
-}
-
-int	is_builtin(char *cmd)
-{
-	char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", NULL};
-	int		i;
-
-	i = 0;	
-	while (builtins[i])
-	{
-		if (ft_strncmp(cmd, builtins[i], ft_strlen(cmd)) == 0)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
+/* LEAKS-LAND, LE ROYAUME DU LEAK ENTRE VOS MAINS :
 char	*fill_tab(t_tok *node)
 {
 	char	*str;
@@ -152,6 +143,22 @@ char	*fill_tab(t_tok *node)
 	str = ft_strjoin(str, "=");
 	str = ft_strjoin(str, node->value);
 	return (str);
+}
+*/
+
+char	*fill_tab(t_tok *node)
+{
+	char *result;
+
+	if (!node || !node->key || !node->value)
+		return (NULL);
+	result = malloc(strlen(node->key) + strlen(node->value));
+	if (!result)
+		return (NULL);
+	ft_strcpy(result, node->key);
+	ft_strlcat(result, "=", 0);
+	ft_strlcat(result, node->value, 0);
+	return (result);
 }
 
 char	**convert_envp(t_tok *head)
@@ -181,7 +188,20 @@ char	**convert_envp(t_tok *head)
 	return (envp);
 }
 
-void	execution_controller(t_tok *env, t_tok *tok_head, char *prompt)
+void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
+{
+	char	**args;
+	char	*path;
+
+	args = get_cmd(cmds);
+	path = get_path(env, args[0]);
+	if (!path || (execve(path, args, envp) == -1))
+		printf("Error\n");
+	free(path);
+	free_tab(args);
+}
+
+void	execution_controller(t_tok *env, t_tok *tok_head)
 {
 	t_tok	*cmds;
 	char	**envp;
@@ -209,7 +229,5 @@ void	execution_controller(t_tok *env, t_tok *tok_head, char *prompt)
 		}
 		cmds = cmds->next;
 	}
-	free_char_tab(envp);
-	free(prompt);
-	free_list(tok_head);
+	free_tab(envp);
 }

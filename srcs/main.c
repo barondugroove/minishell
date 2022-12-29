@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/29 01:30:43 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/29 13:57:21 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ void	minishell(char **envp)
 		{
 			add_history(prompt);
 			cmds = parsing_controller(prompt);
-			execution_controller(env, cmds, prompt);
+			execution_controller(env, cmds);
+			free_list(cmds);
 		}
+		free(prompt);
 	}
 	free_list(env);
 }

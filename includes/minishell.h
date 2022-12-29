@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/29 01:46:17 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/29 13:00:28 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*ft_getenv(t_tok *env_head, char *key);
 int 	echo(char **args);
 
 // EXECUTION
-void	execution_controller(t_tok *env, t_tok *tok_head, char *prompt);
+void	execution_controller(t_tok *env, t_tok *tok_head);
 
 // PARSING
 t_tok	*parsing_controller(char *prompt);
