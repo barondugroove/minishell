@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/30 00:41:42 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/30 00:50:53 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 	path = get_path(env, args[0]);
 	if (!path || (execve(path, args, envp) == -1))
 	{
-		printf("Error\n");
+		printf("command not found: %s\n", args[0]);
 		free(path);	
 		free_list(env);
 		free_list(cmds);
