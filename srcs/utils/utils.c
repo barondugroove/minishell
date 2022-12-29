@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/25 16:22:41 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/29 01:45:28 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,14 @@ void	newtoken_back(t_tok **head, char *data, char *key)
 	while (tmp && tmp->next)
 		tmp = tmp->next;
 	tmp->next = tok;
+}
+
+char *c_to_str(char c)
+{
+    char *str;
+
+    str = malloc(sizeof(char) * 2);
+    str[0] = c;
+    str[1] = '\0';
+    return (str);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 23:29:47 by benjamincha       #+#    #+#             */
-/*   Updated: 2022/12/28 00:37:27 by benjamincha      ###   ########.fr       */
+/*   Updated: 2022/12/29 01:47:09 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ int is_n(char *args)
         return (0);
     while(args[i])
     {
-        if (args[i] != 'n')
+        if (args[i++] != 'n')
             return (0);
-        i++;
     }
     return (1);
 }

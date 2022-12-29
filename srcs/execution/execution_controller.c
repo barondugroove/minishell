@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/28 20:06:34 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/29 01:29:19 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,8 @@ void	free_char_tab(char **tab)
 	if (tab == NULL)
 		return ;
 	i = 0;
-	while (tab[i] != NULL)
-	{
-		free(tab[i]);
-		i++;
-	}
+	while (tab[i])
+		free(tab[i++]);
 	free(tab);
 }
 
@@ -184,14 +181,12 @@ char	**convert_envp(t_tok *head)
 	return (envp);
 }
 
-void	execution_controller(t_tok *env, char *prompt)
+void	execution_controller(t_tok *env, t_tok *tok_head, char *prompt)
 {
-	t_tok	*tok_head;
 	t_tok	*cmds;
 	char	**envp;
 	int		pid;
 
-	tok_head = parsing_controller(prompt);
 	if (!tok_head)
 		return ;
 	cmds = tok_head;

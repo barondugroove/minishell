@@ -124,13 +124,8 @@ void    clean_token(t_tok **tok_head, char *str)
         }
         else if  ((str[i] == '|' || str[i] == '<' || str[i] == '>') && quote == '\0')
         {
-            char *buf = malloc(2);
-            if (buf) {
-                buf[0] = str[i];
-                buf[1] = '\0';
-            }
             newtoken_back(tok_head, ft_substr(str, 0, i), ft_strdup(K_ARG));
-            newtoken_back(tok_head, ft_strdup(buf), ft_strdup(buf));
+            newtoken_back(tok_head, c_to_str(str[i]), c_to_str(str[i]));
             ft_memmove(str, str + i + 1, len - i);
             i = 0;
             len = ft_strlen(str);
@@ -149,12 +144,7 @@ void    add_token(t_tok **tok_head, char *str)
             return ;
         while (str[0] == '|' || str[0] == '<' || str[0] == '>')
         {
-            char *buf = malloc(2);
-            if (buf) {
-                buf[0] = str[0];
-                buf[1] = '\0';
-            }
-            newtoken_back(tok_head, ft_strdup(buf), ft_strdup(buf));
+            newtoken_back(tok_head, c_to_str(str[0]), c_to_str(str[0]));
             ft_memmove(str, str + 1, ft_strlen(str));
         }
         clean_token(tok_head, str);

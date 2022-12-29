@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/28 18:26:25 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/29 01:46:17 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@
 # define K_ARG "A"
 # define K_QUO "'"
 # define K_DQUO "\""
-# define K_PIPE "|"
-# define K_REDIR "R"
 
 typedef struct s_tok {
 	char			*key;
@@ -53,22 +51,21 @@ char	*ft_getenv(t_tok *env_head, char *key);
 int 	echo(char **args);
 
 // EXECUTION
-void	execution_controller(t_tok *env, char *prompt);
+void	execution_controller(t_tok *env, t_tok *tok_head, char *prompt);
 
 // PARSING
 t_tok	*parsing_controller(char *prompt);
+char	*tokenizer(char *str);
 void	add_token(t_tok **tok_head, char *str);
 
 // INIT_DATA
 t_tok	*init_env(char **envp);
 
 // UTILS
-char	*tokenizer(char *str);
 t_tok	*newtoken(char *data, char *key);
 void	newtoken_back(t_tok **head, char *data, char *key);
 void	print_list(t_tok *head);
 void	free_list(t_tok *head);
-void	free_struct(t_tok *head);
-void	addback_envnode(t_tok **head, char *data, char *key);
+char 	*c_to_str(char c);
 
 #endif
