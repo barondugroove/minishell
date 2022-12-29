@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 17:26:43 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/28 18:10:15 by benjamincha      ###   ########.fr       */
+/*   Updated: 2022/12/30 00:32:32 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ t_tok	*init_env(char **envp)
 	{
 		key = ft_strtok(envp[i], "=");
 		value = ft_strtok(NULL, "\0");
-		newtoken_back(&env_head, ft_strdup(value), ft_strdup(key));
+		if (key && value)
+			newtoken_back(&env_head, ft_strdup(value), ft_strdup(key));
 		i++;
 	}
 	return (env_head);

@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/30 00:23:19 by rlaforge         ###   ########.fr       */
+/*   Updated: 2022/12/30 00:41:42 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ char	*get_path(t_tok *env_tok, char *cmd)
 				return (str);
 			free(str);
 		}
+		free_tab(env);
 	}
 	return (NULL);
 }
@@ -150,8 +151,6 @@ char	*fill_tab(t_tok *node)
 {
 	char *result;
 
-	if (!node || !node->key || !node->value)
-		return (NULL);
 	result = malloc(strlen(node->key) + strlen(node->value));
 	if (!result)
 		return (NULL);
@@ -198,7 +197,10 @@ void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 	if (!path || (execve(path, args, envp) == -1))
 	{
 		printf("Error\n");
-		//free(path);
+		free(path);	
+		free_list(env);
+		free_list(cmds);
+		free_tab(envp);
 		free_tab(args);
 		exit(1);
 	}
