@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/30 00:50:53 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/06 19:14:16 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,29 +135,33 @@ char	*get_path(t_tok *env_tok, char *cmd)
 	return (NULL);
 }
 
-/* LEAKS-LAND, LE ROYAUME DU LEAK ENTRE VOS MAINS :
+// 2 strjoin c trop
+char	*strjoinlol(char *s1, char *s2)
+{
+	char	*str;
+	int		length;
+
+	if (!s1 || !s2)
+		return (NULL);
+	length = ft_strlen(s1) + ft_strlen(s2) + 1;
+	str = malloc(sizeof(char) * length);
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, s1, length);
+	ft_strlcat(str, s2, length);
+	free(s1);
+	return (str);
+}
+
+//LEAKS-LAND, LE ROYAUME DU LEAK ENTRE VOS MAINS :
 char	*fill_tab(t_tok *node)
 {
 	char	*str;
 
 	str = ft_strdup(node->key);
-	str = ft_strjoin(str, "=");
-	str = ft_strjoin(str, node->value);
+	str = strjoinlol(str, "=");
+	str = strjoinlol(str, node->value);
 	return (str);
-}
-*/
-
-char	*fill_tab(t_tok *node)
-{
-	char *result;
-
-	result = malloc(strlen(node->key) + strlen(node->value));
-	if (!result)
-		return (NULL);
-	ft_strcpy(result, node->key);
-	ft_strlcat(result, "=", 0);
-	ft_strlcat(result, node->value, 0);
-	return (result);
 }
 
 char	**convert_envp(t_tok *head)
@@ -196,7 +200,7 @@ void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 	path = get_path(env, args[0]);
 	if (!path || (execve(path, args, envp) == -1))
 	{
-		printf("command not found: %s\n", args[0]);
+		printf("command not found: %s\n", args[1]);
 		free(path);	
 		free_list(env);
 		free_list(cmds);
@@ -208,11 +212,48 @@ void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 	free_tab(args);
 }
 
+int	nb_cmds(t_tok *cmds)
+{
+	t_tok	*tmp;
+	int		i;
+
+	tmp = cmds;
+	while (tmp)
+	{
+		if (*tmp->key == *K_CMD)
+			i++;
+		tmp = tmp->next;
+	}
+	return (i);
+}
+
+void	child_process(t_tok *env, char **envp, t_tok *cmds)
+{
+	int	fd_pipe[2];
+	int	pid;
+
+	if (pipe(fd_pipe) == -1)
+		printf("pipe error\n");
+	pid = fork();
+	if (pid == -1)
+		printf("pid error");
+	if (pid == 0)
+	{
+		close(fd_pipe[0]);
+		if (nb_cmds(cmds) != 1)
+			dup2(fd_pipe[1], STDOUT_FILENO);
+		execute_cmd(env, envp, cmds);
+	}
+	close(fd_pipe[1]);
+	if (nb_cmds(cmds) != 1)
+		dup2(fd_pipe[0], fd_pipe[1]);
+	waitpid(pid, NULL, 0);
+}
+
 void	execution_controller(t_tok *env, t_tok *tok_head)
 {
 	t_tok	*cmds;
 	char	**envp;
-	int		pid;
 
 	if (!tok_head)
 		return ;
@@ -226,12 +267,13 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 				execute_builtins(env, cmds);
 			else
 			{
-				pid = fork();
+/*				pid = fork();
 				if (pid == -1)
 					return ;
 				if (pid == 0)
 					execute_cmd(env, envp, cmds);
-				waitpid(pid, NULL, 0);
+				waitpid(pid, NULL, 0);*/
+				child_process(env, envp, cmds);
 			}
 		}
 		cmds = cmds->next;
