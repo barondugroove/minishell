@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/06 19:14:16 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/07 14:59:50 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ int	nb_cmds(t_tok *cmds)
 	int		i;
 
 	tmp = cmds;
+	i = 0;
 	while (tmp)
 	{
 		if (*tmp->key == *K_CMD)
@@ -245,6 +246,7 @@ void	child_process(t_tok *env, char **envp, t_tok *cmds)
 		execute_cmd(env, envp, cmds);
 	}
 	close(fd_pipe[1]);
+	close(fd_pipe[0]);
 	if (nb_cmds(cmds) != 1)
 		dup2(fd_pipe[0], fd_pipe[1]);
 	waitpid(pid, NULL, 0);

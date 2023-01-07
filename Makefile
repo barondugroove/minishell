@@ -6,7 +6,7 @@
 #    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/27 23:34:59 by benjamincha      ###   ########.fr        #
+#    Updated: 2023/01/07 14:59:15 by benjamincha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRCS = srcs/main.c \
 
 CC = @gcc
 
-CFLAGS = -lreadline -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g
 
 LIBFT = libft/libft.a
 
@@ -53,7 +53,7 @@ logo :
 	@echo "\e[0;96m╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋\e[95m┗┛\e[96m╋╋╋╋╋╋╋╋╋\e[0;95m┗━┛\033[0m\n"
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(OBJS) $(CFLAGS) $(LIBFT) -o $(NAME)
+	$(CC) $(OBJS) $(CFLAGS) $(LIBFT) -lreadline -o $(NAME)
 	@echo "\e[2A\e[1;32m📦 $(NAME) compiled!                                           \n\n\033[0m"
 
 message:
