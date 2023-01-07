@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/07 15:47:39 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/07 15:56:59 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@ char	**get_cmd(t_tok *cmds)
 {
 	char	**args;
 	t_tok	*tok;
+	int		nb;
 	int		i;
 
 	tok = cmds;
+	nb = 0;
 	i = 0;
 	if (!cmds)
 		return (NULL);
@@ -38,18 +40,17 @@ char	**get_cmd(t_tok *cmds)
 	{
 		if (*tok->key == '|')
 			break ;
-		i++;
+		nb++;
 		tok = tok->next;
 	}
-	args = malloc(sizeof(char *) * (i + 1));
+	args = malloc(sizeof(char *) * (nb + 1));
 	tok = cmds;
-	i = 0;
-	while (tok)
+	while (i != nb)
 	{
 		args[i++] = ft_strdup(tok->value);
 		tok = tok->next;
 	}
-	args[i] = NULL;
+	args[nb] = NULL;
 	return (args);
 }
 
