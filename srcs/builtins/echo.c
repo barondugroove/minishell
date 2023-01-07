@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 23:29:47 by benjamincha       #+#    #+#             */
-/*   Updated: 2022/12/29 01:47:09 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/07 15:03:05 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int echo(char **args)
     {
         if (!args[1] || !is_n(args[i]))
             printf("%s", args[i]);
-        if (args[i + 1])
+        if (args[i + 1] && !is_n(args[i]))
             printf(" ");
         i++;
     }
