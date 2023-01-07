@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/07 15:56:59 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/07 16:25:06 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,16 @@ void	execute_builtins(t_tok *env, t_tok *cmds)
 	args = get_cmd(cmds);
 	if (ft_strncmp(cmds->value, "export", 7) == 0)
 		export(&env, args);
-	else if (ft_strncmp(cmds->value, "cd", 7) == 0)
+	else if (ft_strncmp(cmds->value, "cd", 3) == 0)
 		cd(args, env);
-	else if (ft_strncmp(cmds->value, "pwd", 7) == 0)
+	else if (ft_strncmp(cmds->value, "pwd", 4) == 0)
 		pwd();
-	else if (ft_strncmp(cmds->value, "env", 7) == 0)
+	else if (ft_strncmp(cmds->value, "env", 4) == 0)
 		print_env(&env);
-	else if (ft_strncmp(cmds->value, "echo", 7) == 0)
+	else if (ft_strncmp(cmds->value, "echo", 5) == 0)
 		echo(args);
+	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
+		unset(&env, args);
 	free_tab(args);
 }
 

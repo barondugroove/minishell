@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/27 22:22:57 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/07 16:33:00 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	print_export(t_tok **head)
 	t_tok	*tok;
 	t_tok	*env_copy;
 
-	tok = *head;
 	env_copy = dup_env(head);
-	sort_export(head);
+	sort_export(&env_copy);
+	tok = env_copy;
 	while (tok)
 	{
 		if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0))

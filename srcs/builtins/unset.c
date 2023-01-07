@@ -3,27 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:41:41 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/12 18:45:43 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/01/07 17:23:31 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	unset(t_tok **env_head, char *key)
+void	remove_node(t_tok **head, t_tok *node_to_remove)
+{
+	t_tok	*current;
+
+	current = *head;
+	if (*head == NULL || node_to_remove == NULL)
+		return ;
+	if (*head == node_to_remove)
+	{
+		*head = node_to_remove->next;
+		return ;
+	}
+	while (current->next != node_to_remove && current->next)
+		current = current->next;
+	current->next = node_to_remove->next;
+	free(node_to_remove->key);
+	free(node_to_remove->value);
+	free(node_to_remove);
+}
+
+void	unset(t_tok **env_head, char **key)
 {
 	t_tok	*tmp;
+	int		i;
 
 	tmp = *env_head;
-	while (tmp->next->key)
+	i = 1;
+	while (key[i])
 	{
-		if (ft_strncmp(tmp->next->key, key, ft_strlen(key)) == 0)
+		while (tmp)
 		{
-			tmp->next = tmp->next->next;
-			return ;
+			if (ft_strncmp(tmp->key, key[i], ft_strlen(tmp->key)) == 0)
+			{
+				remove_node(env_head, tmp);
+				tmp = *env_head;
+				break ;
+			}
+			else
+				tmp = tmp->next;
 		}
-		tmp = tmp->next;
+		i++;
 	}
 }

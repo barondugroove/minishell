@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 19:43:13 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/22 15:54:29 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/01/07 16:39:01 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	print_env(t_tok **head)
 	tok = *head;
 	while (tok)
 	{
-		if (tok->value != NULL && ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0))
+		if (tok->value != NULL && ft_strncmp(tok->key, "_", ft_strlen(tok->key)) != 0)
 			printf("%s=%s\n", tok->key, tok->value);
 		tok = tok->next;
 	}
