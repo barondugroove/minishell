@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/07 18:54:04 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/07 19:01:27 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	is_builtin(char *cmd)
 	i = 0;	
 	while (builtins[i])
 	{
-		if (ft_strncmp(cmd, builtins[i], ft_strlen(cmd)) == 0)
+		if (ft_strncmp(cmd, builtins[i], ft_strlen(builtins[i])) == 0)
 			return (1);
 		i++;
 	}
@@ -247,9 +247,12 @@ void	child_process(t_tok *env, char **envp, t_tok *cmds)
 			dup2(fd_pipe[1], STDOUT_FILENO);
 		execute_cmd(env, envp, cmds);
 	}
-	close(fd_pipe[1]);
-	close(fd_pipe[0]);
-	waitpid(pid, NULL, 0);
+	else
+	{
+		close(fd_pipe[1]);
+		close(fd_pipe[0]);
+		waitpid(pid, NULL, 0);
+	}
 }
 
 void	execution_controller(t_tok *env, t_tok *tok_head)
