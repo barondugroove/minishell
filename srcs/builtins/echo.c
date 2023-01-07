@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 23:29:47 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/07 15:03:05 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/07 15:39:45 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ int echo(char **args)
         return (-1);
     while (args[i])
     {
-        if (!args[1] || !is_n(args[i]))
+        if (!is_n(args[i]) || i != 1)
             printf("%s", args[i]);
-        if (args[i + 1] && !is_n(args[i]))
+        if (is_n(args[i]) && i != 1)
+            printf(" ");
+        else if (args[i + 1] && !is_n(args[i]))
             printf(" ");
         i++;
     }
