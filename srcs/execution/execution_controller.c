@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/07 14:59:50 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/07 15:19:16 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,9 @@ char	**get_cmd(t_tok *cmds)
 {
 	char	**args;
 	t_tok	*tok;
-	int		nb;
 	int		i;
 
 	tok = cmds;
-	nb = 0;
 	i = 0;
 	if (!cmds)
 		return (NULL);
@@ -40,17 +38,18 @@ char	**get_cmd(t_tok *cmds)
 	{
 		if (*tok->key == '|')
 			break ;
-		nb++;
+		i++;
 		tok = tok->next;
 	}
-	args = malloc(sizeof(char *) * (nb + 1));
+	args = malloc(sizeof(char *) * (i + 1));
 	tok = cmds;
-	while (i != nb)
+	i = 0;
+	while (tok)
 	{
 		args[i++] = ft_strdup(tok->value);
 		tok = tok->next;
 	}
-	args[nb] = NULL;
+	args[i] = NULL;
 	return (args);
 }
 
@@ -168,23 +167,21 @@ char	**convert_envp(t_tok *head)
 {
 	t_tok	*node;
 	char	**envp;
-	int		count;
 	int		i;
 
-	count = 0;
 	node = head;
 	i = 0;
 	while (node)
 	{
-		count++;
+		i++;
 		node = node->next;
 	}
-	envp = malloc((count + 1) * sizeof(char *));
+	envp = malloc((i + 1) * sizeof(char *));
 	node = head;
+	i = 0;
 	while (node)
 	{
-		envp[i] = fill_tab(node);
-		i++;
+		envp[i++] = fill_tab(node);
 		node = node->next;
 	}
 	envp[i] = NULL;
@@ -200,7 +197,7 @@ void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 	path = get_path(env, args[0]);
 	if (!path || (execve(path, args, envp) == -1))
 	{
-		printf("command not found: %s\n", args[1]);
+		printf("command not found: %s\n", args[0]);
 		free(path);	
 		free_list(env);
 		free_list(cmds);
