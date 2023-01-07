@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/07 16:25:06 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/07 18:54:04 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,8 @@ void	child_process(t_tok *env, char **envp, t_tok *cmds)
 	if (pipe(fd_pipe) == -1)
 		printf("pipe error\n");
 	pid = fork();
+	if (nb_cmds(cmds) != 1)
+		dup2(fd_pipe[0], STDIN_FILENO);
 	if (pid == -1)
 		printf("pid error");
 	if (pid == 0)
@@ -247,8 +249,6 @@ void	child_process(t_tok *env, char **envp, t_tok *cmds)
 	}
 	close(fd_pipe[1]);
 	close(fd_pipe[0]);
-	if (nb_cmds(cmds) != 1)
-		dup2(fd_pipe[0], fd_pipe[1]);
 	waitpid(pid, NULL, 0);
 }
 
