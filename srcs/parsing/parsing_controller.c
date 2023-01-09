@@ -3,17 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/06 19:20:06 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/09 18:02:27 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 
-int	clean_token_list(t_tok *head)
+
+void replace_var_env(t_tok *env, t_tok *tok)
+{
+	char *avant;
+	char *apres;
+	char *buf;
+
+	avant = ft_strtok(tok->value, "$");
+	apres = ft_strtok(NULL, "\0");
+	if (!apres)
+	{
+		buf = ft_getenv(env, avant);
+		free(tok->value);
+		tok->value = ft_strdup(buf);
+	}
+	else
+	{
+		apres = ft_getenv(env, apres);
+		printf("LE TRUC DE OUF, YA UN TRUC AVANT LA VAR D'ENV%s\n",apres);
+		//buf = malloc((ft_strlen(avant) + ft_strlen(apres)) * sizeof(char));
+	}
+}
+
+int	clean_token_list(t_tok *env, t_tok *head)
 {
 	t_tok	*tok;
 
@@ -25,19 +48,21 @@ int	clean_token_list(t_tok *head)
 	tok->key = ft_strdup("C");
 	while (tok)
 	{
-		if(*tok->key == '|')
+		if (*tok->key == '|')
 		{
 			if (!tok->next)
 				return (1);
 			free(tok->next->key);
 			tok->next->key = ft_strdup("C");
 		}
+		if (ft_strchr(tok->value, '$'))
+			replace_var_env(env, tok);
 		tok = tok->next;
 	}
 	return (0);
 }
 
-t_tok	*parsing_controller(char *prompt)
+t_tok	*parsing_controller(t_tok *env, char *prompt)
 {
 	char	*str;
 	t_tok	*tok_head;
@@ -62,7 +87,7 @@ t_tok	*parsing_controller(char *prompt)
 		}
 		str = tokenizer(NULL);
 	}
-	if(clean_token_list(tok_head))
+	if(clean_token_list(env, tok_head))
 	{
 		printf("Parsing error: pipe a une extremitée du prompt, tu veux que je pipe comment avec ça moi?????\n");
 		free_list(tok_head);

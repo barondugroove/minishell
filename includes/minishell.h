@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/08 23:44:23 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/09 17:01:59 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	free_list(t_tok *head);
 void	free_tab(char **tab);
 
 // PARSING
-t_tok	*parsing_controller(char *prompt);
+t_tok	*parsing_controller(t_tok *env, char *prompt);
 char	*tokenizer(char *str);
 void	add_token(t_tok **tok_head, char *str);
 
