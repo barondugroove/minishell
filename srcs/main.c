@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2023/01/09 16:40:06 by rlaforge         ###   ########.fr       */
-=======
-/*   Updated: 2023/01/09 17:47:30 by benjamincha      ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2023/01/09 18:15:00 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
