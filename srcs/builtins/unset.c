@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:41:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/07 17:23:31 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/09 17:47:17 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,5 @@ void	unset(t_tok **env_head, char **key)
 		}
 		i++;
 	}
+	exit(0);
 }

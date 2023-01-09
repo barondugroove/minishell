@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/08 23:36:35 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/09 18:10:59 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 			dup2(fd_in, STDIN_FILENO);
 			close(fd_in);
 		}
-		if (fd_out != STDOUT_FILENO && nb_cmds(cmd) > 1)
+		if (fd_out != STDOUT_FILENO)
 		{
 			dup2(fd_out, STDOUT_FILENO);
 			close(fd_out);
@@ -100,10 +100,10 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 		return ;
 	cmds = tok_head;
 	envp = convert_envp(env);
-	fd_in = STDIN_FILENO;
-	fd_out = STDOUT_FILENO;
 	while (cmds)
 	{
+		fd_in = STDIN_FILENO;
+		fd_out = STDOUT_FILENO;
 		if (*cmds->key == *K_CMD)
 		{
 			if (nb_cmds(cmds) > 1)
@@ -112,7 +112,7 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 					printf("error pipe\n");
 				fd_out = fd_pipe[1];
 			}
-		//	printf("Command executing is '%s' still %d remaining. FD_IN is %d and FD_OUT is %d\n\n", cmds->value, nb_cmds(cmds), fd_in, fd_out);
+			printf("Command executing is '%s' still %d remaining. FD_IN is %d and FD_OUT is %d\n\n", cmds->value, nb_cmds(cmds), fd_in, fd_out);
 			child_process(env, envp, cmds, fd_in, fd_out);
 			if (nb_cmds(cmds) != 1)
 				fd_in = fd_pipe[0];

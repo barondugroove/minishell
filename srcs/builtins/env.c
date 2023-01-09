@@ -6,7 +6,11 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 19:43:13 by bchabot           #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2023/01/09 18:04:43 by rlaforge         ###   ########.fr       */
+=======
+/*   Updated: 2023/01/09 17:47:24 by benjamincha      ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +42,5 @@ void	print_env(t_tok **head)
 			printf("%s=%s\n", tok->key, tok->value);
 		tok = tok->next;
 	}
+	exit(0);
 }

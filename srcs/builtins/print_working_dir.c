@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_working_dir.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 19:32:16 by bchabot           #+#    #+#             */
-/*   Updated: 2022/12/21 19:50:04 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/01/09 17:47:22 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,5 @@ void	pwd(void)
 
 	getcwd(str, sizeof(str));
 	printf("%s\n", str);
-	return ;
+	exit(0);
 }

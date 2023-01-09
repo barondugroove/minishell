@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 23:29:47 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/07 15:39:45 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/09 17:46:18 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,5 @@ int echo(char **args)
     }
     if (!args[1] || !is_n(args[1]))
        printf("\n");
-    return (0);
+    exit (0);
 }
