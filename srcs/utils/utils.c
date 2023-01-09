@@ -3,43 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/29 01:45:28 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/08 23:36:33 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	print_list(t_tok *head)
-{
-	t_tok	*tok;
-
-	tok = head;
-	printf("PRINTLIST:\n");
-	while (tok)
-	{
-		printf("%s: %s$\n", tok->key, tok->value);
-		tok = tok->next;
-	}
-}
-
-void	free_list(t_tok *head)
-{
-	t_tok	*tmp;
-
-	tmp = head;
-	while (head)
-	{
-		tmp = head;
-		head = head->next;
-		free(tmp->key);
-		free(tmp->value);
-		free(tmp);
-	}
-	free(head);
-}
 
 t_tok	*newtoken(char *data, char *key)
 {
@@ -82,3 +53,53 @@ char *c_to_str(char c)
     str[1] = '\0';
     return (str);
 }
+
+char	*strjoin_pipex(char *s1, char *s2)
+{
+	char	*str;
+	int		length;
+
+	if (!s1 || !s2)
+		return (NULL);
+	length = ft_strlen(s1) + ft_strlen(s2) + 2;
+	str = malloc(sizeof(char) * length);
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, s1, length);
+	ft_strlcat(str, "/", length);
+	ft_strlcat(str, s2, length);
+	return (str);
+}
+
+// 2 strjoin c trop
+char	*strjoinlol(char *s1, char *s2)
+{
+	char	*str;
+	int		length;
+
+	if (!s1 || !s2)
+		return (NULL);
+	length = ft_strlen(s1) + ft_strlen(s2) + 1;
+	str = malloc(sizeof(char) * length);
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, s1, length);
+	ft_strlcat(str, s2, length);
+	free(s1);
+	return (str);
+}
+
+/*
+void	print_list(t_tok *head)
+{
+	t_tok	*tok;
+
+	tok = head;
+	printf("PRINTLIST:\n");
+	while (tok)
+	{
+		printf("%s: %s$\n", tok->key, tok->value);
+		tok = tok->next;
+	}
+}
+*/

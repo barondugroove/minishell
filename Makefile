@@ -6,7 +6,7 @@
 #    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/01/07 14:59:15 by benjamincha      ###   ########.fr        #
+#    Updated: 2023/01/09 15:52:46 by benjamincha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,18 +14,20 @@ NAME = minishell
 
 SRCS = srcs/main.c \
 		srcs/parsing/parsing_controller.c \
-		srcs/execution/execution_controller.c \
 		srcs/parsing/tokenizer.c \
 		srcs/parsing/add_token.c \
-		srcs/utils/utils.c \
 		srcs/parsing/init_env.c \
+		srcs/execution/execution_controller.c \
 		srcs/builtins/export.c \
 		srcs/builtins/export_utils.c \
 		srcs/builtins/unset.c \
 		srcs/builtins/print_working_dir.c \
 		srcs/builtins/change_dir.c \
 		srcs/builtins/env.c \
-		srcs/builtins/echo.c
+		srcs/builtins/echo.c \
+		srcs/utils/utils.c \
+		srcs/utils/free_utils.c \
+		srcs/utils/execution_utils.c
 
 CC = @gcc
 

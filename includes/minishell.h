@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/07 16:21:14 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/08 23:44:23 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,17 @@ void	unset(t_tok **env_head, char **key);
 // EXECUTION
 void	execution_controller(t_tok *env, t_tok *tok_head);
 
+// EXECUTION_UTILS
+int		nb_cmds(t_tok *cmds);
+char	**get_cmd(t_tok *cmds);
+int		is_builtin(char *cmd);
+char	*get_path(t_tok *env_tok, char *cmd);
+char	**convert_envp(t_tok *head);
+
+// FREE_UTILS
+void	free_list(t_tok *head);
+void	free_tab(char **tab);
+
 // PARSING
 t_tok	*parsing_controller(char *prompt);
 char	*tokenizer(char *str);
@@ -66,7 +77,8 @@ t_tok	*init_env(char **envp);
 t_tok	*newtoken(char *data, char *key);
 void	newtoken_back(t_tok **head, char *data, char *key);
 void	print_list(t_tok *head);
-void	free_list(t_tok *head);
 char 	*c_to_str(char c);
+char	*strjoin_pipex(char *s1, char *s2);
+char	*strjoinlol(char *s1, char *s2);
 
 #endif
