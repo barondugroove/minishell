@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2023/01/09 18:02:27 by rlaforge         ###   ########.fr       */
-=======
-/*   Updated: 2023/01/09 16:54:48 by benjamincha      ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2023/01/09 18:18:26 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

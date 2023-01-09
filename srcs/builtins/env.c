@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/12 19:43:13 by bchabot           #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2023/01/09 18:04:43 by rlaforge         ###   ########.fr       */
-=======
-/*   Updated: 2023/01/09 17:47:24 by benjamincha      ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Created: 2023/01/09 18:19:29 by benjamincha       #+#    #+#             */
+/*   Updated: 2023/01/09 18:19:47 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +15,6 @@
 char	*ft_getenv(t_tok *env_head, char *key)
 {
 	t_tok	*tmp;
-
 
 	tmp = env_head;
 	if (!key)
