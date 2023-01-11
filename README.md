@@ -1,12 +1,30 @@
-┏━┓╋┏┓┏┳┓╋┏━┓╋╋╋╋╋┏┓           \
-┃╋┣━┫┗╋┫┗┓┃┏╋━┳━┳┳╋╋┓┏┓┏━┓┏━┳━┓\
-┃┏┫┻┫┏┫┃┏┫┃┗┫╋┃╋┃┃┃┃┗┫┗┫╋┗┫╋┃┻┫\
-┗┛┗━┻━┻┻━┛┗━┻━┻┓┣━┻┻━┻━┻━━╋┓┣━┛\
-╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋┗┛╋╋╋╋╋╋╋╋╋┗━┛  
 
 <div align="center">
-  <br>
-  <a href=https://open.spotify.com/album/5CXBCsYUVcbeFHisHsBfnA> <img src=https://www.podcastjournal.net/photo/art/default/3659590-5359889.jpg?v=1326539099 width="40%">
-  </a> </img>
+  <h1>📟 Minishell</h1>
   <h3>As beautiful as a shell</h3>
+  <a href=https://open.spotify.com/track/18pedqpot9iF1Z7Ol3YHmc?si=15e7483b67544b80><img src=https://www.podcastjournal.net/photo/art/default/3659590-5359889.jpg?v=1326539099 width="30%">
+  </a></img>
 </div>
+
+
+## 🔩 Makefile
+
+### This project use `Make`, here are the commands to compile it
+
+**1. 🗜️Compiling the project :**
+
+```shell
+$ make
+```
+
+**2. 🧹Cleaning all binary (.o) :**
+
+```shell
+$ make clean
+```
+
+**2. 🪦Cleaning all binary (.o) and executable file :**
+
+```shell
+$ make fclean
+```
