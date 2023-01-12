@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2023/01/08 23:36:33 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/12 23:46:14 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,24 +68,6 @@ char	*strjoin_pipex(char *s1, char *s2)
 	ft_strlcpy(str, s1, length);
 	ft_strlcat(str, "/", length);
 	ft_strlcat(str, s2, length);
-	return (str);
-}
-
-// 2 strjoin c trop
-char	*strjoinlol(char *s1, char *s2)
-{
-	char	*str;
-	int		length;
-
-	if (!s1 || !s2)
-		return (NULL);
-	length = ft_strlen(s1) + ft_strlen(s2) + 1;
-	str = malloc(sizeof(char) * length);
-	if (!str)
-		return (NULL);
-	ft_strlcpy(str, s1, length);
-	ft_strlcat(str, s2, length);
-	free(s1);
 	return (str);
 }
 

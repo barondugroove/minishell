@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 21:26:54 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/12 23:46:10 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,5 @@ void	newtoken_back(t_tok **head, char *data, char *key);
 void	print_list(t_tok *head);
 char 	*c_to_str(char c);
 char	*strjoin_pipex(char *s1, char *s2);
-char	*strjoinlol(char *s1, char *s2);
 
 #endif

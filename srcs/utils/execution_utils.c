@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/08 23:36:30 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/12 23:43:51 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,15 @@ char	**get_cmd(t_tok *cmds)
 char	*fill_tab(t_tok *node)
 {
 	char	*str;
+	int	length;
 
-	str = ft_strdup(node->key);
-	str = strjoinlol(str, "=");
-	str = strjoinlol(str, node->value);
+	length = ft_strlen(node->key) + ft_strlen(node->value) + 2;
+	str = malloc(sizeof(char) * length);
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, node->key, length);
+	ft_strlcat(str, "=", length);
+	ft_strlcat(str, node->value, length);
 	return (str);
 }
 
