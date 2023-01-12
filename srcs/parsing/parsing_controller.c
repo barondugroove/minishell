@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 17:30:08 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/12 17:37:16 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ t_tok	*parsing_controller(t_tok *env, char *prompt)
 			add_token(&tok_head, str);
 		if (str && *str == ERROR_CHAR)
 		{
-			printf("Parsing error: plein de pipe a la suite, t'es fou ou quoi???\n");
+			printf("syntax error near unexpected token '|'\n");
+			exit_code = 2;
 			free_list(tok_head);
 			return (NULL);
 		}
@@ -93,7 +94,8 @@ t_tok	*parsing_controller(t_tok *env, char *prompt)
 	}
 	if(clean_token_list(env, tok_head))
 	{
-		printf("Parsing error: pipe a une extremitée du prompt, tu veux que je pipe comment avec ça moi?????\n");
+		printf("syntax error near unexpected token '|'\n");
+		exit_code = 2;
 		free_list(tok_head);
 		return (NULL);
 	}
