@@ -6,13 +6,13 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 21:43:53 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/12 22:05:51 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	execute_builtins(t_tok *env, t_tok *cmds)
+int	execute_builtins(t_tok *env, t_tok *cmds)
 {
 	char	**args;
 
@@ -30,6 +30,7 @@ void	execute_builtins(t_tok *env, t_tok *cmds)
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
 		unset(&env, args);
 	free_tab(args);
+	return (1);
 }
 
 int	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
@@ -56,14 +57,13 @@ int	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 {
 	int	pid;
 	int status;
-	int truc;
+	int code;
 
 	pid = fork();
 	if (pid == -1)
 		printf("pid error");
 	if (pid == 0)
 	{
-		truc = 1;
 		if (fd_in != STDIN_FILENO)
 		{
 			dup2(fd_in, STDIN_FILENO);
@@ -75,19 +75,19 @@ int	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 			close(fd_out);
 		}
 		if (is_builtin(cmd->value))
-			execute_builtins(env, cmd);
+			code = execute_builtins(env, cmd);
 		else
-			truc = execute_cmd(env, envp, cmd);
-		if (truc != 0)
-			return (truc);
+			code = execute_cmd(env, envp, cmd);
+		if (code != 0)
+			return (code);
 	}
 	else
 	{
+		waitpid(pid, &status, 0);
 		if (fd_out != STDOUT_FILENO)
 			close(fd_out);
 		if (fd_in != STDIN_FILENO)
 			close(fd_in);
-		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
 	}
@@ -101,7 +101,7 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 	int		fd_in;
 	int		fd_out;
 	int		fd_pipe[2];
-	int truc;
+	int		code;
 
 	if (!tok_head)
 		return ;
@@ -119,14 +119,14 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 					printf("error pipe\n");
 				fd_out = fd_pipe[1];
 			}
-		//	printf("Command executing is '%s' still %d remaining. FD_IN is %d and FD_OUT is %d\n\n", cmds->value, nb_cmds(cmds), fd_in, fd_out);
-			truc = child_process(env, envp, cmds, fd_in, fd_out);
-			if (truc != 0)
+		//printf("Command executing is '%s' still %d remaining. FD_IN is %d and FD_OUT is %d\n\n", cmds->value, nb_cmds(cmds), fd_in, fd_out);
+			code = child_process(env, envp, cmds, fd_in, fd_out);
+			if (code != 0)
 			{
 				free_list(env);
 				free_list(tok_head);
 				free_tab(envp);
-				exit (truc);
+				exit(code);
 			}
 			if (nb_cmds(cmds) != 1)
 				fd_in = fd_pipe[0];
