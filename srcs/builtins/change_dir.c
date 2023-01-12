@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   change_dir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 20:08:33 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/09 17:47:27 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/12 15:43:13 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	cd(char **args, t_tok *head)
 	if (!args[1])
 	{
 		chdir(ft_getenv(head, "HOME"));
-		return (0);
+		exit(0);
 	}	
 	set_pwd(head, "OLDPWD", ft_getenv(head, "PWD"));
 	if (chdir(args[1]) < 0)
@@ -40,5 +40,5 @@ int	cd(char **args, t_tok *head)
 	}
 	getcwd(str, sizeof(str));
 	set_pwd(head, "PWD", str);
-	return (0);
+	exit(0);
 }

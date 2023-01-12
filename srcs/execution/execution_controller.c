@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/09 18:23:02 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/12 17:29:28 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 		free_list(cmds);
 		free_tab(envp);
 		free_tab(args);
-		exit(1);
+		exit(127);
 	}
 	free(path);
 	free_tab(args);
@@ -57,6 +57,7 @@ void	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 		int fd_out)
 {
 	int	pid;
+	int status;
 
 	pid = fork();
 	if (pid == -1)
@@ -84,7 +85,10 @@ void	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 			close(fd_out);
 		if (fd_in != STDIN_FILENO)
 			close(fd_in);
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &status, 0);
+
+		if (WIFEXITED(status))
+			exit_code = WEXITSTATUS(status);
 	}
 }
 
