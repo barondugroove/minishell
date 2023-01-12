@@ -6,13 +6,13 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 17:29:28 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/12 21:12:06 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	execute_builtins(t_tok *env, t_tok *cmds)
+void	execute_builtins(t_tok *env, char **envp, t_tok *cmds)
 {
 	char	**args;
 
@@ -22,7 +22,7 @@ void	execute_builtins(t_tok *env, t_tok *cmds)
 	else if (ft_strncmp(cmds->value, "cd", 3) == 0)
 		cd(args, env);
 	else if (ft_strncmp(cmds->value, "pwd", 4) == 0)
-		pwd();
+		pwd(args, env);
 	else if (ft_strncmp(cmds->value, "env", 4) == 0)
 		print_env(&env);
 	else if (ft_strncmp(cmds->value, "echo", 5) == 0)
@@ -30,6 +30,10 @@ void	execute_builtins(t_tok *env, t_tok *cmds)
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
 		unset(&env, args);
 	free_tab(args);
+	free_tab(envp);
+	free_list(env);
+	free_list(cmds);
+	exit(0);
 }
 
 void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
@@ -75,7 +79,7 @@ void	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 			close(fd_out);
 		}
 		if (is_builtin(cmd->value))
-			execute_builtins(env, cmd);
+			execute_builtins(env, envp, cmd);
 		else
 			execute_cmd(env, envp, cmd);
 	}

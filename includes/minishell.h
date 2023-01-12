@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 16:31:41 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/12 20:25:50 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	export(t_tok **head, char **args);
 void	print_env(t_tok **head);
 t_tok	*dup_env(t_tok **env_head);
 void	sort_export(t_tok **env_head);
-void	pwd(void);
+void	pwd(char **args, t_tok *env);
 int		cd(char **args, t_tok *head);
 void	set_pwd(t_tok *head, char *key, char *path);
 char	*ft_getenv(t_tok *env_head, char *key);
