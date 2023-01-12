@@ -6,13 +6,13 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 21:12:06 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/12 21:43:53 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	execute_builtins(t_tok *env, char **envp, t_tok *cmds)
+void	execute_builtins(t_tok *env, t_tok *cmds)
 {
 	char	**args;
 
@@ -30,13 +30,9 @@ void	execute_builtins(t_tok *env, char **envp, t_tok *cmds)
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
 		unset(&env, args);
 	free_tab(args);
-	free_tab(envp);
-	free_list(env);
-	free_list(cmds);
-	exit(0);
 }
 
-void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
+int	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 {
 	char	**args;
 	char	*path;
@@ -47,27 +43,27 @@ void	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 	{
 		printf("command not found: %s\n", args[0]);
 		free(path);
-		free_list(env);
-		free_list(cmds);
-		free_tab(envp);
 		free_tab(args);
-		exit(127);
+		return (127);
 	}
 	free(path);
 	free_tab(args);
+	return (0);
 }
 
-void	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
+int	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 		int fd_out)
 {
 	int	pid;
 	int status;
+	int truc;
 
 	pid = fork();
 	if (pid == -1)
 		printf("pid error");
 	if (pid == 0)
 	{
+		truc = 1;
 		if (fd_in != STDIN_FILENO)
 		{
 			dup2(fd_in, STDIN_FILENO);
@@ -79,9 +75,11 @@ void	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 			close(fd_out);
 		}
 		if (is_builtin(cmd->value))
-			execute_builtins(env, envp, cmd);
+			execute_builtins(env, cmd);
 		else
-			execute_cmd(env, envp, cmd);
+			truc = execute_cmd(env, envp, cmd);
+		if (truc != 0)
+			return (truc);
 	}
 	else
 	{
@@ -90,10 +88,10 @@ void	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 		if (fd_in != STDIN_FILENO)
 			close(fd_in);
 		waitpid(pid, &status, 0);
-
 		if (WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
 	}
+	return (0);
 }
 
 void	execution_controller(t_tok *env, t_tok *tok_head)
@@ -103,6 +101,7 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 	int		fd_in;
 	int		fd_out;
 	int		fd_pipe[2];
+	int truc;
 
 	if (!tok_head)
 		return ;
@@ -121,7 +120,14 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 				fd_out = fd_pipe[1];
 			}
 		//	printf("Command executing is '%s' still %d remaining. FD_IN is %d and FD_OUT is %d\n\n", cmds->value, nb_cmds(cmds), fd_in, fd_out);
-			child_process(env, envp, cmds, fd_in, fd_out);
+			truc = child_process(env, envp, cmds, fd_in, fd_out);
+			if (truc != 0)
+			{
+				free_list(env);
+				free_list(tok_head);
+				free_tab(envp);
+				exit (truc);
+			}
 			if (nb_cmds(cmds) != 1)
 				fd_in = fd_pipe[0];
 		}

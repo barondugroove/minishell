@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 16:40:49 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/12 21:44:00 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	minishell(char **envp)
 	t_tok	*env;
 
 	env = init_env(envp);
-	
 	while (1)
 	{
 		signal(SIGQUIT, SIG_IGN);
@@ -65,4 +64,4 @@ int	main(int ac, char **av, char **envp)
 	return (0);
 }
 
-//valgrind --suppressions=.vsupp --leak-check=full --show-leak-kinds=all ./minishell
+//valgrind --suppressions=.vsupp --leak-check=full --show-leak-kinds=all --trace-children=yes ./minishell

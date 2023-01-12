@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 20:25:50 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/12 21:26:54 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	pwd(char **args, t_tok *env);
 int		cd(char **args, t_tok *head);
 void	set_pwd(t_tok *head, char *key, char *path);
 char	*ft_getenv(t_tok *env_head, char *key);
-int 	echo(char **args);
+void 	echo(char **args);
 void	unset(t_tok **env_head, char **key);
 
 // EXECUTION
