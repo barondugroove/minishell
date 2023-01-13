@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
+#    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/01/09 17:47:32 by benjamincha      ###   ########.fr        #
+#    Updated: 2023/01/14 00:45:27 by rlaforge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ SRCS = srcs/main.c \
 		srcs/parsing/parsing_controller.c \
 		srcs/parsing/tokenizer.c \
 		srcs/parsing/add_token.c \
-		srcs/parsing/init_env.c \
 		srcs/execution/execution_controller.c \
+		srcs/execution/execution_utils.c \
 		srcs/builtins/export.c \
 		srcs/builtins/export_utils.c \
 		srcs/builtins/unset.c \
@@ -25,9 +25,9 @@ SRCS = srcs/main.c \
 		srcs/builtins/change_dir.c \
 		srcs/builtins/env.c \
 		srcs/builtins/echo.c \
+		srcs/utils/init_env.c \
 		srcs/utils/utils.c \
-		srcs/utils/free_utils.c \
-		srcs/utils/execution_utils.c
+		srcs/utils/free_utils.c
 
 CC = @gcc
 
