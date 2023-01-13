@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 23:29:47 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/12 21:27:03 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/14 00:32:34 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,4 @@ void echo(char **args)
     }
     if (!args[1] || !is_n(args[1]))
        printf("\n");
-    //exit (0);
 }

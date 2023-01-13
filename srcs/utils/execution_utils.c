@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/12 23:43:51 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/14 00:15:57 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,8 @@ char	**get_cmd(t_tok *cmds)
 	i = 0;
 	if (!cmds)
 		return (NULL);
-	while (tok)
+	while (tok && *tok->key != '|')
 	{
-		if (*tok->key == '|')
-			break ;
 		nb++;
 		tok = tok->next;
 	}
@@ -131,15 +129,17 @@ int	nb_cmds(t_tok *cmds)
 
 int	is_builtin(char *cmd)
 {
-	char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", NULL};
-	int		i;
-
-	i = 0;
-	while (builtins[i])
-	{
-		if (ft_strncmp(cmd, builtins[i], ft_strlen(builtins[i])) == 0)
-			return (1);
-		i++;
-	}
+	if (ft_strncmp(cmd, "echo", 4) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "cd", 2) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "pwd", 3) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "export", 6) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "unset", 5) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "env", 3) == 0)
+		return (1);
 	return (0);
 }

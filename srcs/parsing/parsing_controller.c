@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 17:37:16 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/14 00:25:24 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,10 @@ void replace_var_env(t_tok *env, t_tok *tok)
 	else
 	{
 		apres = ft_getenv(env, apres);
-		printf("LE TRUC DE OUF, YA UN TRUC AVANT LA VAR D'ENV %s\n",apres);
-		//buf = malloc((ft_strlen(avant) + ft_strlen(apres)) * sizeof(char));
+		buf = ft_strjoin(avant, apres);
+		free(tok->value);
+		tok->value = ft_strdup(buf);
+		free(buf);
 	}
 }
 
