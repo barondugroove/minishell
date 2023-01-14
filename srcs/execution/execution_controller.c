@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/14 14:30:53 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/14 14:56:34 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 	return (0);
 }
 
-int	execute_simple_cmd(t_tok *env, char **envp, t_tok *cmds)
+void	execute_simple_cmd(t_tok *env, char **envp, t_tok *cmds)
 {
 	int	pid;
 	int status;
@@ -104,8 +104,9 @@ int	execute_simple_cmd(t_tok *env, char **envp, t_tok *cmds)
 
 	if (is_builtin(cmds->value))
 	{
-		code = execute_builtins(env, cmds);
-		return (code);
+		execute_builtins(env, cmds);
+		exit_code = 0;
+		return;
 	}
 	pid = fork();
 	if (pid == -1)
@@ -127,7 +128,7 @@ int	execute_simple_cmd(t_tok *env, char **envp, t_tok *cmds)
 		if (WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
 	}
-	return (0);
+	return;
 }
 
 int	has_pipe(t_tok *cmds)
