@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:41:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 23:45:11 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/14 03:26:31 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,15 @@ void	remove_node(t_tok **head, t_tok *node_to_remove)
 	free(node_to_remove);
 }
 
-void	unset(t_tok **env_head, char **key)
+void	unset(t_tok **env_head, char **key, t_tok *cmds)
 {
 	t_tok	*tmp;
 	int		i;
 
 	tmp = *env_head;
 	i = 1;
+	if (has_pipe(cmds))
+		exit (0);
 	while (key[i])
 	{
 		while (tmp)

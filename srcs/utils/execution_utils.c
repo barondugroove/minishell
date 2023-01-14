@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/14 03:43:50 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/08 23:36:30 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ char	**get_cmd(t_tok *cmds)
 	i = 0;
 	if (!cmds)
 		return (NULL);
-	while (tok && *tok->key != '|')
+	while (tok)
 	{
+		if (*tok->key == '|')
+			break ;
 		nb++;
 		tok = tok->next;
 	}
@@ -74,15 +76,10 @@ char	**get_cmd(t_tok *cmds)
 char	*fill_tab(t_tok *node)
 {
 	char	*str;
-	int	length;
 
-	length = ft_strlen(node->key) + ft_strlen(node->value) + 2;
-	str = malloc(sizeof(char) * length);
-	if (!str)
-		return (NULL);
-	ft_strlcpy(str, node->key, length);
-	ft_strlcat(str, "=", length);
-	ft_strlcat(str, node->value, length);
+	str = ft_strdup(node->key);
+	str = strjoinlol(str, "=");
+	str = strjoinlol(str, node->value);
 	return (str);
 }
 
@@ -129,17 +126,15 @@ int	nb_cmds(t_tok *cmds)
 
 int	is_builtin(char *cmd)
 {
-	if (ft_strncmp(cmd, "echo", 5) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "cd", 3) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "pwd", 4) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "export", 7) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "unset", 6) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "env", 4) == 0)
-		return (1);
+	char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", NULL};
+	int		i;
+
+	i = 0;
+	while (builtins[i])
+	{
+		if (ft_strncmp(cmd, builtins[i], ft_strlen(builtins[i])) == 0)
+			return (1);
+		i++;
+	}
 	return (0);
 }

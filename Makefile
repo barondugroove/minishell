@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
+#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/01/14 00:45:27 by rlaforge         ###   ########.fr        #
+#    Updated: 2023/01/14 13:47:56 by benjamincha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SRCS = srcs/main.c \
 		srcs/builtins/change_dir.c \
 		srcs/builtins/env.c \
 		srcs/builtins/echo.c \
-		srcs/utils/init_env.c \
+		srcs/parsing/init_env.c \
 		srcs/utils/utils.c \
 		srcs/utils/free_utils.c
 

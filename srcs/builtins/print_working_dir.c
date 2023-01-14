@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   print_working_dir.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 19:32:16 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/14 00:33:17 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/14 03:43:54 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	pwd()
+void	pwd(t_tok *env)
 {
-	char	str[1024];
+	char	*str;
 
-	getcwd(str, sizeof(str));
+	str = ft_strdup(ft_getenv(env, "PWD"));
 	printf("%s\n", str);
+	free(str);
 }

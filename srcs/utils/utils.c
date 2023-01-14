@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2023/01/12 23:46:14 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/14 13:39:12 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

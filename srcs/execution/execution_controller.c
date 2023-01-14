@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/12 22:05:51 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/14 14:13:29 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ int	execute_builtins(t_tok *env, t_tok *cmds)
 
 	args = get_cmd(cmds);
 	if (ft_strncmp(cmds->value, "export", 7) == 0)
-		export(&env, args);
+		export(&env, args, cmds);
 	else if (ft_strncmp(cmds->value, "cd", 3) == 0)
-		cd(args, env);
+		cd(args, env, cmds);
 	else if (ft_strncmp(cmds->value, "pwd", 4) == 0)
-		pwd(args, env);
+		pwd(env);
 	else if (ft_strncmp(cmds->value, "env", 4) == 0)
 		print_env(&env);
 	else if (ft_strncmp(cmds->value, "echo", 5) == 0)
 		echo(args);
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
-		unset(&env, args);
+		unset(&env, args, cmds);
 	free_tab(args);
 	return (1);
 }
@@ -66,12 +66,14 @@ int	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 	{
 		if (fd_in != STDIN_FILENO)
 		{
-			dup2(fd_in, STDIN_FILENO);
+			if (dup2(fd_in, STDIN_FILENO) == -1)
+				perror("dup2");
 			close(fd_in);
 		}
 		if (fd_out != STDOUT_FILENO)
 		{
-			dup2(fd_out, STDOUT_FILENO);
+			if (dup2(fd_out, STDOUT_FILENO) == -1)
+				perror("dup2");
 			close(fd_out);
 		}
 		if (is_builtin(cmd->value))
@@ -83,13 +85,56 @@ int	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
 		if (fd_out != STDOUT_FILENO)
 			close(fd_out);
 		if (fd_in != STDIN_FILENO)
 			close(fd_in);
+		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
+	}
+	return (0);
+}
+
+int	execute_simple_cmd(t_tok *env, char **envp, t_tok *cmds)
+{
+	int	pid;
+	int status;
+	int code;
+
+	if (is_builtin(cmds->value))
+	{
+		code = execute_builtins(env, cmds);
+		return (code);
+	}
+	pid = fork();
+	if (pid == -1)
+		printf("pid error");
+	if (pid == 0)
+	{
+		code = execute_cmd(env, envp, cmds);
+		if (code != 0)
+			return (code);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			exit_code = WEXITSTATUS(status);
+	}
+	return (0);
+}
+
+int	has_pipe(t_tok *cmds)
+{
+	t_tok *tmp;
+
+	tmp = cmds;
+	while (tmp->next)
+	{
+		if (*tmp->key == '|')
+			return (1);
+		tmp = tmp->next;
 	}
 	return (0);
 }
@@ -102,6 +147,7 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 	int		fd_out;
 	int		fd_pipe[2];
 	int		code;
+	int		nbr;
 
 	if (!tok_head)
 		return ;
@@ -109,31 +155,35 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 	envp = convert_envp(env);
 	fd_in = STDIN_FILENO;
 	fd_out = STDOUT_FILENO;
+	nbr = nb_cmds(cmds);
 	while (cmds)
 	{
 		if (*cmds->key == *K_CMD)
 		{
-			if (nb_cmds(cmds) > 1)
+			if (nbr > 1)
 			{
 				if (pipe(fd_pipe) == -1)
 					printf("error pipe\n");
-				fd_out = fd_pipe[1];
-			}
+				if (nb_cmds(cmds) != 1)
+					fd_out = fd_pipe[1];
+				else
+					fd_out = STDOUT_FILENO;
 		//printf("Command executing is '%s' still %d remaining. FD_IN is %d and FD_OUT is %d\n\n", cmds->value, nb_cmds(cmds), fd_in, fd_out);
-			code = child_process(env, envp, cmds, fd_in, fd_out);
-			if (code != 0)
-			{
-				free_list(env);
-				free_list(tok_head);
-				free_tab(envp);
-				exit(code);
+				code = child_process(env, envp, cmds, fd_in, fd_out);
+				if (code != 0)
+				{
+					free_list(env);
+					free_list(tok_head);
+					free_tab(envp);
+					exit(code);
+				}
+				if (has_pipe(cmds))
+					fd_in = fd_pipe[0];
 			}
-			if (nb_cmds(cmds) != 1)
-				fd_in = fd_pipe[0];
+			else
+				execute_simple_cmd(env, envp, cmds);
 		}
 		cmds = cmds->next;
 	}
-	if (fd_in != STDIN_FILENO)
-		close(fd_in);
 	free_tab(envp);
 }

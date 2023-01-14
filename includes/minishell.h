@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/14 00:34:56 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/14 03:36:22 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,20 @@ typedef struct s_tok {
 // CHECK_ERRORS
 
 // BUILTINS
-void	export(t_tok **head, char **args);
+void	export(t_tok **head, char **args, t_tok *cmds);
 void	print_env(t_tok **head);
 t_tok	*dup_env(t_tok **env_head);
 void	sort_export(t_tok **env_head);
-void	pwd();
-int		cd(char **args, t_tok *head);
+void	pwd(t_tok *env);
+int		cd(char **args, t_tok *head, t_tok *cmds);
 void	set_pwd(t_tok *head, char *key, char *path);
 char	*ft_getenv(t_tok *env_head, char *key);
 void 	echo(char **args);
-void	unset(t_tok **env_head, char **key);
+void	unset(t_tok **env_head, char **key, t_tok *cmds);
 
 // EXECUTION
 void	execution_controller(t_tok *env, t_tok *tok_head);
+int		has_pipe(t_tok *cmds);
 
 // EXECUTION_UTILS
 int		nb_cmds(t_tok *cmds);
