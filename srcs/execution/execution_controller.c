@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/14 14:13:29 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/14 14:30:53 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,12 @@ int	execute_simple_cmd(t_tok *env, char **envp, t_tok *cmds)
 	{
 		code = execute_cmd(env, envp, cmds);
 		if (code != 0)
-			return (code);
+		{
+			free_list(env);
+			free_list(cmds);
+			free_tab(envp);
+			exit (code);
+		}
 	}
 	else
 	{
