@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/14 14:56:34 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/15 17:30:33 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	execute_builtins(t_tok *env, t_tok *cmds)
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
 		unset(&env, args, cmds);
 	free_tab(args);
-	return (1);
+	return (0);
 }
 
 int	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
@@ -45,90 +45,81 @@ int	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
 		printf("command not found: %s\n", args[0]);
 		free(path);
 		free_tab(args);
-		return (127);
+		exit (127);
 	}
 	free(path);
 	free_tab(args);
 	return (0);
 }
 
-int	child_process(t_tok *env, char **envp, t_tok *cmd, int fd_in,
-		int fd_out)
+void	duplicator(int *fd_pipe, int fd_save, int i, int total)
 {
-	int	pid;
-	int status;
-	int code;
-
-	pid = fork();
-	if (pid == -1)
-		printf("pid error");
-	if (pid == 0)
+	if (total == 1)
 	{
-		if (fd_in != STDIN_FILENO)
-		{
-			if (dup2(fd_in, STDIN_FILENO) == -1)
-				perror("dup2");
-			close(fd_in);
-		}
-		if (fd_out != STDOUT_FILENO)
-		{
-			if (dup2(fd_out, STDOUT_FILENO) == -1)
-				perror("dup2");
-			close(fd_out);
-		}
-		if (is_builtin(cmd->value))
-			code = execute_builtins(env, cmd);
-		else
-			code = execute_cmd(env, envp, cmd);
-		if (code != 0)
-			return (code);
+		close(fd_pipe[0]);
+		close(fd_pipe[1]);
+		return ;
+	}		
+	if (i == 0)
+	{
+		if (dup2(fd_pipe[1], STDOUT_FILENO) == -1)
+			perror("dup2");
+		close(fd_pipe[0]);
+		close(fd_pipe[1]);
+	}
+	else if (i == total - 1)
+	{
+		if (dup2(fd_pipe[0], STDIN_FILENO) == -1)
+			perror("dup2");
+		close(fd_pipe[0]);
+		close(fd_pipe[1]);
 	}
 	else
 	{
-		if (fd_out != STDOUT_FILENO)
-			close(fd_out);
-		if (fd_in != STDIN_FILENO)
-			close(fd_in);
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			exit_code = WEXITSTATUS(status);
+		if (dup2(fd_pipe[1], STDOUT_FILENO) == -1)
+			perror("dup2");
+		if (dup2(fd_save, STDIN_FILENO) == -1)
+			perror("dup2");
+		close(fd_save);
+		close(fd_pipe[0]);
+		close(fd_pipe[1]);
 	}
-	return (0);
 }
 
-void	execute_simple_cmd(t_tok *env, char **envp, t_tok *cmds)
+int	child_process(t_tok *env, char **envp, t_tok *cmd, int *fd_pipe, int i, int total)
 {
 	int	pid;
 	int status;
-	int code;
+	int fd_save;
 
-	if (is_builtin(cmds->value))
-	{
-		execute_builtins(env, cmds);
-		exit_code = 0;
-		return;
+	fd_save = -1;
+	if (i != 0 && i != total - 1)
+    {
+		fd_save = dup(fd_pipe[0]);
+		close(fd_pipe[0]);
+		close(fd_pipe[1]);
+		pipe(fd_pipe);
 	}
 	pid = fork();
 	if (pid == -1)
 		printf("pid error");
 	if (pid == 0)
 	{
-		code = execute_cmd(env, envp, cmds);
-		if (code != 0)
+		duplicator(fd_pipe, fd_save, i, total);
+		if (is_builtin(cmd->value))
 		{
-			free_list(env);
-			free_list(cmds);
-			free_tab(envp);
-			exit (code);
+			status = execute_builtins(env, cmd);
+			exit (status);
 		}
+		else
+			execute_cmd(env, envp, cmd);
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			exit_code = WEXITSTATUS(status);
+		if (i != 0 && i != total - 1)
+			close(fd_save);
 	}
-	return;
+	return (pid);
 }
 
 int	has_pipe(t_tok *cmds)
@@ -145,51 +136,48 @@ int	has_pipe(t_tok *cmds)
 	return (0);
 }
 
+t_tok	*find_next_cmd(t_tok *cmds)
+{
+	while (cmds->next)
+	{
+		cmds = cmds->next;
+		if (*cmds->key == *K_CMD)
+			return (cmds);
+	}
+	return (cmds);
+}
+
 void	execution_controller(t_tok *env, t_tok *tok_head)
 {
 	t_tok	*cmds;
 	char	**envp;
-	int		fd_in;
-	int		fd_out;
 	int		fd_pipe[2];
-	int		code;
+	int		*pid;
 	int		nbr;
+	int		i;
 
 	if (!tok_head)
 		return ;
 	cmds = tok_head;
 	envp = convert_envp(env);
-	fd_in = STDIN_FILENO;
-	fd_out = STDOUT_FILENO;
 	nbr = nb_cmds(cmds);
-	while (cmds)
+	i = 0;
+	pid = malloc(sizeof(int) * nb_cmds(cmds));
+	if (pipe(fd_pipe) == -1)
+		printf("error pipe\n");
+	while (i < nbr)
 	{
-		if (*cmds->key == *K_CMD)
-		{
-			if (nbr > 1)
-			{
-				if (pipe(fd_pipe) == -1)
-					printf("error pipe\n");
-				if (nb_cmds(cmds) != 1)
-					fd_out = fd_pipe[1];
-				else
-					fd_out = STDOUT_FILENO;
-		//printf("Command executing is '%s' still %d remaining. FD_IN is %d and FD_OUT is %d\n\n", cmds->value, nb_cmds(cmds), fd_in, fd_out);
-				code = child_process(env, envp, cmds, fd_in, fd_out);
-				if (code != 0)
-				{
-					free_list(env);
-					free_list(tok_head);
-					free_tab(envp);
-					exit(code);
-				}
-				if (has_pipe(cmds))
-					fd_in = fd_pipe[0];
-			}
-			else
-				execute_simple_cmd(env, envp, cmds);
-		}
-		cmds = cmds->next;
+		pid[i] = child_process(env, envp, cmds, fd_pipe, i, nbr);
+		cmds = find_next_cmd(cmds);
+		i++;
+	}
+	close(fd_pipe[0]);
+	close(fd_pipe[1]);
+	i = 0;
+	while (pid[i])
+	{
+		waitpid(pid[i], NULL, 0);
+		i++;
 	}
 	free_tab(envp);
 }

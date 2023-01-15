@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/14 13:47:57 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/14 22:58:24 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	export(t_tok **env, char **args, t_tok *cmds)
 			i++;
 		}
 	}
+	exit (0);
 }
 
 // PENSER A GERER LE += qui concatene la nouvelle chaine

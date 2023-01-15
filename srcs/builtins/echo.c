@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 23:29:47 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/14 00:32:34 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/14 22:58:26 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
