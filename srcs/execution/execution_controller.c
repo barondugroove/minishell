@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/15 17:30:33 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/16 19:49:14 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,41 +33,48 @@ int	execute_builtins(t_tok *env, t_tok *cmds)
 	return (0);
 }
 
-int	execute_cmd(t_tok *env, char **envp, t_tok *cmds)
+int	execute_cmd(t_tok *env, t_tok *cmds)
 {
 	char	**args;
+	char	**envp;
 	char	*path;
 
 	args = get_cmd(cmds);
 	path = get_path(env, args[0]);
+	envp = convert_envp(env);
 	if (!path || (execve(path, args, envp) == -1))
 	{
 		printf("command not found: %s\n", args[0]);
 		free(path);
 		free_tab(args);
+		free_tab(envp);
+		free_list(env);
+		// free cmds HEAD
+		// free pids
 		exit (127);
 	}
 	free(path);
 	free_tab(args);
+	free_tab(envp);
 	return (0);
 }
 
-void	duplicator(int *fd_pipe, int fd_save, int i, int total)
+void	duplicator(int *fd_pipe, int fd_save, int cmd_id, int cmd_nbr)
 {
-	if (total == 1)
+	if (cmd_nbr == 1)
 	{
 		close(fd_pipe[0]);
 		close(fd_pipe[1]);
 		return ;
 	}		
-	if (i == 0)
+	if (cmd_id == 0)
 	{
 		if (dup2(fd_pipe[1], STDOUT_FILENO) == -1)
 			perror("dup2");
 		close(fd_pipe[0]);
 		close(fd_pipe[1]);
 	}
-	else if (i == total - 1)
+	else if (cmd_id == cmd_nbr - 1)
 	{
 		if (dup2(fd_pipe[0], STDIN_FILENO) == -1)
 			perror("dup2");
@@ -86,14 +93,14 @@ void	duplicator(int *fd_pipe, int fd_save, int i, int total)
 	}
 }
 
-int	child_process(t_tok *env, char **envp, t_tok *cmd, int *fd_pipe, int i, int total)
+int	child_process(t_tok *env, t_tok *cmd, int *fd_pipe, int cmd_id, int cmd_nbr)
 {
 	int	pid;
 	int status;
 	int fd_save;
 
 	fd_save = -1;
-	if (i != 0 && i != total - 1)
+	if (cmd_id != 0 && cmd_id != cmd_nbr - 1)
     {
 		fd_save = dup(fd_pipe[0]);
 		close(fd_pipe[0]);
@@ -105,20 +112,19 @@ int	child_process(t_tok *env, char **envp, t_tok *cmd, int *fd_pipe, int i, int 
 		printf("pid error");
 	if (pid == 0)
 	{
-		duplicator(fd_pipe, fd_save, i, total);
+		duplicator(fd_pipe, fd_save, cmd_id, cmd_nbr);
 		if (is_builtin(cmd->value))
 		{
 			status = execute_builtins(env, cmd);
-			exit (status);
+			// free cmd HEAD
+			// free pids
+			free_list(env);
+			exit(status);
 		}
-		else
-			execute_cmd(env, envp, cmd);
+		execute_cmd(env, cmd);
 	}
-	else
-	{
-		if (i != 0 && i != total - 1)
+	else if (cmd_id != 0 && cmd_id != cmd_nbr - 1)
 			close(fd_save);
-	}
 	return (pid);
 }
 
@@ -136,48 +142,37 @@ int	has_pipe(t_tok *cmds)
 	return (0);
 }
 
-t_tok	*find_next_cmd(t_tok *cmds)
-{
-	while (cmds->next)
-	{
-		cmds = cmds->next;
-		if (*cmds->key == *K_CMD)
-			return (cmds);
-	}
-	return (cmds);
-}
-
 void	execution_controller(t_tok *env, t_tok *tok_head)
 {
 	t_tok	*cmds;
-	char	**envp;
 	int		fd_pipe[2];
-	int		*pid;
-	int		nbr;
+	int		*pids;
+	int		cmd_nbr;
 	int		i;
 
 	if (!tok_head)
 		return ;
 	cmds = tok_head;
-	envp = convert_envp(env);
-	nbr = nb_cmds(cmds);
+	cmd_nbr = nb_cmds(cmds);
 	i = 0;
-	pid = malloc(sizeof(int) * nb_cmds(cmds));
+	pids = malloc(sizeof(int) * cmd_nbr);
 	if (pipe(fd_pipe) == -1)
 		printf("error pipe\n");
-	while (i < nbr)
+	while (i < cmd_nbr)
 	{
-		pid[i] = child_process(env, envp, cmds, fd_pipe, i, nbr);
-		cmds = find_next_cmd(cmds);
+		pids[i] = child_process(env, cmds, fd_pipe, i, cmd_nbr);
+		while (cmds->next)
+		{
+			cmds = cmds->next;
+			if (*cmds->key == *K_CMD)
+				break;
+		}
 		i++;
 	}
 	close(fd_pipe[0]);
 	close(fd_pipe[1]);
 	i = 0;
-	while (pid[i])
-	{
-		waitpid(pid[i], NULL, 0);
-		i++;
-	}
-	free_tab(envp);
+	while (i < cmd_nbr)
+		waitpid(pids[i++], NULL, 0);
+	free(pids);
 }
