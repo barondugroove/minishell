@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/17 15:49:03 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/17 15:58:17 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,14 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	i = 0;
 	while (i < truc.cmd_nbr)
 	{
+		if (ft_strncmp(cmds->value, "exit", 5) == 0)
+		{
+			close(fd_pipe[0]);
+			close(fd_pipe[1]);
+			free_truc(&truc);
+			exit(0);
+		}
+
 		child_process(&truc, cmds, fd_pipe, i);
 		while (cmds->next)
 		{
