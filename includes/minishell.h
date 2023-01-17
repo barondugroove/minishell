@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/17 13:03:57 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/17 13:25:24 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ typedef struct s_tok {
 	struct s_tok	*next;
 }	t_tok;
 
+typedef struct s_allocated {
+	t_tok	*env;
+	t_tok	*cmd_head;
+	int		*pids;
+	int		cmd_nbr;
+}	t_allocated;
+
 // CHECK_ERRORS
 
 // BUILTINS
@@ -67,6 +74,7 @@ char	**convert_envp(t_tok *head);
 // FREE_UTILS
 void	free_list(t_tok *head);
 void	free_tab(char **tab);
+void	free_truc(t_allocated *truc);
 
 // PARSING
 t_tok	*parsing_controller(t_tok *env, char *prompt);

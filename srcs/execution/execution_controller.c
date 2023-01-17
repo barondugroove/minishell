@@ -6,20 +6,20 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/17 12:50:29 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/17 13:35:24 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_builtins(t_tok *env, t_tok *cmds)
+int	execute_builtins(t_allocated *truc, t_tok *cmds)
 {
 	char	**args;
 
 
 //
 //  NE PAS OUBLIER LES BAD OPTIONS SUR LES BUILTINS
-//	pwd -mdr = "pwd: bad option: -m"
+//	pwd -mdr = "pwd: bad option: -m" + exit_code = 1
 //	
 //	Pour l'instant pwd -mdr = pwd
 //
@@ -28,41 +28,40 @@ int	execute_builtins(t_tok *env, t_tok *cmds)
 
 	args = get_cmd(cmds);
 	if (ft_strncmp(cmds->value, "export", 7) == 0)
-		export(&env, args, cmds);
+		export(&truc->env, args, cmds);
 	else if (ft_strncmp(cmds->value, "cd", 3) == 0)
-		cd(args, env, cmds);
+		cd(args, truc->env, cmds);
 	else if (ft_strncmp(cmds->value, "pwd", 4) == 0)
-		pwd(env);
+		pwd(truc->env);
 	else if (ft_strncmp(cmds->value, "env", 4) == 0)
-		print_env(&env);
+		print_env(&truc->env);
 	else if (ft_strncmp(cmds->value, "echo", 5) == 0)
 		echo(args);
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
-		unset(&env, args, cmds);
+		unset(&truc->env, args, cmds);
 	free_tab(args);
-	return (1);
+	return (0);
 }
 
-int	execute_cmd(t_tok *env, t_tok *cmds)
+int	execute_cmd(t_allocated *truc, t_tok *cmds)
 {
 	char	**args;
 	char	**envp;
 	char	*path;
 
 	args = get_cmd(cmds);
-	path = get_path(env, args[0]);
-	envp = convert_envp(env);
+	path = get_path(truc->env, args[0]);
+	envp = convert_envp(truc->env);
 	if (!path || (execve(path, args, envp) == -1))
 	{
 		printf("command not found: %s\n", args[0]);
 		free(path);
 		free_tab(args);
 		free_tab(envp);
-		free_list(env);
-		// free cmds HEAD
-		// free pids
+		free_truc(truc);
 		exit (127);
 	}
+	printf("OUAH LA DINGUERIE, LE BOUT DE CODE QUI SE LANCE JAMAIS\n");
 	free(path);
 	free_tab(args);
 	free_tab(envp);
@@ -103,14 +102,14 @@ void	duplicator(int *fd_pipe, int fd_save, int cmd_id, int cmd_nbr)
 	}
 }
 
-int	child_process(int *pidos, int *pids, t_tok *env, t_tok *cmd, t_tok *tok_head, int *fd_pipe, int cmd_id, int cmd_nbr)
+int	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
 {
 	int	pid;
 	int status;
 	int fd_save;
 
 	fd_save = -1;
-	if (cmd_id != 0 && cmd_id != cmd_nbr - 1)
+	if (cmd_id != 0 && cmd_id != truc->cmd_nbr - 1)
     {
 		fd_save = dup(fd_pipe[0]);
 		close(fd_pipe[0]);
@@ -122,27 +121,23 @@ int	child_process(int *pidos, int *pids, t_tok *env, t_tok *cmd, t_tok *tok_head
 		printf("pid error");
 	if (pid == 0)
 	{
-		duplicator(fd_pipe, fd_save, cmd_id, cmd_nbr);
+		duplicator(fd_pipe, fd_save, cmd_id, truc->cmd_nbr);
 		if (is_builtin(cmd->value))
 		{
-			status = execute_builtins(env, cmd);
-			free(pids);
-			free_list(tok_head);
-			free_list(env);
+			status = execute_builtins(truc, cmd);
+			free_truc(truc);
 			exit(status);
 		}
-		status = execute_cmd(env, cmd);
+		status = execute_cmd(truc, cmd);
 		if (status != 0)
-		{
-			free(pids);
-			free_list(env);
-			free_list(tok_head);
+		{	
+			free_truc(truc);
 			exit(status);
 		}
 	}
-	else if (cmd_id != 0 && cmd_id != cmd_nbr - 1)
+	else if (cmd_id != 0 && cmd_id != truc->cmd_nbr - 1)
 			close(fd_save);
-	*pidos = pid;
+	truc->pids[cmd_id] = pid;
 	return (status);
 }
 
@@ -160,26 +155,27 @@ int	has_pipe(t_tok *cmds)
 	return (0);
 }
 
-void	execution_controller(t_tok *env, t_tok *tok_head)
+void	execution_controller(t_tok *env, t_tok *cmd_head)
 {
 	t_tok	*cmds;
+	t_allocated	truc;
 	int		fd_pipe[2];
-	int		*pids;
-	int		cmd_nbr;
-	int status;
+	int 	status;
 	int		i;
 
-	if (!tok_head)
+	if (!cmd_head)
 		return ;
-	cmds = tok_head;
-	cmd_nbr = nb_cmds(cmds);
-	i = 0;
-	pids = malloc(sizeof(int) * cmd_nbr);
+	cmds = cmd_head;
+	truc.env = env;
+	truc.cmd_head = cmd_head;
+	truc.cmd_nbr = nb_cmds(cmds);
+	truc.pids = malloc(sizeof(int) * truc.cmd_nbr);
 	if (pipe(fd_pipe) == -1)
 		printf("error pipe\n");
-	while (i < cmd_nbr)
+	i = 0;
+	while (i < truc.cmd_nbr)
 	{
-		child_process(&pids[i], pids, env, cmds, tok_head, fd_pipe, i, cmd_nbr);
+		child_process(&truc, cmds, fd_pipe, i);
 		while (cmds->next)
 		{
 			cmds = cmds->next;
@@ -191,11 +187,11 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 	close(fd_pipe[0]);
 	close(fd_pipe[1]);
 	i = 0;
-	while (i < cmd_nbr)
+	while (i < truc.cmd_nbr)
 	{
-		waitpid(pids[i++], &status, 0);
+		waitpid(truc.pids[i++], &status, 0);
 		if (WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
 	}
-	free(pids);
+	free(truc.pids);
 }
