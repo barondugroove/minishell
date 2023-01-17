@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/17 13:35:24 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/17 15:49:03 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
 	pid = fork();
 	if (pid == -1)
 		printf("pid error");
-	if (pid == 0)
+	else if (pid == 0)
 	{
 		duplicator(fd_pipe, fd_save, cmd_id, truc->cmd_nbr);
 		if (is_builtin(cmd->value))

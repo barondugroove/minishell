@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/17 13:25:24 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/17 15:38:00 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ typedef struct s_allocated {
 	int		cmd_nbr;
 }	t_allocated;
 
-// CHECK_ERRORS
-
 // BUILTINS
 void	export(t_tok **head, char **args, t_tok *cmds);
 void	print_env(t_tok **head);
@@ -55,8 +53,6 @@ t_tok	*dup_env(t_tok **env_head);
 void	sort_export(t_tok **env_head);
 void	pwd(t_tok *env);
 int		cd(char **args, t_tok *head, t_tok *cmds);
-void	set_pwd(t_tok *head, char *key, char *path);
-char	*ft_getenv(t_tok *env_head, char *key);
 void 	echo(char **args);
 void	unset(t_tok **env_head, char **key, t_tok *cmds);
 
@@ -81,14 +77,14 @@ t_tok	*parsing_controller(t_tok *env, char *prompt);
 char	*tokenizer(char *str);
 void	add_token(t_tok **tok_head, char *str);
 
-// INIT_DATA
-t_tok	*init_env(char **envp);
-
 // UTILS
+t_tok	*init_env(char **envp);
 t_tok	*newtoken(char *data, char *key);
 void	newtoken_back(t_tok **head, char *data, char *key);
 void	print_list(t_tok *head);
 char 	*c_to_str(char c);
 char	*strjoin_pipex(char *s1, char *s2);
+char	*ft_getenv(t_tok *env_head, char *key);
+void	set_pwd(t_tok *head, char *key, char *path);
 
 #endif
