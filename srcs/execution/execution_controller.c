@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/16 19:49:14 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/17 12:50:29 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 int	execute_builtins(t_tok *env, t_tok *cmds)
 {
 	char	**args;
+
+
+//
+//  NE PAS OUBLIER LES BAD OPTIONS SUR LES BUILTINS
+//	pwd -mdr = "pwd: bad option: -m"
+//	
+//	Pour l'instant pwd -mdr = pwd
+//
+//	if (check_bad_option(args))
+//		return (1);
 
 	args = get_cmd(cmds);
 	if (ft_strncmp(cmds->value, "export", 7) == 0)
@@ -30,7 +40,7 @@ int	execute_builtins(t_tok *env, t_tok *cmds)
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
 		unset(&env, args, cmds);
 	free_tab(args);
-	return (0);
+	return (1);
 }
 
 int	execute_cmd(t_tok *env, t_tok *cmds)
@@ -93,7 +103,7 @@ void	duplicator(int *fd_pipe, int fd_save, int cmd_id, int cmd_nbr)
 	}
 }
 
-int	child_process(t_tok *env, t_tok *cmd, int *fd_pipe, int cmd_id, int cmd_nbr)
+int	child_process(int *pidos, int *pids, t_tok *env, t_tok *cmd, t_tok *tok_head, int *fd_pipe, int cmd_id, int cmd_nbr)
 {
 	int	pid;
 	int status;
@@ -116,16 +126,24 @@ int	child_process(t_tok *env, t_tok *cmd, int *fd_pipe, int cmd_id, int cmd_nbr)
 		if (is_builtin(cmd->value))
 		{
 			status = execute_builtins(env, cmd);
-			// free cmd HEAD
-			// free pids
+			free(pids);
+			free_list(tok_head);
 			free_list(env);
 			exit(status);
 		}
-		execute_cmd(env, cmd);
+		status = execute_cmd(env, cmd);
+		if (status != 0)
+		{
+			free(pids);
+			free_list(env);
+			free_list(tok_head);
+			exit(status);
+		}
 	}
 	else if (cmd_id != 0 && cmd_id != cmd_nbr - 1)
 			close(fd_save);
-	return (pid);
+	*pidos = pid;
+	return (status);
 }
 
 int	has_pipe(t_tok *cmds)
@@ -148,6 +166,7 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 	int		fd_pipe[2];
 	int		*pids;
 	int		cmd_nbr;
+	int status;
 	int		i;
 
 	if (!tok_head)
@@ -160,7 +179,7 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 		printf("error pipe\n");
 	while (i < cmd_nbr)
 	{
-		pids[i] = child_process(env, cmds, fd_pipe, i, cmd_nbr);
+		child_process(&pids[i], pids, env, cmds, tok_head, fd_pipe, i, cmd_nbr);
 		while (cmds->next)
 		{
 			cmds = cmds->next;
@@ -173,6 +192,10 @@ void	execution_controller(t_tok *env, t_tok *tok_head)
 	close(fd_pipe[1]);
 	i = 0;
 	while (i < cmd_nbr)
-		waitpid(pids[i++], NULL, 0);
+	{
+		waitpid(pids[i++], &status, 0);
+		if (WIFEXITED(status))
+			exit_code = WEXITSTATUS(status);
+	}
 	free(pids);
 }
