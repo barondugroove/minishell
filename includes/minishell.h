@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/17 15:38:00 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/19 14:27:35 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,6 @@ char 	*c_to_str(char c);
 char	*strjoin_pipex(char *s1, char *s2);
 char	*ft_getenv(t_tok *env_head, char *key);
 void	set_pwd(t_tok *head, char *key, char *path);
+void	child_c_handler(int sig);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/17 15:58:17 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/19 14:27:45 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ int	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
 	}
 	else if (cmd_id != 0 && cmd_id != truc->cmd_nbr - 1)
 			close(fd_save);
+	signal(SIGINT, child_c_handler);
 	truc->pids[cmd_id] = pid;
 	return (status);
 }
