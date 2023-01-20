@@ -6,43 +6,13 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/14 00:25:24 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/20 14:27:09 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void replace_var_env(t_tok *env, t_tok *tok)
-{
-	char *avant;
-	char *apres;
-	char *buf;
-
-	if (tok->value[0] == '$' && tok->value[1] == '?' && !tok->value[2])
-	{
-		free(tok->value);
-		tok->value = ft_strdup(ft_itoa(exit_code));
-		return ;
-	}
-	avant = ft_strtok(tok->value, "$");
-	apres = ft_strtok(NULL, "\0");
-	if (!apres)
-	{
-		buf = ft_getenv(env, avant);
-		free(tok->value);
-		tok->value = ft_strdup(buf);
-	}
-	else
-	{
-		apres = ft_getenv(env, apres);
-		buf = ft_strjoin(avant, apres);
-		free(tok->value);
-		tok->value = ft_strdup(buf);
-		free(buf);
-	}
-}
-
-int	clean_token_list(t_tok *env, t_tok *head)
+int	clean_token_list(t_tok *head)
 {
 	t_tok	*tok;
 
@@ -61,8 +31,6 @@ int	clean_token_list(t_tok *env, t_tok *head)
 			free(tok->next->key);
 			tok->next->key = ft_strdup("C");
 		}
-		if (ft_strchr(tok->value, '$'))
-			replace_var_env(env, tok);
 		tok = tok->next;
 	}
 	return (0);
@@ -84,7 +52,7 @@ t_tok	*parsing_controller(t_tok *env, char *prompt)
 			return (NULL);
 		}
 		if (str && *str)
-			add_token(&tok_head, str);
+			add_token(env, &tok_head, str);
 		if (str && *str == ERROR_CHAR)
 		{
 			printf("syntax error near unexpected token '|'\n");
@@ -94,7 +62,7 @@ t_tok	*parsing_controller(t_tok *env, char *prompt)
 		}
 		str = tokenizer(NULL);
 	}
-	if(clean_token_list(env, tok_head))
+	if(clean_token_list(tok_head))
 	{
 		printf("syntax error near unexpected token '|'\n");
 		exit_code = 2;

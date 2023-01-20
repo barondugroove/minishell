@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/19 14:27:35 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/20 14:26:42 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	free_truc(t_allocated *truc);
 // PARSING
 t_tok	*parsing_controller(t_tok *env, char *prompt);
 char	*tokenizer(char *str);
-void	add_token(t_tok **tok_head, char *str);
+void	add_token(t_tok *env, t_tok **tok_head, char *str);
 
 // UTILS
 t_tok	*init_env(char **envp);
