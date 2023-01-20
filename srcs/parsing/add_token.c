@@ -174,6 +174,47 @@ void    clean_token_envSAVEEEEE(t_tok *env, char *str)
 }
 
 
+
+
+
+
+
+
+
+
+
+/* LES PROBLEMES :
+
+🐚 Minishell echo user
+user
+🐚 Minishell echo $user
+VAR : $user
+[1]    14279 segmentation fault  ./minishell
+🩹 minishell git:(test)📌 ./minishell
+🐚 Minishell echo $USER
+VAR : $USER
+��ˌUromil
+🐚 Minishell echo "$USER"
+VAR : $USER
+�ˌUromil
+🐚 Minishell echo '$USER'
+VAR : $USER'
+[1]    14294 segmentation fault  ./minishell
+🩹 minishell git:(test)📌 ./minishell
+🐚 Minishell echo "super$USER"
+VAR : $USER
+superromil
+🐚 Minishell echo "$USER super"
+VAR : $USER
+��iUromil super
+🐚 Minishell echo "$USER"super
+VAR : $USER
+��iUromilsuper
+🐚 Minishell
+*/
+
+
+
 void    clean_token_env(t_tok *env, char *str)
 {
     char newStr[100];
@@ -183,7 +224,7 @@ void    clean_token_env(t_tok *env, char *str)
     char *value;
     int i;
     // Recherche de la variable d'environnement
-    ptr = strstr(str, "$");
+    ptr = ft_strnstr(str, "$", 100);
     while (ptr != NULL) {
         //on récupère le nom de la variable
         end = ptr;
@@ -198,9 +239,9 @@ void    clean_token_env(t_tok *env, char *str)
         //on récupère sa valeur
         value = ft_getenv(env, var+1);
 
-        printf("newStr : %s\n", newStr);
         // Copie de la partie de la chaîne avant la variable
         strncpy(newStr, str, ptr - str);
+        //printf("newStr : %s\n", newStr);
 
         // Ajout de la valeur de la variable
         strcat(newStr, value);
@@ -210,10 +251,13 @@ void    clean_token_env(t_tok *env, char *str)
 
         // Remplacement de la chaîne originale par la nouvelle chaîne
         strcpy(str, newStr);
-        ptr = strstr(str, "$");
+        ptr = ft_strnstr(str, "$", 100);
     }
-    printf("%s\n", str);
+    //printf("%s\n", str);
 }
+
+
+
 
 void    clean_token_envSUPER(t_tok *env, char *str)
 {
