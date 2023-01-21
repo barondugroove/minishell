@@ -6,7 +6,7 @@
 #    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/01/14 13:47:56 by benjamincha      ###   ########.fr        #
+#    Updated: 2023/01/20 18:38:52 by benjamincha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SRCS = srcs/main.c \
 		srcs/parsing/add_token.c \
 		srcs/execution/execution_controller.c \
 		srcs/execution/execution_utils.c \
+		srcs/execution/redirections.c \
 		srcs/builtins/export.c \
 		srcs/builtins/export_utils.c \
 		srcs/builtins/unset.c \
@@ -25,6 +26,7 @@ SRCS = srcs/main.c \
 		srcs/builtins/change_dir.c \
 		srcs/builtins/env.c \
 		srcs/builtins/echo.c \
+		srcs/builtins/exit.c \
 		srcs/parsing/init_env.c \
 		srcs/utils/utils.c \
 		srcs/utils/free_utils.c

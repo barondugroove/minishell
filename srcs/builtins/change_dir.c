@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 20:08:33 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/14 03:43:47 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/20 15:50:22 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,41 @@ void	set_pwd(t_tok *head, char *key, char *path)
 	tmp->value = ft_strdup(path);
 }
 
-int	cd(char **args, t_tok *env, t_tok *cmds)
+static void	no_file_directory(char *arg)
+{	
+	ft_putstr_fd("minishell: cd: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
+	exit_code = 1;
+	return ;
+}
+
+static void	too_many_args(void)
+{	
+	ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+	exit_code = 1;
+	return ;
+}
+
+static int	args_nbr(char **args)
+{
+	int	i;
+
+	i = 1;
+	while (args[i])
+		i++;
+	return (i - 1);
+}
+
+int	cd(char **args, t_tok *env)
 {
 	char	str[4096];
 	
-	if (has_pipe(cmds))
-		exit (0);
+	if (args_nbr(args) >= 2)
+	{
+		too_many_args();
+		return (1);
+	}
 	if (!args[1])
 	{
 		set_pwd(env, "OLDPWD", ft_getenv(env, "PWD"));
@@ -40,8 +69,8 @@ int	cd(char **args, t_tok *env, t_tok *cmds)
 	set_pwd(env, "OLDPWD", ft_getenv(env, "PWD"));
 	if (chdir(args[1]) < 0)
 	{
-		printf("minishell: cd: %s: No such file or directory\n", args[1]);
-		return (errno);
+		no_file_directory(args[1]);
+		return (1);
 	}
 	getcwd(str, sizeof(str));
 	set_pwd(env, "PWD", str);

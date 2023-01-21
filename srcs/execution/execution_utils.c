@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/14 03:43:50 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/20 17:48:56 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	**get_cmd(t_tok *cmds)
 	i = 0;
 	if (!cmds)
 		return (NULL);
-	while (tok && *tok->key != '|')
+	while (tok && (*tok->key != '|' && *tok->key != '<' && *tok->key != '>'))
 	{
 		nb++;
 		tok = tok->next;
@@ -140,6 +140,8 @@ int	is_builtin(char *cmd)
 	if (ft_strncmp(cmd, "unset", 6) == 0)
 		return (1);
 	if (ft_strncmp(cmd, "env", 4) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "exit", 5) == 0)
 		return (1);
 	return (0);
 }

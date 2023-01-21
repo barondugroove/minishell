@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:23:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/09 17:33:37 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/19 20:04:41 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,20 @@ t_tok	*dup_env(t_tok **env_head)
 		tmp = tmp->next;
 	}
 	return (export);
+}
+
+int has_equal(char *arg)
+{
+	int	i;
+
+	i = 0;
+	while(arg[i])
+	{
+		if (arg[i] == '=')
+			return (1);
+		else if (arg[i] == '+' && arg[i + 1] == '=')
+			return (2);
+		i++;
+	}
+	return (0);
 }

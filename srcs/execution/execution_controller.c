@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/19 14:27:45 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/20 19:04:42 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,26 @@
 int	execute_builtins(t_allocated *truc, t_tok *cmds)
 {
 	char	**args;
+	int		status;
 
-
-//
-//  NE PAS OUBLIER LES BAD OPTIONS SUR LES BUILTINS
-//	pwd -mdr = "pwd: bad option: -m" + exit_code = 1
-//	
-//	Pour l'instant pwd -mdr = pwd
-//
-//	if (check_bad_option(args))
-//		return (1);
-
+	status = 0;
 	args = get_cmd(cmds);
 	if (ft_strncmp(cmds->value, "export", 7) == 0)
-		export(&truc->env, args, cmds);
+		status = export(&truc->env, args);
 	else if (ft_strncmp(cmds->value, "cd", 3) == 0)
-		cd(args, truc->env, cmds);
+		status = cd(args, truc->env);
 	else if (ft_strncmp(cmds->value, "pwd", 4) == 0)
-		pwd(truc->env);
+		status = pwd(truc->env, args);
 	else if (ft_strncmp(cmds->value, "env", 4) == 0)
 		print_env(&truc->env);
 	else if (ft_strncmp(cmds->value, "echo", 5) == 0)
 		echo(args);
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
 		unset(&truc->env, args, cmds);
+	else if (ft_strncmp(cmds->value, "exit", 5) == 0)
+		status = exit_builtin(args);
 	free_tab(args);
-	return (0);
+	return (status);
 }
 
 int	execute_cmd(t_allocated *truc, t_tok *cmds)
@@ -122,6 +116,8 @@ int	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
 	else if (pid == 0)
 	{
 		duplicator(fd_pipe, fd_save, cmd_id, truc->cmd_nbr);
+		if (has_redir(cmd))
+			handle_redirection(cmd);
 		if (is_builtin(cmd->value))
 		{
 			status = execute_builtins(truc, cmd);
@@ -176,14 +172,6 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	i = 0;
 	while (i < truc.cmd_nbr)
 	{
-		if (ft_strncmp(cmds->value, "exit", 5) == 0)
-		{
-			close(fd_pipe[0]);
-			close(fd_pipe[1]);
-			free_truc(&truc);
-			exit(0);
-		}
-
 		child_process(&truc, cmds, fd_pipe, i);
 		while (cmds->next)
 		{

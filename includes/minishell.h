@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/20 14:26:42 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/21 18:51:38 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,25 @@ typedef struct s_allocated {
 }	t_allocated;
 
 // BUILTINS
-void	export(t_tok **head, char **args, t_tok *cmds);
+int		export(t_tok **head, char **args);
 void	print_env(t_tok **head);
 t_tok	*dup_env(t_tok **env_head);
 void	sort_export(t_tok **env_head);
-void	pwd(t_tok *env);
-int		cd(char **args, t_tok *head, t_tok *cmds);
+int		has_equal(char *arg);
+int		pwd(t_tok *env, char **args);
+int		cd(char **args, t_tok *head);
 void 	echo(char **args);
 void	unset(t_tok **env_head, char **key, t_tok *cmds);
+int		exit_builtin(char **args);
 
 // EXECUTION
 void	execution_controller(t_tok *env, t_tok *tok_head);
 int		has_pipe(t_tok *cmds);
+
+// REDIRECTION
+void	handle_redirection(t_tok *cmds);
+int		has_redir(t_tok *cmds);
+char    *get_file(t_tok *cmds);
 
 // EXECUTION_UTILS
 int		nb_cmds(t_tok *cmds);
