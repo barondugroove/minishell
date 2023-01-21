@@ -217,40 +217,48 @@ VAR : $USER
 
 void    clean_token_env(t_tok *env, char *str)
 {
-    char newStr[100];
+    char *newStr;
     char *ptr;
     char *end;
-    char var[20];
+    char *var;
     char *value;
     int i;
     // Recherche de la variable d'environnement
     ptr = ft_strnstr(str, "$", 100);
-    while (ptr != NULL) {
-        //on récupère le nom de la variable
+    while (ptr != NULL) 
+    {
         end = ptr;
         i = 0;
-        while (*end != '"' && *end != ' ' && *end != '\0') {
-            var[i++] = *end;
+        while (*end != '"' && *end != ' ' && *end != '\0')
+        {
+            i++;
             end++;
         }
-        var[i] = '\0';
+        var = malloc(sizeof(char ) * (i + 1));
+        ft_strlcpy(var, end - i, i + 1);
+        var[i + 1] = '\0';
 
         printf("VAR : %s\n", var);
-        //on récupère sa valeur
-        value = ft_getenv(env, var+1);
+        // Get la var + malloc
+        value = ft_getenv(env, var + 1);
+        newStr = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(end)));
 
-        // Copie de la partie de la chaîne avant la variable
-        strncpy(newStr, str, ptr - str);
-        //printf("newStr : %s\n", newStr);
+        // Copie de la partie de la chaîne avant la variable (marche pas)
+        ft_strlcpy(newStr, str, ptr - str);
+        printf("newStr : %s\n", newStr);
+        printf("str : %s\n", str);
+        printf("ptr : %s\n", ptr);
 
-        // Ajout de la valeur de la variable
+        // Cat la var
         strcat(newStr, value);
 
-        // Ajout de la partie de la chaîne après la variable
+        // Cat du reste apres la var
         strcat(newStr, end);
 
-        // Remplacement de la chaîne originale par la nouvelle chaîne
+        // str = newstr
         strcpy(str, newStr);
+
+        // reset de ptr pour trouver la prochaine var
         ptr = ft_strnstr(str, "$", 100);
     }
     //printf("%s\n", str);
