@@ -222,47 +222,66 @@ void    clean_token_env(t_tok *env, char *str)
     char *end;
     char *var;
     char *value;
+    char    quote;
     int i;
     // Recherche de la variable d'environnement
-    ptr = strstr(str, "$");
-    while (ptr != NULL) 
-    {
-        end = ptr;
-        i = 0;
-        while (*end != '"' && *end != ' ' && *end != '\0')
+
+
+
+        quote = '\0';
+        ptr = str;
+        while (*ptr)
         {
-            i++;
-            end++;
+            if (*ptr == '$' && (quote == '\0' || quote == '"'))
+            {
+                end = ptr;
+                i = 0;
+                while (*end != '"' && *end != ' ' && *end != '\0')
+                {
+                    i++;
+                    end++;
+                }
+                var = malloc(sizeof(char ) * (i + 1));
+                ft_strlcpy(var, end - i, i + 1);
+
+                // Get la var + malloc
+                value = ft_getenv(env, var + 1);
+                free(var);
+
+                // Si la var existe pas, on se casse
+                if (!value)
+                    return;
+
+                newStr = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(end)));
+
+                // Copie de la partie de la chaîne avant la variable
+                ft_strlcpy(newStr, str, ptr - str + 1);
+
+                /*
+                printf("VAR : %s\n", var);
+                printf("newStr : %s\n", newStr);
+                printf("str : %s\n", str);
+                printf("ptr : %s\n", ptr);
+                */
+
+                // Cat la var
+                strcat(newStr, value);
+
+                // Cat du reste apres la var
+                strcat(newStr, end);
+
+                // str = newstr
+                strcpy(str, newStr);
+
+            }
+
+            if ((*ptr == '"' || *ptr == '\'') && quote == '\0')
+                quote = *ptr;
+            else if (*ptr == quote && quote != '\0')
+                quote = '\0';
+            ptr++;
         }
-        var = malloc(sizeof(char ) * (i + 1));
-        ft_strlcpy(var, end - i, i + 1);
 
-        printf("VAR : %s\n", var);
-        // Get la var + malloc
-        value = ft_getenv(env, var + 1);
-        free(var);
-        newStr = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(end)));
-
-        // Copie de la partie de la chaîne avant la variable
-        ft_strlcpy(newStr, str, ptr - str + 1);
-        printf("newStr : %s\n", newStr);
-        printf("str : %s\n", str);
-        printf("ptr : %s\n", ptr);
-        printf("ptr - str : %ld\n", ptr - str);
-
-        // Cat la var
-        strcat(newStr, value);
-
-        // Cat du reste apres la var
-        strcat(newStr, end);
-
-        // str = newstr
-        strcpy(str, newStr);
-
-        // reset de ptr pour trouver la prochaine var
-        ptr = strstr(str, "$");
-    }
-    //printf("%s\n", str);
 }
 
 
