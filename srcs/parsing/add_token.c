@@ -224,7 +224,7 @@ void    clean_token_env(t_tok *env, char *str)
     char *value;
     int i;
     // Recherche de la variable d'environnement
-    ptr = ft_strnstr(str, "$", 100);
+    ptr = strstr(str, "$");
     while (ptr != NULL) 
     {
         end = ptr;
@@ -236,18 +236,19 @@ void    clean_token_env(t_tok *env, char *str)
         }
         var = malloc(sizeof(char ) * (i + 1));
         ft_strlcpy(var, end - i, i + 1);
-        var[i + 1] = '\0';
 
         printf("VAR : %s\n", var);
         // Get la var + malloc
         value = ft_getenv(env, var + 1);
+        free(var);
         newStr = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(end)));
 
-        // Copie de la partie de la chaîne avant la variable (marche pas)
-        ft_strlcpy(newStr, str, ptr - str);
+        // Copie de la partie de la chaîne avant la variable
+        ft_strlcpy(newStr, str, ptr - str + 1);
         printf("newStr : %s\n", newStr);
         printf("str : %s\n", str);
         printf("ptr : %s\n", ptr);
+        printf("ptr - str : %ld\n", ptr - str);
 
         // Cat la var
         strcat(newStr, value);
@@ -259,7 +260,7 @@ void    clean_token_env(t_tok *env, char *str)
         strcpy(str, newStr);
 
         // reset de ptr pour trouver la prochaine var
-        ptr = ft_strnstr(str, "$", 100);
+        ptr = strstr(str, "$");
     }
     //printf("%s\n", str);
 }
