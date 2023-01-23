@@ -65,7 +65,7 @@ void    clean_token(t_tok **tok_head, char *str)
     }
 }
 
-void    clean_token_env(t_tok *env, char *str)
+void    replace_var_env(t_tok *env, char *str)
 {
     char *newStr;
     char *ptr;
@@ -118,7 +118,7 @@ void    clean_token_env(t_tok *env, char *str)
 
 void    add_token(t_tok *env, t_tok **tok_head, char *str)
 {
-    clean_token_env(env, str);
+    replace_var_env(env, str);
     if (ft_strchr(str, '"') || ft_strchr(str, '\'') || ft_strchr(str, '|') || ft_strchr(str, '<') || ft_strchr(str, '>'))
     {
         if (pipe_error(str))
