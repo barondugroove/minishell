@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/20 19:04:42 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/23 14:43:02 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
 
 	fd_save = -1;
 	if (cmd_id != 0 && cmd_id != truc->cmd_nbr - 1)
-    {
+	{
 		fd_save = dup(fd_pipe[0]);
 		close(fd_pipe[0]);
 		close(fd_pipe[1]);
@@ -132,7 +132,7 @@ int	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
 		}
 	}
 	else if (cmd_id != 0 && cmd_id != truc->cmd_nbr - 1)
-			close(fd_save);
+		close(fd_save);
 	signal(SIGINT, child_c_handler);
 	truc->pids[cmd_id] = pid;
 	return (status);
@@ -140,7 +140,7 @@ int	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
 
 int	has_pipe(t_tok *cmds)
 {
-	t_tok *tmp;
+	t_tok	*tmp;
 
 	tmp = cmds;
 	while (tmp->next)
@@ -154,11 +154,11 @@ int	has_pipe(t_tok *cmds)
 
 void	execution_controller(t_tok *env, t_tok *cmd_head)
 {
-	t_tok	*cmds;
+	t_tok		*cmds;
 	t_allocated	truc;
-	int		fd_pipe[2];
-	int 	status;
-	int		i;
+	int			fd_pipe[2];
+	int 		status;
+	int			i;
 
 	if (!cmd_head)
 		return ;
