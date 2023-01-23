@@ -69,44 +69,48 @@ void	clean_token(t_tok **tok_head, char *str)
 	}
 }
 
-void	replace_var_env(t_tok *env, char *str)
+void	replace_var_env(t_tok *env, char *str, char *ptr)
 {
 	char *newStr;
-	char *ptr;
 	char *end;
-	char *var;
 	char *value;
-	char quote;
+	char *var;
 	int varlen;
+
+    end = ptr;
+    varlen = 0;
+    while (*end != '"' && *end != ' ' && *end != '\0')
+    {
+        varlen++;
+        end++;
+    }
+    var = malloc(sizeof(char) * (varlen + 1));
+    ft_strlcpy(var, end - varlen, varlen + 1);
+    if (*(var + 1) && *(var + 1) == '?' && !*(var + 2))
+        value = ft_itoa(exit_code);
+    else
+        value = ft_getenv(env, var + 1);
+    free(var);
+    newStr = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(end)));
+    ft_strlcpy(newStr, str, ptr - str + 1);
+    if (value)
+        strcat(newStr, value);
+    strcat(newStr, end);
+    strcpy(str, newStr);
+    free(newStr);
+}
+
+void	check_var_env(t_tok *env, char *str)
+{
+	char *ptr;
+	char quote;
 
 	quote = '\0';
 	ptr = str;
 	while (*ptr)
 	{
 		if (*ptr == '$' && (quote == '\0' || quote == '"'))
-		{
-			end = ptr;
-			varlen = 0;
-			while (*end != '"' && *end != ' ' && *end != '\0')
-			{
-				varlen++;
-				end++;
-			}
-			var = malloc(sizeof(char) * (varlen + 1));
-			ft_strlcpy(var, end - varlen, varlen + 1);
-			if (*(var + 1) && *(var + 1) == '?' && !*(var + 2))
-				value = ft_itoa(exit_code);
-			else
-				value = ft_getenv(env, var + 1);
-			free(var);
-			newStr = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(end)));
-			ft_strlcpy(newStr, str, ptr - str + 1);
-			if (value)
-                strcat(newStr, value);
-			strcat(newStr, end);
-			strcpy(str, newStr);
-			free(newStr);
-		}
+			replace_var_env(env, str, ptr);
 		if ((*ptr == '"' || *ptr == '\'') && quote == '\0')
 			quote = *ptr;
 		else if (*ptr == quote && quote != '\0')
@@ -117,7 +121,7 @@ void	replace_var_env(t_tok *env, char *str)
 
 void	add_token(t_tok *env, t_tok **tok_head, char *str)
 {
-	replace_var_env(env, str);
+	check_var_env(env, str);
 	if (ft_strchr(str, '"') || ft_strchr(str, '\'') || ft_strchr(str, '|')
 			|| ft_strchr(str, '<') || ft_strchr(str, '>'))
 	{
