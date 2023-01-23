@@ -77,7 +77,7 @@ void	replace_var_env(t_tok *env, char *str)
 	char *var;
 	char *value;
 	char quote;
-	int i;
+	int varlen;
 
 	quote = '\0';
 	ptr = str;
@@ -86,33 +86,24 @@ void	replace_var_env(t_tok *env, char *str)
 		if (*ptr == '$' && (quote == '\0' || quote == '"'))
 		{
 			end = ptr;
-			i = 0;
+			varlen = 0;
 			while (*end != '"' && *end != ' ' && *end != '\0')
 			{
-				i++;
+				varlen++;
 				end++;
 			}
-			var = malloc(sizeof(char) * (i + 1));
-			ft_strlcpy(var, end - i, i + 1);
-
-			// Get la var + malloc
+			var = malloc(sizeof(char) * (varlen + 1));
+			ft_strlcpy(var, end - varlen, varlen + 1);
 			if (*(var + 1) && *(var + 1) == '?' && !*(var + 2))
 				value = ft_itoa(exit_code);
 			else
 				value = ft_getenv(env, var + 1);
 			free(var);
-			// Si la var existe pas, on se casse                                 BESOIN DE SUPPR LA VAR DANS STR
-			if (!value)
-				return ;
-			newStr = malloc(sizeof(char) * (ft_strlen(value)
-						+ ft_strlen(end)));
-			// Cpy du debut avant la var
+			newStr = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(end)));
 			ft_strlcpy(newStr, str, ptr - str + 1);
-			// Cat la var
-			strcat(newStr, value);
-			// Cat du reste apres la var
+			if (value)
+                strcat(newStr, value);
 			strcat(newStr, end);
-			// str = newstr
 			strcpy(str, newStr);
 			free(newStr);
 		}

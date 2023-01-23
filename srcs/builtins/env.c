@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 18:19:29 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/14 13:46:09 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/23 22:57:58 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+
+// IL PRINT TOUJOURS LE USER SI ON MET JUSTE $U
 
 char	*ft_getenv(t_tok *env_head, char *key)
 {

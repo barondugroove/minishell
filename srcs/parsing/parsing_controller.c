@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/20 14:27:09 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/23 22:54:32 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_tok	*parsing_controller(t_tok *env, char *prompt)
 		}
 		str = tokenizer(NULL);
 	}
-	if(clean_token_list(tok_head))
+	if (clean_token_list(tok_head))
 	{
 		printf("syntax error near unexpected token '|'\n");
 		exit_code = 2;
