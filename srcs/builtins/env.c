@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 18:19:29 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/23 22:57:58 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/24 14:36:41 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_getenv(t_tok *env_head, char *key)
 	tmp = env_head;
 	if (!key)
 		return (NULL);
-	while (tmp && ft_strncmp(tmp->key, key, ft_strlen(key)) != 0)
+	while (tmp && ft_strcmp(tmp->key, key) != 0)
 		tmp = tmp->next;
 	if (!tmp)
 		return (NULL);

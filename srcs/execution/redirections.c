@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/24 13:47:47 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/24 14:39:34 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
