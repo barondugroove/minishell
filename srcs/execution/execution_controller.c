@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/24 13:46:39 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/24 17:22:05 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 	if (is_builtin(cmd->value))
 	{
 		status = execute_builtins(truc, cmd);
-		//free_truc(truc);
+		free_truc(truc);
 		return (status);
 	}
 	pid = fork();
@@ -173,7 +173,7 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 		status = execute_cmd(truc, cmd);
 		if (status != 0)
 		{	
-			//free_truc(truc);
+			free_truc(truc);
 			exit (status);
 		}
 	}
@@ -201,13 +201,13 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	truc.env = env;
 	truc.cmd_head = cmd_head;
 	truc.cmd_nbr = nb_cmds(cmds);
+	truc.pids = malloc(sizeof(int) * truc.cmd_nbr);
 	i = 0;
 	if (truc.cmd_nbr == 1)
 	{
 		exit_code = execute_simple_command(&truc, cmds);
 		return ;
 	}
-	truc.pids = malloc(sizeof(int) * truc.cmd_nbr);
 	if (pipe(fd_pipe) == -1)
 		printf("error pipe\n");
 	while (i < truc.cmd_nbr)

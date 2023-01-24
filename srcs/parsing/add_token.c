@@ -15,6 +15,10 @@
 
 #include "../../includes/minishell.h"
 
+
+
+///// Il faut faire un token pour les doubles redir pour que je puisse set les bons files dans handle_redirections apres.
+
 int	pipe_error(char *str)
 {
 	int i;

@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:17:14 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/21 18:21:14 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/24 17:13:46 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int check_args(char **args)
 	if (i > 2)
 	{
 		ft_putstr_fd("exit\n", 2);
-		ft_putstr_fd("minishell: exit: too many arguments", 2);
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		ft_exit(1);
 	}
 	i = 1;
