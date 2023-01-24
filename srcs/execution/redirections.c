@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/21 17:18:57 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/23 19:45:17 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,19 @@ int check_file(char *file, int dir)
     }
 }
 
+t_tok *get_next_redir(t_tok *cmds, int nbr)
+{
+    while (cmds && nbr)
+    {
+        if (*cmds->key == '>' && *cmds->next->key == '>')
+            nbr--;
+        else if (*cmds->key == '>' || *cmds->key == '<')
+            nbr--; 
+        cmds = cmds->next;
+    }
+    return (cmds);
+}
+
 void handle_redirection(t_tok *cmds)
 {
     int 	fd_in = -1;
@@ -111,32 +124,31 @@ void handle_redirection(t_tok *cmds)
     int     nbr;
 	char	*str;
 	
-	str = get_file(cmds);
     nbr = redir_nbr(cmds);
-    if (!str)
+    while (nbr--)
     {
-        return ;
+        str = get_file(cmds);
+        if (!str)
+            return ;
+        if (has_redir(cmds) == 1)
+        {
+            fd_out = open(str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+            dup2(fd_out, 1);
+        }
+        if (has_redir(cmds) == 3)
+        {
+            fd_out = open(str, O_CREAT | O_WRONLY | O_APPEND, 0644);
+            dup2(fd_out, 1);
+        }
+        if (has_redir(cmds) == 2 && !check_file(str, 0))
+        {
+            fd_in = open(str, O_RDONLY);
+            dup2(fd_in, 0);
+        }
+        cmds = get_next_redir(cmds, nbr);
+        if (fd_in != -1)
+            close(fd_in);
+        if (fd_out != -1)
+            close(fd_out);
     }
-	if (has_redir(cmds) == 1)
-	{
-        fd_out = open(str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		dup2(fd_out, 1);
-    }
-	if (has_redir(cmds) == 3)
-    {
-        fd_out = open(str, O_CREAT | O_WRONLY | O_APPEND, 0644);
-        dup2(fd_out, 1);
-    }
-    if (has_redir(cmds) == 2 && !check_file(str, 0))
-    {
-        fd_in = open(str, O_RDONLY);
-        dup2(fd_in, 0);
-    }
-    if (--nbr > 0)
-
-        handle_redirection(cmds->next);
-    if (fd_in != -1)
-        close(fd_in);
-    if (fd_out != -1)
-        close(fd_out);
 }

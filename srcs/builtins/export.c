@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/20 18:02:15 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/23 19:45:15 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ void	print_export(t_tok **head)
 	tok = env_copy;
 	while (tok)
 	{
-		if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0))
+		if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0) && *tok->value != '\0')
 			printf("declare -x %s=\"%s\"\n", tok->key, tok->value);
+		else if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0))
+			printf("declare -x %s\n", tok->key);
 		tok = tok->next;
 	}
 	free_list(env_copy);
@@ -50,25 +52,19 @@ static void error_message_export(char *arg)
 	return ;
 }
 
-int check_errors_export(char **args)
+int check_errors_export(char *args)
 {
 	int	i;
-	int	j;
 
-	i = 1;
+	i = 0;
 	while (args[i])
 	{
-		j = 0;
-		while (args[i][j])
+		if (args[i] == '=' && ft_isalpha(args[i]))
+			break ;
+		if (args[i] <= 32 || (!ft_isalpha(args[i]) && args[i] != '_'))
 		{
-			if (args[i][j] == '=' && ft_isalpha(args[i][j - 1]))
-				break ;
-			if (args[i][j] <= 32 || (!ft_isalpha(args[i][j]) && args[i][j] != '_'))
-			{
-				error_message_export(args[i]);
-				return (1);
-			}
-			j++;
+			error_message_export(args);
+			return (1);
 		}
 		i++;
 	}
@@ -87,10 +83,10 @@ int	export(t_tok **env, char **args)
 		print_export(env);
 	else
 	{
-		if (check_errors_export(args))
-			return (1);
 		while (args[i])
 		{
+			if (check_errors_export(args[i]))
+				return (1);
 			if (has_equal(args[i]))
 			{
 				arg_copy = ft_strdup(args[i]);
@@ -103,11 +99,7 @@ int	export(t_tok **env, char **args)
 			{
 				arg_copy = ft_strdup(args[i]);
 				key = ft_strtok(arg_copy, "=");
-				value = ft_strtok(NULL, "\0");
-				if (!value)
-					newtoken_back(env, ft_strdup("/0"), ft_strdup(key));
-				else
-					newtoken_back(env, ft_strdup(value), ft_strdup(key));
+				newtoken_back(env, ft_strdup("\0"), ft_strdup(key));
 				free(arg_copy);
 			}
 			i++;
