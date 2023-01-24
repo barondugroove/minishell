@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/20 17:48:56 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/24 13:43:56 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,22 @@ char	**get_cmd(t_tok *cmds)
 	i = 0;
 	if (!cmds)
 		return (NULL);
-	while (tok && (*tok->key != '|' && *tok->key != '<' && *tok->key != '>'))
+	while (tok && *tok->key != '|')
 	{
-		nb++;
+		if (*tok->key != '<' && *tok->key != '>')
+			nb++;
+		else
+			tok = tok->next;
 		tok = tok->next;
 	}
 	args = malloc(sizeof(char *) * (nb + 1));
 	tok = cmds;
 	while (i != nb)
 	{
-		args[i++] = ft_strdup(tok->value);
+		if (*tok->key != '<' && *tok->key != '>')
+			args[i++] = ft_strdup(tok->value);
+		else
+			tok = tok->next;
 		tok = tok->next;
 	}
 	args[nb] = NULL;
