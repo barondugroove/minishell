@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
+#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/31 14:29:55 by bchabot           #+#    #+#              #
-#    Updated: 2022/12/19 16:05:27 by bchabot          ###   ########.fr        #
+#    Updated: 2023/01/24 14:23:11 by benjamincha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,11 +22,13 @@ SRCS =	ft_isalpha.c \
 		ft_memmove.c \
 		ft_strlcpy.c \
 		ft_strlcat.c \
+		ft_strcat.c \
 		ft_toupper.c \
 		ft_tolower.c \
 		ft_strchr.c \
 		ft_strrchr.c \
 		ft_strncmp.c \
+		ft_strcmp.c \
 		ft_strcpy.c \
 		ft_memchr.c \
 		ft_memcmp.c \
