@@ -15,9 +15,8 @@
 
 #include "../../includes/minishell.h"
 
-
-
 ///// Il faut faire un token pour les doubles redir pour que je puisse set les bons files dans handle_redirections apres.
+// DOUBLE/TRIPLE REDIR = EXPLOSION
 
 int	pipe_error(char *str)
 {
@@ -38,9 +37,9 @@ int	pipe_error(char *str)
 
 void	clean_token(t_tok **tok_head, char *str)
 {
-	char quote;
-	int i;
-	int len;
+	char    quote;
+	int     i;
+	int     len;
 
 	quote = '\0';
 	len = ft_strlen(str);
@@ -60,7 +59,7 @@ void	clean_token(t_tok **tok_head, char *str)
 			len--;
 		}
 		else if ((str[i] == '|' || str[i] == '<' || str[i] == '>')
-				&& quote == '\0')
+			&& quote == '\0')
 		{
 			newtoken_back(tok_head, ft_substr(str, 0, i), ft_strdup(K_ARG));
 			newtoken_back(tok_head, c_to_str(str[i]), c_to_str(str[i]));
@@ -81,27 +80,27 @@ void	replace_var_env(t_tok *env, char *str, char *ptr)
 	char *var;
 	int varlen;
 
-    end = ptr;
-    varlen = 0;
-    while (*end != '"' && *end != ' ' && *end != '\0')
-    {
-        varlen++;
-        end++;
-    }
-    var = malloc(sizeof(char) * (varlen + 1));
-    ft_strlcpy(var, end - varlen, varlen + 1);
-    if (*(var + 1) && *(var + 1) == '?' && !*(var + 2))
-        value = ft_itoa(exit_code);
-    else
-        value = ft_getenv(env, var + 1);
-    free(var);
-    newStr = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(end)));
-    ft_strlcpy(newStr, str, ptr - str + 1);
-    if (value)
-        strcat(newStr, value);
-    strcat(newStr, end);
-    strcpy(str, newStr);
-    free(newStr);
+	end = ptr;
+	varlen = 0;
+	while (*end != '"' && *end != ' ' && *end != '\0')
+	{
+		varlen++;
+		end++;
+	}
+	var = malloc(sizeof(char) * (varlen + 1));
+	ft_strlcpy(var, end - varlen, varlen + 1);
+	if (*(var + 1) && *(var + 1) == '?' && !*(var + 2))
+		value = ft_itoa(exit_code);
+	else
+		value = ft_getenv(env, var + 1);
+	free(var);
+	newStr = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(end)));
+	ft_strlcpy(newStr, str, ptr - str + 1);
+	if (value)
+		ft_strcat(newStr, value);
+	ft_strcat(newStr, end);
+	ft_strcpy(str, newStr);
+	free(newStr);
 }
 
 void	check_var_env(t_tok *env, char *str)
@@ -131,7 +130,7 @@ void	add_token(t_tok *env, t_tok **tok_head, char *str)
 	{
 		if (pipe_error(str))
 			return ;
-		while (str[0] == '|' || str[0] == '<' || str[0] == '>')
+		while (*str == '|' || *str == '<' || *str == '>')
 		{
 			newtoken_back(tok_head, c_to_str(str[0]), c_to_str(str[0]));
 			ft_memmove(str, str + 1, ft_strlen(str));
