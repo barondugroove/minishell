@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/24 17:51:15 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/24 17:56:25 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 	{
 		if (has_redir(cmd))
 			handle_redirection(cmd);
-		exit_code = execute_cmd(truc, cmd);
+		status = execute_cmd(truc, cmd);
 		if (status != 0)
 		{	
 			free_truc(truc);
