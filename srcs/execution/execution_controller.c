@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/24 17:22:05 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/24 17:51:15 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,6 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 	if (is_builtin(cmd->value))
 	{
 		status = execute_builtins(truc, cmd);
-		free_truc(truc);
 		return (status);
 	}
 	pid = fork();
@@ -170,7 +169,7 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 	{
 		if (has_redir(cmd))
 			handle_redirection(cmd);
-		status = execute_cmd(truc, cmd);
+		exit_code = execute_cmd(truc, cmd);
 		if (status != 0)
 		{	
 			free_truc(truc);
@@ -206,6 +205,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	if (truc.cmd_nbr == 1)
 	{
 		exit_code = execute_simple_command(&truc, cmds);
+		free(truc.pids);
 		return ;
 	}
 	if (pipe(fd_pipe) == -1)
