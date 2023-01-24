@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/23 22:54:32 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/24 19:02:56 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,17 @@ int	clean_token_list(t_tok *head)
 	tok->key = ft_strdup("C");
 	while (tok)
 	{
-		if (*tok->key == '|')
+		if (*tok->key == '<' || *tok->key == '>')
+		{
+			if (tok->next && *tok->next->key == *tok->key)
+                printf("AAAAAAAAAAAAAAAAAAAAAAAAAAH ERREUR REDIRR\n");
+		}
+        if (*tok->key == '|')
 		{
 			if (!tok->next)
 				return (1);
 			free(tok->next->key);
-			tok->next->key = ft_strdup("C");
+			tok->next->key = ft_strdup(">>");
 		}
 		tok = tok->next;
 	}

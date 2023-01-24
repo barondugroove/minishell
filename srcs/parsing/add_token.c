@@ -126,7 +126,7 @@ void	add_token(t_tok *env, t_tok **tok_head, char *str)
 {
 	check_var_env(env, str);
 	if (ft_strchr(str, '"') || ft_strchr(str, '\'') || ft_strchr(str, '|')
-			|| ft_strchr(str, '<') || ft_strchr(str, '>'))
+		|| ft_strchr(str, '<') || ft_strchr(str, '>'))
 	{
 		if (pipe_error(str))
 			return ;
