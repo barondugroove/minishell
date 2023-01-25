@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/24 13:42:25 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/25 15:15:59 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	print_export(t_tok **head)
 	tok = env_copy;
 	while (tok)
 	{
-		if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0) && *tok->value != '\0')
+		if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0)
+			&& *tok->value != '\0')
 			printf("declare -x %s=\"%s\"\n", tok->key, tok->value);
 		else if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0))
 			printf("declare -x %s\n", tok->key);
@@ -31,7 +32,7 @@ void	print_export(t_tok **head)
 	free_list(env_copy);
 }
 
-void add_existing_var(t_tok *env, char *arg)
+void	add_existing_var(t_tok *env, char *arg)
 {
 	t_tok	*tmp;
 
@@ -44,7 +45,7 @@ void add_existing_var(t_tok *env, char *arg)
 	}
 }
 
-static void error_message_export(char *arg)
+static void	error_message_export(char *arg)
 {
 	ft_putstr_fd("minishell: export: ", 2);
 	ft_putstr_fd(arg, 2);
@@ -52,7 +53,7 @@ static void error_message_export(char *arg)
 	return ;
 }
 
-int check_errors_export(char *args)
+int	check_errors_export(char *args)
 {
 	int	i;
 
@@ -78,12 +79,12 @@ int	export(t_tok **env, char **args)
 	char	*arg_copy;
 	int		i;
 
-	i = 1;
-	if (!args[i])
+	if (!args[1])
 		print_export(env);
 	else
 	{
-		while (args[i])
+		i = 0;
+		while (args[++i])
 		{
 			if (check_errors_export(args[i]))
 				return (1);
@@ -102,7 +103,6 @@ int	export(t_tok **env, char **args)
 				newtoken_back(env, ft_strdup("\0"), ft_strdup(key));
 				free(arg_copy);
 			}
-			i++;
 		}
 	}
 	return (0);

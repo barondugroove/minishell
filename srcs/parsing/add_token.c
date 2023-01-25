@@ -1,15 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_quote_token.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+        
-	+:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+      
-	+#+        */
-/*                                                +#+#+#+#+#+  
-	+#+           */
+/*   add_token.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:57:55 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/24 17:57:55 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/25 16:38:53 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +17,7 @@
 
 int	pipe_error(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -37,9 +34,9 @@ int	pipe_error(char *str)
 
 void	clean_token(t_tok **tok_head, char *str)
 {
-	char    quote;
-	int     i;
-	int     len;
+	char	quote;
+	int		i;
+	int		len;
 
 	quote = '\0';
 	len = ft_strlen(str);
@@ -74,11 +71,11 @@ void	clean_token(t_tok **tok_head, char *str)
 
 void	replace_var_env(t_tok *env, char *str, char *ptr)
 {
-	char *newStr;
-	char *end;
-	char *value;
-	char *var;
-	int varlen;
+	char	*newStr;
+	char	*end;
+	char	*value;
+	char	*var;
+	int		varlen;
 
 	end = ptr;
 	varlen = 0;
@@ -90,7 +87,7 @@ void	replace_var_env(t_tok *env, char *str, char *ptr)
 	var = malloc(sizeof(char) * (varlen + 1));
 	ft_strlcpy(var, end - varlen, varlen + 1);
 	if (*(var + 1) && *(var + 1) == '?' && !*(var + 2))
-		value = ft_itoa(exit_code);
+		value = ft_itoa(g_exit_code);
 	else
 		value = ft_getenv(env, var + 1);
 	free(var);
@@ -105,8 +102,8 @@ void	replace_var_env(t_tok *env, char *str, char *ptr)
 
 void	check_var_env(t_tok *env, char *str)
 {
-	char *ptr;
-	char quote;
+	char	*ptr;
+	char	quote;
 
 	quote = '\0';
 	ptr = str;
@@ -126,7 +123,7 @@ void	add_token(t_tok *env, t_tok **tok_head, char *str)
 {
 	check_var_env(env, str);
 	if (ft_strchr(str, '"') || ft_strchr(str, '\'') || ft_strchr(str, '|')
-		|| ft_strchr(str, '<') || ft_strchr(str, '>'))
+			|| ft_strchr(str, '<') || ft_strchr(str, '>'))
 	{
 		if (pipe_error(str))
 			return ;

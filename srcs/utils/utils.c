@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2023/01/14 13:39:12 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/25 14:49:45 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 t_tok	*newtoken(char *data, char *key)
 {
 	t_tok	*tok;
-
 
 	tok = malloc(sizeof(t_tok));
 	if (tok)
@@ -44,14 +43,14 @@ void	newtoken_back(t_tok **head, char *data, char *key)
 	tmp->next = tok;
 }
 
-char *c_to_str(char c)
+char	*c_to_str(char c)
 {
-    char *str;
+	char	*str;
 
-    str = malloc(sizeof(char) * 2);
-    str[0] = c;
-    str[1] = '\0';
-    return (str);
+	str = malloc(sizeof(char) * 2);
+	str[0] = c;
+	str[1] = '\0';
+	return (str);
 }
 
 char	*strjoin_pipex(char *s1, char *s2)

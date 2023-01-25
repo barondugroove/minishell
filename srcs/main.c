@@ -6,25 +6,25 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/19 14:27:37 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/25 16:37:05 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int exit_code = 0;
+int	g_exit_code = 0;
 
-void  child_c_handler(int sig)
+void	child_c_handler(int sig)
 {
 	(void)sig;
-	exit_code = 130;
+	g_exit_code = 130;
 	printf("\n");
 }
 
-void  ctrl_c_handler(int sig)
+void	ctrl_c_handler(int sig)
 {
 	(void)sig;
-	exit_code = 130;
+	g_exit_code = 130;
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);

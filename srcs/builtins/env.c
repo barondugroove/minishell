@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 18:19:29 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/24 14:39:31 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/25 15:08:11 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
 
 // IL PRINT TOUJOURS LE USER SI ON MET JUSTE $U
 
@@ -36,7 +35,8 @@ void	print_env(t_tok **head)
 	tok = *head;
 	while (tok)
 	{
-		if (tok->value != NULL && ft_strncmp(tok->key, "_", ft_strlen(tok->key)) != 0)
+		if (tok->value != NULL && ft_strncmp(tok->key, "_",
+				ft_strlen(tok->key)) != 0)
 			printf("%s=%s\n", tok->key, tok->value);
 		tok = tok->next;
 	}

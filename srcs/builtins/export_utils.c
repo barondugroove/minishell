@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:23:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/19 20:04:41 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/25 14:40:05 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ t_tok	*dup_env(t_tok **env_head)
 	return (export);
 }
 
-int has_equal(char *arg)
+int	has_equal(char *arg)
 {
 	int	i;
 
 	i = 0;
-	while(arg[i])
+	while (arg[i])
 	{
 		if (arg[i] == '=')
 			return (1);

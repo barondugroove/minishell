@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/24 19:02:56 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/25 16:40:31 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	clean_token_list(t_tok *head)
 	t_tok	*tok;
 
 	tok = head;
-
 	if (*tok->key == '|')
 		return (1);
 	free(tok->key);
@@ -27,9 +26,9 @@ int	clean_token_list(t_tok *head)
 		if (*tok->key == '<' || *tok->key == '>')
 		{
 			if (tok->next && *tok->next->key == *tok->key)
-                printf("AAAAAAAAAAAAAAAAAAAAAAAAAAH ERREUR REDIRR\n");
+				printf("AAAAAAAAAAAAAAAAAAAAAAAAAAH ERREUR REDIRR\n");
 		}
-        if (*tok->key == '|')
+		if (*tok->key == '|')
 		{
 			if (!tok->next)
 				return (1);
@@ -61,7 +60,7 @@ t_tok	*parsing_controller(t_tok *env, char *prompt)
 		if (str && *str == ERROR_CHAR)
 		{
 			printf("syntax error near unexpected token '|'\n");
-			exit_code = 2;
+			g_exit_code = 2;
 			free_list(tok_head);
 			return (NULL);
 		}
@@ -70,7 +69,7 @@ t_tok	*parsing_controller(t_tok *env, char *prompt)
 	if (clean_token_list(tok_head))
 	{
 		printf("syntax error near unexpected token '|'\n");
-		exit_code = 2;
+		g_exit_code = 2;
 		free_list(tok_head);
 		return (NULL);
 	}

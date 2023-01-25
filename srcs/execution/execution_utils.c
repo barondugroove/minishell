@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/24 13:43:56 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/25 16:27:51 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	**get_cmd(t_tok *cmds)
 char	*fill_tab(t_tok *node)
 {
 	char	*str;
-	int	length;
+	int		length;
 
 	length = ft_strlen(node->key) + ft_strlen(node->value) + 2;
 	str = malloc(sizeof(char) * length);

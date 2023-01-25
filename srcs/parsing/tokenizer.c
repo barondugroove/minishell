@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 18:11:47 by rlaforge          #+#    #+#             */
-/*   Updated: 2022/12/28 20:53:47 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/25 16:35:40 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_tokenizer_ext(char *str)
 			quote = '\0';
 		else if (*str == '|' && *str + 1 <= 32 && quote == '\0')
 			return (len + 1);
-		else if ((*str == '<' || *str == '>') 
+		else if ((*str == '<' || *str == '>')
 			&& *str + 1 <= 32 && quote == '\0')
 			return (len + 1);
 		len++;

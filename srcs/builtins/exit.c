@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:17:14 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/24 17:49:03 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/25 16:34:33 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@
 
 void	ft_exit(long long code)
 {
-	exit_code = code;
+	g_exit_code = code;
 	exit(code);
 }
 
-long long		ft_atoll(const char *str)
+long long	ft_atoll(const char *str)
 {
 	int			i;
 	int			neg;
@@ -52,7 +52,7 @@ long long		ft_atoll(const char *str)
 	return (neg * nbr);
 }
 
-static void numeric_argument_required(char *arg)
+static void	numeric_argument_required(char *arg)
 {
 	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putstr_fd(arg, 2);
@@ -60,7 +60,7 @@ static void numeric_argument_required(char *arg)
 	return ;
 }
 
-int check_args(char **args)
+int	check_args(char **args)
 {
 	int	i;
 	int	j;
@@ -94,9 +94,9 @@ int check_args(char **args)
 
 int	exit_builtin(char **args)
 {
-    long long	arg_nbr;
+	long long	arg_nbr;
 
-	exit_code = 0;
+	g_exit_code = 0;
 	if (!args[1])
 		ft_exit(0);
 	check_args(args);
