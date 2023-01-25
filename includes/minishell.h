@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/25 16:34:33 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/25 17:28:06 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define K_QUO "'"
 # define K_DQUO "\""
 
-extern int			g_g_exit_code;
+extern int			g_exit_code;
 
 typedef struct s_tok
 {

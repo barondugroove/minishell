@@ -6,15 +6,30 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/25 16:40:31 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/25 18:32:10 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+void	print_list(t_tok *head)
+{
+	t_tok	*tok;
+
+	tok = head;
+	printf("PRINTLIST:\n");
+	while (tok)
+	{
+		printf("%s: %s$\n", tok->key, tok->value);
+		tok = tok->next;
+	}
+}
+
 int	clean_token_list(t_tok *head)
 {
 	t_tok	*tok;
+
+	print_list(head);
 
 	tok = head;
 	if (*tok->key == '|')
@@ -26,7 +41,7 @@ int	clean_token_list(t_tok *head)
 		if (*tok->key == '<' || *tok->key == '>')
 		{
 			if (tok->next && *tok->next->key == *tok->key)
-				printf("AAAAAAAAAAAAAAAAAAAAAAAAAAH ERREUR REDIRR\n");
+				printf("DOUBLE REDIR\n");
 		}
 		if (*tok->key == '|')
 		{
