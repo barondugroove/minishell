@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/26 01:57:09 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/26 15:54:00 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*get_path(t_tok *env_tok, char *cmd)
 }
 
 
-// Pourquoi ne pas mettre les redirs dans les args??
+// Pourquoi ne pas mettre les redirs dans les args
 char	**get_cmd(t_tok *cmds)
 {
 	char	**args;

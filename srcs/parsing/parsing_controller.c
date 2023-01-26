@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/26 01:48:49 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/26 15:59:35 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,14 @@ int	clean_token_list(t_tok *head)
 		{
 			if (!tok->next)
 				return (1);
+			else if (*tok->next->key == 'A')
+			{
+				free(tok->next->key);
+				tok->next->key = ft_strdup("C");
+			}
 		}
 		tok = tok->next;
 	}
-	
 	print_list(head);
 	return (0);
 }
