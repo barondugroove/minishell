@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/25 16:34:33 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/26 18:58:44 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	execute_builtins(t_allocated *truc, t_tok *cmds)
 	return (status);
 }
 
-int	execute_cmd(t_allocated *truc, t_tok *cmds)
+void	execute_cmd(t_allocated *truc, t_tok *cmds)
 {
 	char	**args;
 	char	**envp;
@@ -48,18 +48,15 @@ int	execute_cmd(t_allocated *truc, t_tok *cmds)
 	envp = convert_envp(truc->env);
 	if (!path || (execve(path, args, envp) == -1))
 	{
-		printf("command not found: %s\n", args[0]);
+		ft_putstr_fd("command not found: ", 2);
+		ft_putstr_fd(args[0], 2);
+		ft_putstr_fd("\n", 2);
 		free(path);
 		free_tab(args);
 		free_tab(envp);
 		free_truc(truc);
 		exit(127);
 	}
-	printf("OUAH LA DINGUERIE, LE BOUT DE CODE QUI SE LANCE JAMAIS\n");
-	free(path);
-	free_tab(args);
-	free_tab(envp);
-	return (0);
 }
 
 void	duplicator(int *fd_pipe, int fd_save, int cmd_id, int cmd_nbr)
@@ -96,7 +93,7 @@ void	duplicator(int *fd_pipe, int fd_save, int cmd_id, int cmd_nbr)
 	}
 }
 
-int	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
+void	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
 {
 	int	pid;
 	int	status;
@@ -124,18 +121,12 @@ int	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
 			free_truc(truc);
 			exit(status);
 		}
-		status = execute_cmd(truc, cmd);
-		if (status != 0)
-		{
-			free_truc(truc);
-			exit(status);
-		}
+		execute_cmd(truc, cmd);
 	}
 	else if (cmd_id != 0 && cmd_id != truc->cmd_nbr - 1)
 		close(fd_save);
 	signal(SIGINT, child_c_handler);
 	truc->pids[cmd_id] = pid;
-	return (status);
 }
 
 int	has_pipe(t_tok *cmds)
@@ -169,18 +160,14 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 	{
 		if (has_redir(cmd))
 			handle_redirection(cmd);
-		status = execute_cmd(truc, cmd);
-		if (status != 0)
-		{
-			free_truc(truc);
-			exit(status);
-		}
+		execute_cmd(truc, cmd);
 	}
 	else
 	{
+		printf("WIFEEXITED DU SIMPLE CMD\n");
 		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			g_exit_code = WEXITSTATUS(status);
+		//if (WIFEXITED(status))
+		//	g_exit_code = WEXITSTATUS(status);
 	}
 	signal(SIGINT, child_c_handler);
 	return (status);
@@ -226,6 +213,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	i = 0;
 	while (i < truc.cmd_nbr)
 	{
+		printf("WIFEEXITED DU EXEC CONTROLLER\n");
 		waitpid(truc.pids[i++], &status, 0);
 		if (WIFEXITED(status))
 			g_exit_code = WEXITSTATUS(status);

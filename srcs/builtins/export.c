@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/25 15:15:59 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/26 18:31:41 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	export(t_tok **env, char **args)
 		while (args[++i])
 		{
 			if (check_errors_export(args[i]))
-				return (1);
+				return (2);
 			if (has_equal(args[i]))
 			{
 				arg_copy = ft_strdup(args[i]);

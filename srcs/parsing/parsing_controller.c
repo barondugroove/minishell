@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/26 15:59:35 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/26 17:32:00 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	print_list(t_tok *head)
 int	clean_token_list(t_tok *head)
 {
 	t_tok	*tok;
-
 
 	tok = head;
 	if (*tok->key == '|')
