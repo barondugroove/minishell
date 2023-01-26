@@ -12,51 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-///// Il faut faire un token pour les doubles redir pour que je puisse set les bons files dans handle_redirections apres.
-// DOUBLE/TRIPLE REDIR = EXPLOSION
-
-int	pipe_error(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '|' && str[i + 1] == '|' && str[i + 2] == '|')
-		{
-			*str = ERROR_CHAR;
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	redir_error(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if ((str[i] == '<' || str[i] == '>') && (str[i + 1] == '<' || str[i + 1] == '>') && (str[i + 2] == '<' || str[i + 2] == '>'))
-		{
-			*str = ERROR_CHAR;
-			printf("Triple redir (ou plus)\n");
-			return (1);
-		}
-		if ((str[i] == '<' && str[i + 1] == '>') || (str[i] == '>' && str[i + 1] == '<'))
-		{
-			*str = ERROR_CHAR;
-			printf("Double redir inversées\n");
-			return (1);
-		}
-
-		i++;
-	}
-	return (0);
-}
-
 void	clean_token(t_tok **tok_head, char *str)
 {
 	char	quote;
@@ -150,8 +105,6 @@ void	add_token(t_tok *env, t_tok **tok_head, char *str)
 	if (ft_strchr(str, '"') || ft_strchr(str, '\'') || ft_strchr(str, '|')
 			|| ft_strchr(str, '<') || ft_strchr(str, '>'))
 	{
-		if (pipe_error(str) || redir_error(str))
-			return ;
 		while (*str == '|' || *str == '<' || *str == '>')
 		{
 			newtoken_back(tok_head, c_to_str(str[0]), c_to_str(str[0]));

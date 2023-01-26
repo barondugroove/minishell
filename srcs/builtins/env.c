@@ -6,13 +6,11 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 18:19:29 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/25 15:08:11 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/26 00:48:21 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// IL PRINT TOUJOURS LE USER SI ON MET JUSTE $U
 
 char	*ft_getenv(t_tok *env_head, char *key)
 {

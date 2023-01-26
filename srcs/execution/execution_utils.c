@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/25 16:27:51 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/26 01:57:09 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ char	*get_path(t_tok *env_tok, char *cmd)
 	return (NULL);
 }
 
+
+// Pourquoi ne pas mettre les redirs dans les args??
 char	**get_cmd(t_tok *cmds)
 {
 	char	**args;
@@ -59,8 +61,6 @@ char	**get_cmd(t_tok *cmds)
 	{
 		if (*tok->key != '<' && *tok->key != '>')
 			nb++;
-		else
-			tok = tok->next;
 		tok = tok->next;
 	}
 	args = malloc(sizeof(char *) * (nb + 1));
@@ -76,6 +76,36 @@ char	**get_cmd(t_tok *cmds)
 	args[nb] = NULL;
 	return (args);
 }
+
+/* Version avec les redirs
+char	**get_cmd(t_tok *cmds)
+{
+	char	**args;
+	t_tok	*tok;
+	int		nb;
+	int		i;
+
+	tok = cmds;
+	nb = 0;
+	i = 0;
+	if (!cmds)
+		return (NULL);
+	while (tok && *tok->key != '|' && *tok->key != '<' && *tok->key != '>')
+	{
+		nb++;
+		tok = tok->next;
+	}
+	args = malloc(sizeof(char *) * (nb + 1));
+	tok = cmds;
+	while (i != nb)
+	{
+		args[i++] = ft_strdup(tok->value);
+		tok = tok->next;
+	}
+	args[nb] = NULL;
+	return (args);
+}
+*/
 
 char	*fill_tab(t_tok *node)
 {

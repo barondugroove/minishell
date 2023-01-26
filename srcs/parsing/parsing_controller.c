@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/25 18:32:10 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/26 01:48:49 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,19 @@ void	print_list(t_tok *head)
 	t_tok	*tok;
 
 	tok = head;
-	printf("PRINTLIST:\n");
+	printf("Printlist:\n");
 	while (tok)
 	{
 		printf("%s: %s$\n", tok->key, tok->value);
 		tok = tok->next;
 	}
+	printf("Output:\n");
 }
 
 int	clean_token_list(t_tok *head)
 {
 	t_tok	*tok;
 
-	print_list(head);
 
 	tok = head;
 	if (*tok->key == '|')
@@ -38,20 +38,44 @@ int	clean_token_list(t_tok *head)
 	tok->key = ft_strdup("C");
 	while (tok)
 	{
+
+		// REDIR ERRORS VVV
+		if (tok->next && tok->next->next
+			&& (*tok->key == '<' || *tok->key == '>')
+				&& (*tok->next->key == '<' || *tok->next->key == '>')
+					&& (*tok->next->next->key == '<' || *tok->next->next->key == '>'))
+				return (1);
+		if (tok->next && ((*tok->key == '<' && *tok->next->key == '>') || (*tok->key == '>' && *tok->next->key == '<')))
+			return (1);
+		// REDIR ERRORS ^^^
+
 		if (*tok->key == '<' || *tok->key == '>')
 		{
 			if (tok->next && *tok->next->key == *tok->key)
-				printf("DOUBLE REDIR\n");
+			{
+				printf("\nDOUBLE REDIR\n\n");
+				free(tok->key);
+				if (*tok->next->key == '>')
+					tok->key = ft_strdup(">>");
+				else
+					tok->key = ft_strdup("<<");
+				t_tok	*buf;
+				buf = tok->next;
+				tok->next = tok->next->next;
+				free(buf->key);
+				free(buf->value);
+				free(buf);
+			}
 		}
 		if (*tok->key == '|')
 		{
 			if (!tok->next)
 				return (1);
-			free(tok->next->key);
-			tok->next->key = ft_strdup(">>");
 		}
 		tok = tok->next;
 	}
+	
+	print_list(head);
 	return (0);
 }
 
@@ -67,23 +91,17 @@ t_tok	*parsing_controller(t_tok *env, char *prompt)
 		if (str && *str == ERROR_CHAR)
 		{
 			printf("Parsing error: quote not closed\n");
+			g_exit_code = 2;
 			free_list(tok_head);
 			return (NULL);
 		}
 		if (str && *str)
 			add_token(env, &tok_head, str);
-		if (str && *str == ERROR_CHAR)
-		{
-			printf("syntax error near unexpected token '|'\n");
-			g_exit_code = 2;
-			free_list(tok_head);
-			return (NULL);
-		}
 		str = tokenizer(NULL);
 	}
 	if (clean_token_list(tok_head))
 	{
-		printf("syntax error near unexpected token '|'\n");
+		printf("syntax error\n");
 		g_exit_code = 2;
 		free_list(tok_head);
 		return (NULL);
