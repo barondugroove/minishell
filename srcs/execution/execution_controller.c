@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/26 18:58:44 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/27 14:12:45 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,8 +150,8 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 
 	if (is_builtin(cmd->value))
 	{
-		status = execute_builtins(truc, cmd);
-		return (status);
+		g_exit_code = execute_builtins(truc, cmd);
+		return (0);
 	}
 	pid = fork();
 	if (pid == -1)
@@ -164,10 +164,9 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 	}
 	else
 	{
-		printf("WIFEEXITED DU SIMPLE CMD\n");
 		waitpid(pid, &status, 0);
-		//if (WIFEXITED(status))
-		//	g_exit_code = WEXITSTATUS(status);
+		if (WIFEXITED(status))
+			g_exit_code = WEXITSTATUS(status);
 	}
 	signal(SIGINT, child_c_handler);
 	return (status);
@@ -191,7 +190,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	i = 0;
 	if (truc.cmd_nbr == 1)
 	{
-		g_exit_code = execute_simple_command(&truc, cmds);
+		execute_simple_command(&truc, cmds);
 		free(truc.pids);
 		return ;
 	}
