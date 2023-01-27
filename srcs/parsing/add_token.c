@@ -49,6 +49,7 @@ void	clean_token(t_tok **tok_head, char *str)
 	}
 }
 
+// Need to cat ce qui as de collé apres le $?. genre: echo $?HELLO = 0HELLO
 void	replace_var_env(t_tok *env, char *str, char *ptr)
 {
 	char	*newStr;
@@ -66,17 +67,17 @@ void	replace_var_env(t_tok *env, char *str, char *ptr)
 	}
 	var = malloc(sizeof(char) * (varlen + 1));
 	ft_strlcpy(var, end - varlen, varlen + 1);
-	if (*(var + 1) && *(var + 1) == '?' && !*(var + 2))
+	if (*(var + 1) && *(var + 1) == '?')
 		value = ft_itoa(g_exit_code);
 	else
 		value = ft_getenv(env, var + 1);
-	free(var);
-	newStr = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(end)));
+	newStr = malloc(sizeof(char) * ((ft_strlen(value) + ft_strlen(end)) + 1));
 	ft_strlcpy(newStr, str, ptr - str + 1);
 	if (value)
 		ft_strcat(newStr, value);
 	ft_strcat(newStr, end);
 	ft_strcpy(str, newStr);
+	free(var);
 	free(newStr);
 }
 

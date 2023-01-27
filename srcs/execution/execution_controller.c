@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/27 14:12:45 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/27 14:43:16 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	execute_cmd(t_allocated *truc, t_tok *cmds)
 	envp = convert_envp(truc->env);
 	if (!path || (execve(path, args, envp) == -1))
 	{
-		ft_putstr_fd("command not found: ", 2);
 		ft_putstr_fd(args[0], 2);
+		ft_putstr_fd(": command not found", 2);
 		ft_putstr_fd("\n", 2);
 		free(path);
 		free_tab(args);
@@ -212,7 +212,6 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	i = 0;
 	while (i < truc.cmd_nbr)
 	{
-		printf("WIFEEXITED DU EXEC CONTROLLER\n");
 		waitpid(truc.pids[i++], &status, 0);
 		if (WIFEXITED(status))
 			g_exit_code = WEXITSTATUS(status);
