@@ -6,12 +6,18 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 18:19:29 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/26 00:48:21 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/28 16:04:32 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+
+// 
+//
+// PROBLEME QUAND JE FAIT ECHO $PWD. probleme quand je met une var d'env avec un / dans sa value.
+//
+//
 char	*ft_getenv(t_tok *env_head, char *key)
 {
 	t_tok	*tmp;

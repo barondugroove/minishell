@@ -90,7 +90,7 @@ void	check_var_env(t_tok *env, char *str)
 	ptr = str;
 	while (*ptr)
 	{
-		if (*ptr == '$' && (quote == '\0' || quote == '"'))
+		if (*ptr == '$' && *(ptr + 1) && *(ptr + 1) != '"' && (quote == '\0' || quote == '"'))
 			replace_var_env(env, str, ptr);
 		if ((*ptr == '"' || *ptr == '\'') && quote == '\0')
 			quote = *ptr;

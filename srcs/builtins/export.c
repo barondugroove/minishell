@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/26 18:31:41 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/28 16:34:39 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	print_export(t_tok **head)
 	free_list(env_copy);
 }
 
+// Fonction jamais utilisée
 void	add_existing_var(t_tok *env, char *arg)
 {
 	t_tok	*tmp;
@@ -39,13 +40,13 @@ void	add_existing_var(t_tok *env, char *arg)
 	tmp = env;
 	while (tmp->next)
 	{
-		if (ft_strncmp(tmp->value, arg, ft_strlen(tmp->value) == 0))
-			ft_strlcat(tmp->value, arg, ft_strlen(arg));
+		if (ft_strcmp(tmp->value, arg) == 0)
+			ft_strcat(tmp->value, arg);
 		tmp = tmp->next;
 	}
 }
 
-static void	error_message_export(char *arg)
+void	error_message_export(char *arg)
 {
 	ft_putstr_fd("minishell: export: ", 2);
 	ft_putstr_fd(arg, 2);
@@ -53,18 +54,18 @@ static void	error_message_export(char *arg)
 	return ;
 }
 
-int	check_errors_export(char *args)
+int	check_errors_export(char *arg)
 {
 	int	i;
 
 	i = 0;
-	while (args[i])
+	while (arg[i])
 	{
-		if (args[i] == '=' && ft_isalpha(args[i]))
+		if (arg[i] == '=' && ft_isalpha(arg[i]))                                              //wtf??
 			break ;
-		if (args[i] <= 32 || (!ft_isalpha(args[i]) && args[i] != '_'))
+		if (arg[i] <= 32 || (!ft_isalpha(arg[i]) && arg[i] != '_'))                 //??
 		{
-			error_message_export(args);
+			error_message_export(arg);
 			return (1);
 		}
 		i++;
@@ -87,7 +88,7 @@ int	export(t_tok **env, char **args)
 		while (args[++i])
 		{
 			if (check_errors_export(args[i]))
-				return (2);
+				return (1);
 			if (has_equal(args[i]))
 			{
 				arg_copy = ft_strdup(args[i]);

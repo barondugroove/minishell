@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:17:14 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/25 16:34:33 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/28 16:31:10 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,11 @@ int	check_args(char **args)
 	int	i;
 	int	j;
 
-	i = 1;
-	while (args[i])
-		i++;
-	if (i > 2)
+	if (args[2])
 	{
-		ft_putstr_fd("exit\n", 2);
-		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-		ft_exit(1);
+		ft_putstr_fd("exit\n", 1);
+		ft_putstr_fd(" too many arguments\n", 2);
+		return (1);
 	}
 	i = 1;
 	while (args[i])
@@ -99,7 +96,8 @@ int	exit_builtin(char **args)
 	g_exit_code = 0;
 	if (!args[1])
 		ft_exit(0);
-	check_args(args);
+	if (check_args(args))
+		return (1);
 	arg_nbr = ft_atoll(args[1]);
 	if (arg_nbr > INT_MAX || arg_nbr < INT_MIN)
 		ft_exit(1);
