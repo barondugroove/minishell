@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/25 16:28:47 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:27:14 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	has_redir(t_tok *cmds)
 	tmp = cmds;
 	while (tmp->next && *tmp->key != '|')
 	{
-		if (*tmp->key == '>' && *tmp->next->key == '>')
+		if (ft_strcmp(tmp->key, ">>") == 0)
 			return (3);
 		else if (*tmp->key == '>')
 			return (1);
@@ -74,11 +74,8 @@ int	redir_nbr(t_tok *cmds)
 	i = 0;
 	while (tmp->next && *tmp->key != '|')
 	{
-		if (*tmp->key == '>' && *tmp->next->key == '>')
-		{
+		if (ft_strcmp(tmp->key, ">>") == 0)
 			i++;
-			tmp = tmp->next;
-		}
 		else if (*tmp->key == '>')
 			i++;
 		else if (*tmp->key == '<')
@@ -122,31 +119,40 @@ void	handle_redirection(t_tok *cmds)
 	int		fd_out;
 	int		nbr;
 	char	*str;
+	t_tok	*tmp;
 
 	fd_in = -1;
 	fd_out = -1;
 	nbr = redir_nbr(cmds);
+	tmp = cmds;
 	while (nbr--)
 	{
-		str = get_file(cmds);
+		ft_putstr_fd("redir nbr is : ", 2);
+		ft_putnbr_fd(nbr, 2);
+		ft_putstr_fd("\n", 2);
+		str = get_file(tmp);
 		if (!str)
 			return ;
 		if (has_redir(cmds) == 1)
 		{
+			ft_putstr_fd("Je suis la redir out dans le fichier\n", 2);
 			fd_out = open(str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			dup2(fd_out, 1);
 		}
 		if (has_redir(cmds) == 3)
 		{
+			ft_putstr_fd("Je suis la redir append dans le fichier\n", 2);
 			fd_out = open(str, O_CREAT | O_WRONLY | O_APPEND, 0644);
 			dup2(fd_out, 1);
 		}
 		if (has_redir(cmds) == 2 && !check_file(str, 0))
 		{
+			ft_putstr_fd("Je suis la redir in dans le fichier\n", 2);
 			fd_in = open(str, O_RDONLY);
 			dup2(fd_in, 0);
 		}
-		cmds = get_next_redir(cmds, nbr);
+		if (nbr)
+			tmp = get_next_redir(tmp, nbr);
 		if (fd_in != -1)
 			close(fd_in);
 		if (fd_out != -1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/27 14:43:16 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:32:55 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 
 	if (is_builtin(cmd->value))
 	{
+		if (has_redir(truc->cmd_head))
+			handle_redirection(truc->cmd_head);
 		g_exit_code = execute_builtins(truc, cmd);
 		return (0);
 	}
@@ -158,8 +160,8 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 		printf("pid error");
 	else if (pid == 0)
 	{
-		if (has_redir(cmd))
-			handle_redirection(cmd);
+		if (has_redir(truc->cmd_head))
+			handle_redirection(truc->cmd_head);
 		execute_cmd(truc, cmd);
 	}
 	else

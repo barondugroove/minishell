@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/26 15:54:00 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:30:15 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	**get_cmd(t_tok *cmds)
 		return (NULL);
 	while (tok && *tok->key != '|')
 	{
-		if (*tok->key != '<' && *tok->key != '>')
+		if (*tok->key == *K_CMD || *tok->key == *K_ARG)
 			nb++;
 		tok = tok->next;
 	}
@@ -67,10 +67,8 @@ char	**get_cmd(t_tok *cmds)
 	tok = cmds;
 	while (i != nb)
 	{
-		if (*tok->key != '<' && *tok->key != '>')
+		if (*tok->key == *K_CMD || *tok->key == *K_ARG)
 			args[i++] = ft_strdup(tok->value);
-		else
-			tok = tok->next;
 		tok = tok->next;
 	}
 	args[nb] = NULL;
