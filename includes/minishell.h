@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/25 17:28:06 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/31 20:22:46 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,15 @@ typedef struct s_allocated
 
 // BUILTINS
 int					export(t_tok **head, char **args);
-void				print_env(t_tok **head);
-t_tok				*dup_env(t_tok **env_head);
+int					is_existing(t_tok **env, char *arg);
 void				sort_export(t_tok **env_head);
 int					has_equal(char *arg);
+void				print_env(t_tok **head);
+t_tok				*dup_env(t_tok **env_head);
 int					pwd(t_tok *env, char **args);
 int					cd(char **args, t_tok *head);
 void				echo(char **args);
-void				unset(t_tok **env_head, char **key, t_tok *cmds);
+void				unset(t_tok **env_head, char **key);
 int					exit_builtin(char **args);
 
 // EXECUTION

@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:41:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/14 22:58:32 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/01/31 20:29:38 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static void	error_message_unset(char *arg)
+{
+	ft_putstr_fd("minishell: unset: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd(": not a valid identifier\n", 2);
+	return ;
+}
 
 void	remove_node(t_tok **head, t_tok *node_to_remove)
 {
@@ -32,19 +40,40 @@ void	remove_node(t_tok **head, t_tok *node_to_remove)
 	free(node_to_remove);
 }
 
-void	unset(t_tok **env_head, char **key, t_tok *cmds)
+int	check_errors_unset(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (!arg)
+		return (1);
+	while (arg[i])
+	{
+		if ((!ft_isalpha(arg[i]) && i == 0) || arg[i] <= 32)
+			return (1);
+		else if ((ft_isdigit(arg[i]) && i == 0))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	unset(t_tok **env_head, char **key)
 {
 	t_tok	*tmp;
 	int		i;
 
 	tmp = *env_head;
 	i = 1;
-	if (has_pipe(cmds))
-		exit (0);
 	while (key[i])
 	{
 		while (tmp)
 		{
+			if (check_errors_unset(key[i]))
+			{
+				error_message_unset(key[i]);
+				break ;
+			}
 			if (ft_strncmp(tmp->key, key[i], ft_strlen(tmp->key)) == 0)
 			{
 				remove_node(env_head, tmp);

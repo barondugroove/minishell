@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 18:19:29 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/28 16:04:32 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/31 20:43:55 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 
-// 
+//
 //
 // PROBLEME QUAND JE FAIT ECHO $PWD. probleme quand je met une var d'env avec un / dans sa value.
 //
@@ -39,8 +39,7 @@ void	print_env(t_tok **head)
 	tok = *head;
 	while (tok)
 	{
-		if (tok->value != NULL && ft_strncmp(tok->key, "_",
-				ft_strlen(tok->key)) != 0)
+		if (*tok->value != '\x7F' && ft_strcmp(tok->key, "_") != 0)
 			printf("%s=%s\n", tok->key, tok->value);
 		tok = tok->next;
 	}

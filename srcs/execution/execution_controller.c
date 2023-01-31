@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/31 15:54:53 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/01/31 20:43:52 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	execute_builtins(t_allocated *truc, t_tok *cmds)
 	else if (ft_strncmp(cmds->value, "echo", 5) == 0)
 		echo(args);
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
-		unset(&truc->env, args, cmds);
+		unset(&truc->env, args);
 	else if (ft_strncmp(cmds->value, "exit", 5) == 0)
 		status = exit_builtin(args);
 	free_tab(args);
@@ -176,6 +176,8 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 
 t_tok	*find_next_cmd(t_tok *cmds)
 {
+	if (!cmds)
+		return NULL;
 	while (cmds->next)
 	{
 		if (*cmds->key == *K_CMD && ft_strcmp(cmds->value, "<") != 0)
@@ -200,8 +202,6 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	truc.cmd_head = cmd_head;
 	truc.cmd_nbr = nb_cmds(cmds);
 	truc.pids = malloc(sizeof(int) * truc.cmd_nbr);
-	print_list(cmds);
-	print_list(truc.cmd_head);
 	i = 0;
 	if (truc.cmd_nbr == 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/31 15:52:51 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/01/31 20:51:19 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,21 @@ int	check_file(char *file, int dir)
 
 t_tok	*get_next_redir(t_tok *cmds, int nbr)
 {
-	while (cmds && nbr)
+	while (cmds)
 	{
-		if (*cmds->key == '>' && *cmds->next->key == '>')
+		if (ft_strcmp(cmds->key, ">>") == 0)
 			nbr--;
 		else if (*cmds->key == '>' || *cmds->key == '<')
 			nbr--;
+		ft_putnbr_fd(nbr, 2);
+		ft_putstr_fd("\n", 2);
 		cmds = cmds->next;
+		ft_putstr_fd("next redir is :", 2);
+		ft_putstr_fd(cmds->value, 2);
+		ft_putstr_fd("\n", 2);
+		if (nbr == 0)
+			return (cmds);
+
 	}
 	return (cmds);
 }
@@ -132,24 +140,21 @@ void	handle_redirection(t_tok *cmds)
 			return ;
 		if (has_redir(cmds) == 1)
 		{
-			ft_putstr_fd("JE SUIS LA REDIR OUT\n", 2);
 			fd_out = open(str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			dup2(fd_out, 1);
 		}
 		if (has_redir(cmds) == 3)
 		{
-			ft_putstr_fd("JE SUIS LA REDIR APPEND\n", 2);
 			fd_out = open(str, O_CREAT | O_WRONLY | O_APPEND, 0644);
 			dup2(fd_out, 1);
 		}
 		if (has_redir(cmds) == 2 && !check_file(str, 0))
 		{
-			ft_putstr_fd("JE SUIS LA REDIR IN\n", 2);
 			fd_in = open(str, O_RDONLY);
 			dup2(fd_in, 0);
 		}
 		if (nbr)
-			tmp = get_next_redir(tmp, nbr);
+			tmp = get_next_redir(tmp->next, nbr);
 		if (fd_in != -1)
 			close(fd_in);
 		if (fd_out != -1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:23:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/25 14:40:05 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/31 19:23:02 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,20 @@ int	has_equal(char *arg)
 		else if (arg[i] == '+' && arg[i + 1] == '=')
 			return (2);
 		i++;
+	}
+	return (0);
+}
+
+int	is_existing(t_tok **env, char *arg)
+{
+	t_tok	*tmp;
+
+	tmp = *env;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->key, arg) == 0)
+			return (1);
+		tmp = tmp->next;
 	}
 	return (0);
 }

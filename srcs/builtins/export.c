@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/28 16:34:39 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/31 20:30:10 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,6 @@ void	print_export(t_tok **head)
 	free_list(env_copy);
 }
 
-// Fonction jamais utilisée
-void	add_existing_var(t_tok *env, char *arg)
-{
-	t_tok	*tmp;
-
-	tmp = env;
-	while (tmp->next)
-	{
-		if (ft_strcmp(tmp->value, arg) == 0)
-			ft_strcat(tmp->value, arg);
-		tmp = tmp->next;
-	}
-}
-
 void	error_message_export(char *arg)
 {
 	ft_putstr_fd("minishell: export: ", 2);
@@ -59,55 +45,94 @@ int	check_errors_export(char *arg)
 	int	i;
 
 	i = 0;
+	if (!arg)
+		return (1);
 	while (arg[i])
 	{
-		if (arg[i] == '=' && ft_isalpha(arg[i]))                                              //wtf??
-			break ;
-		if (arg[i] <= 32 || (!ft_isalpha(arg[i]) && arg[i] != '_'))                 //??
-		{
-			error_message_export(arg);
+		if ((!ft_isalpha(arg[i]) && i == 0) || arg[i] <= 32)
 			return (1);
-		}
+		else if ((!ft_isalpha(arg[i]) && arg[i] != '_'))
+			return (1);
 		i++;
 	}
 	return (0);
 }
 
-int	export(t_tok **env, char **args)
+int	add_existing_var(t_tok **env, char *args)
 {
+	t_tok	*tmp;
 	char	*key;
 	char	*value;
 	char	*arg_copy;
-	int		i;
 
-	if (!args[1])
-		print_export(env);
-	else
+	tmp = *env;
+	arg_copy = ft_strdup(args);
+	key = ft_strtok(arg_copy, "+=");
+	value = ft_strtok(NULL, "\0");
+	if (check_errors_export(key))
 	{
-		i = 0;
-		while (args[++i])
-		{
-			if (check_errors_export(args[i]))
-				return (1);
-			if (has_equal(args[i]))
-			{
-				arg_copy = ft_strdup(args[i]);
-				key = ft_strtok(arg_copy, "=");
-				value = ft_strtok(NULL, "\0");
-				newtoken_back(env, ft_strdup(value), ft_strdup(key));
-				free(arg_copy);
-			}
-			else
-			{
-				arg_copy = ft_strdup(args[i]);
-				key = ft_strtok(arg_copy, "=");
-				newtoken_back(env, ft_strdup("\0"), ft_strdup(key));
-				free(arg_copy);
-			}
-		}
+		error_message_export(args);
+		return (1);
 	}
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->key, key) == 0)
+		{
+			if (has_equal(args) == 2)
+				tmp->value = ft_strjoin(tmp->value, value);
+			else if (has_equal(args) == 1)
+				tmp->value = ft_strdup(value);
+			return (0);
+		}
+		tmp = tmp->next;
+	}
+	return (1);
+}
+
+int	add_var(t_tok **env, char *key, char *value)
+{
+	if (check_errors_export(key))
+	{
+		error_message_export(key);
+		return (1);
+	}
+	if (!value)
+		newtoken_back(env, ft_strdup("\x7F"), ft_strdup(key));
+	else
+		newtoken_back(env, ft_strdup(value), ft_strdup(key));
 	return (0);
 }
 
-// PENSER A GERER LE += qui concatene la nouvelle chaine
-//a celle deja presente dans value.
+int	export(t_tok **env, char **args)
+{
+	char	*arg_copy;
+	char	*key;
+	char	*value;
+	int		i;
+	int		status;
+
+	i = 0;
+	status = 0;
+	if (!args[1])
+	{
+		print_export(env);
+		return (status);
+	}
+	while (args[++i])
+	{
+		arg_copy = ft_strdup(args[i]);
+		key = ft_strtok(arg_copy, "+=");
+		value = ft_strtok(NULL, "\0");
+		if (!key)
+		{
+			error_message_export(args[i]);
+			return (1);
+		}
+		if (is_existing(env, key))
+			status = add_existing_var(env, args[i]);
+		else
+			status = add_var(env, key, value);
+		free(arg_copy);
+	}
+	return (status);
+}
