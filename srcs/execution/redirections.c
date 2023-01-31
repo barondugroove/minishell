@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/30 18:27:14 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/01/31 15:52:51 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,27 +127,24 @@ void	handle_redirection(t_tok *cmds)
 	tmp = cmds;
 	while (nbr--)
 	{
-		ft_putstr_fd("redir nbr is : ", 2);
-		ft_putnbr_fd(nbr, 2);
-		ft_putstr_fd("\n", 2);
 		str = get_file(tmp);
 		if (!str)
 			return ;
 		if (has_redir(cmds) == 1)
 		{
-			ft_putstr_fd("Je suis la redir out dans le fichier\n", 2);
+			ft_putstr_fd("JE SUIS LA REDIR OUT\n", 2);
 			fd_out = open(str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			dup2(fd_out, 1);
 		}
 		if (has_redir(cmds) == 3)
 		{
-			ft_putstr_fd("Je suis la redir append dans le fichier\n", 2);
+			ft_putstr_fd("JE SUIS LA REDIR APPEND\n", 2);
 			fd_out = open(str, O_CREAT | O_WRONLY | O_APPEND, 0644);
 			dup2(fd_out, 1);
 		}
 		if (has_redir(cmds) == 2 && !check_file(str, 0))
 		{
-			ft_putstr_fd("Je suis la redir in dans le fichier\n", 2);
+			ft_putstr_fd("JE SUIS LA REDIR IN\n", 2);
 			fd_in = open(str, O_RDONLY);
 			dup2(fd_in, 0);
 		}

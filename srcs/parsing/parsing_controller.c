@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/27 14:15:35 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/01/31 16:00:51 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+// APRES LA REDIR C TOUJOURS UN FILE WALLAH
+// ET SI JAI UNE REDIR AU DEBUT, IL YA PLUS DE COMMANDE DU TOUT :(
+// GENRE <Makefile cat
+// PAS COOL
 
 void	print_list(t_tok *head)
 {
@@ -33,18 +38,22 @@ int	clean_token_list(t_tok *head)
 	tok = head;
 	if (*tok->key == '|')
 		return (1);
-	free(tok->key);
-	tok->key = ft_strdup("C");
+	if (*tok->key != '<' && *tok->key != '>')
+	{
+		free(tok->key);
+		tok->key = ft_strdup("C");
+	}
 	while (tok)
 	{
 
 		// REDIR ERRORS VVV
 		if (tok->next && tok->next->next
 			&& (*tok->key == '<' || *tok->key == '>')
-				&& (*tok->next->key == '<' || *tok->next->key == '>')
-					&& (*tok->next->next->key == '<' || *tok->next->next->key == '>'))
-				return (1);
-		if (tok->next && ((*tok->key == '<' && *tok->next->key == '>') || (*tok->key == '>' && *tok->next->key == '<')))
+			&& (*tok->next->key == '<' || *tok->next->key == '>')
+			&& (*tok->next->next->key == '<' || *tok->next->next->key == '>'))
+			return (1);
+		if (tok->next && ((*tok->key == '<' && *tok->next->key == '>')
+				|| (*tok->key == '>' && *tok->next->key == '<')))
 			return (1);
 		// REDIR ERRORS ^^^
 

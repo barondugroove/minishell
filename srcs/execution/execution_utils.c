@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/30 18:30:15 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/01/31 15:27:17 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ char	**get_cmd(t_tok *cmds)
 	{
 		if (*tok->key == *K_CMD || *tok->key == *K_ARG)
 			nb++;
+		else if (*tok->key == '>' || *tok->key == '<' || ft_strcmp(tok->key, ">>") == 0)
+			tok = tok->next;
 		tok = tok->next;
 	}
 	args = malloc(sizeof(char *) * (nb + 1));

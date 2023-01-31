@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/30 18:32:55 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/01/31 15:54:53 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,17 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 	return (status);
 }
 
+t_tok	*find_next_cmd(t_tok *cmds)
+{
+	while (cmds->next)
+	{
+		if (*cmds->key == *K_CMD && ft_strcmp(cmds->value, "<") != 0)
+			break ;
+		cmds = cmds->next;
+	}
+	return (cmds);
+}
+
 void	execution_controller(t_tok *env, t_tok *cmd_head)
 {
 	t_tok		*cmds;
@@ -184,11 +195,13 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 
 	if (!cmd_head)
 		return ;
-	cmds = cmd_head;
+	cmds = find_next_cmd(cmd_head);
 	truc.env = env;
 	truc.cmd_head = cmd_head;
 	truc.cmd_nbr = nb_cmds(cmds);
 	truc.pids = malloc(sizeof(int) * truc.cmd_nbr);
+	print_list(cmds);
+	print_list(truc.cmd_head);
 	i = 0;
 	if (truc.cmd_nbr == 1)
 	{
@@ -201,12 +214,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	while (i < truc.cmd_nbr)
 	{
 		child_process(&truc, cmds, fd_pipe, i);
-		while (cmds->next)
-		{
-			cmds = cmds->next;
-			if (*cmds->key == *K_CMD)
-				break ;
-		}
+		cmds = find_next_cmd(cmds->next);
 		i++;
 	}
 	close(fd_pipe[0]);
