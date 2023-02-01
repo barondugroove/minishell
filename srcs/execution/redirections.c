@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/01 17:49:03 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/01 19:28:38 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	check_file(char *file, int dir)
 			return (0);
 		// ft_putnbr_fd(access(file, W_OK), 2);
 		// ft_putstr_fd("\n", 2);
-         if (access(file, W_OK) == -1)
+        if (access(file, W_OK) == -1)
 		{
             ft_putstr_fd("minishell: ", 2);
             ft_putstr_fd(file, 2);
@@ -160,7 +160,7 @@ void	handle_redirection(t_tok *cmds)
 	while (nbr--)
 	{
 		// ft_putstr_fd("cmd is : ", 2);
-		// ft_putstr_fd(cmds->value, 2);
+		// ft_putstr_fd(tmp->value, 2);
 		// ft_putstr_fd("\n", 2);
 		// ft_putstr_fd("has redir is : ", 2);
 		// ft_putnbr_fd(has_redir(tmp), 2);
@@ -198,7 +198,7 @@ void	handle_redirection(t_tok *cmds)
 			// ft_putstr_fd("next redir is :", 2);
 			// ft_putstr_fd(tmp->value, 2);
 			// ft_putstr_fd("\n", 2);
-			cmds = find_next_cmd(cmds);
+			// cmds = find_next_cmd(cmds);
 		}
 		if (fd_in != -1)
 			close(fd_in);
