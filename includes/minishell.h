@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/31 20:22:46 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/01 01:39:42 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int					cd(char **args, t_tok *head);
 void				echo(char **args);
 void				unset(t_tok **env_head, char **key);
 int					exit_builtin(char **args);
+void				ft_exit(long long code);
 
 // EXECUTION
 void				execution_controller(t_tok *env, t_tok *tok_head);
@@ -68,7 +69,7 @@ int					has_pipe(t_tok *cmds);
 // REDIRECTION
 void				handle_redirection(t_tok *cmds);
 int					has_redir(t_tok *cmds);
-char				*get_file(t_tok *cmds);
+char				*get_file(t_tok *cmds, int nbr);
 
 // EXECUTION_UTILS
 int					nb_cmds(t_tok *cmds);
