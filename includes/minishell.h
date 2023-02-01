@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/01 01:39:42 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/01 14:57:45 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void				echo(char **args);
 void				unset(t_tok **env_head, char **key);
 int					exit_builtin(char **args);
 void				ft_exit(long long code);
+t_tok				*find_next_cmd(t_tok *cmds);
 
 // EXECUTION
 void				execution_controller(t_tok *env, t_tok *tok_head);

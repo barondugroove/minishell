@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/01 02:34:14 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/01 15:19:21 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,8 +197,6 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 
 	if (!cmd_head)
 		return ;
-//	print_list(cmd_head);
-//	printf("\n");
 	cmds = find_next_cmd(cmd_head);
 	truc.env = env;
 	truc.cmd_head = cmd_head;
@@ -215,10 +213,10 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 		printf("error pipe\n");
 	while (i < truc.cmd_nbr)
 	{
-//		if (i == 0)
-//			printf("first cmd is : %s\n", cmds->value);		
-//		else
-//			printf("next cmd is : %s\n", cmds->value);
+		// if (i == 0)
+		// 	printf("first cmd is : %s\n", cmds->value);
+		// else
+		// 	printf("next cmd is : %s\n", cmds->value);
 		child_process(&truc, cmds, fd_pipe, i);
 		cmds = find_next_cmd(cmds->next);
 		i++;

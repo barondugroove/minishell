@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/01 14:28:44 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/01 17:49:03 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	redir_nbr(t_tok *cmds)
 
 int	check_file(char *file, int dir)
 {
+	// ft_putstr_fd("File in checkfile is :", 2);
 	// ft_putstr_fd(file, 2);
 	// ft_putstr_fd("\n", 2);
 	if (dir == 0 && access(file, F_OK | R_OK) == 0)
@@ -102,14 +103,14 @@ int	check_file(char *file, int dir)
 		// ft_putstr_fd("\n", 2);
         if (access(file, F_OK) == -1)
 			return (0);
-		ft_putnbr_fd(access(file, W_OK), 2);
-		ft_putstr_fd("\n", 2);
-        if (access(file, W_OK) == -1)
+		// ft_putnbr_fd(access(file, W_OK), 2);
+		// ft_putstr_fd("\n", 2);
+         if (access(file, W_OK) == -1)
 		{
             ft_putstr_fd("minishell: ", 2);
             ft_putstr_fd(file, 2);
             ft_putstr_fd(": Permission denied\n", 2);
-            ft_exit(1);
+			ft_exit(1);
             return (1);
         }
 		else
@@ -136,10 +137,7 @@ t_tok	*get_next_redir(t_tok *cmds, int nbr)
 		else if (*tmp->key == '>' || *tmp->key == '<')
 			i++;
 		if (i == nbr)
-		{
-		//	tmp = tmp->next;
 			return (tmp);
-		}
 		tmp = tmp->next;
 	}
 	return (tmp);
@@ -162,7 +160,10 @@ void	handle_redirection(t_tok *cmds)
 	while (nbr--)
 	{
 		// ft_putstr_fd("cmd is : ", 2);
-		// ft_putstr_fd(tmp->value, 2);
+		// ft_putstr_fd(cmds->value, 2);
+		// ft_putstr_fd("\n", 2);
+		// ft_putstr_fd("has redir is : ", 2);
+		// ft_putnbr_fd(has_redir(tmp), 2);
 		// ft_putstr_fd("\n", 2);
 		if (has_redir(tmp) == 1 && !check_file(tmp->next->value, 1))
 		{
@@ -197,6 +198,7 @@ void	handle_redirection(t_tok *cmds)
 			// ft_putstr_fd("next redir is :", 2);
 			// ft_putstr_fd(tmp->value, 2);
 			// ft_putstr_fd("\n", 2);
+			cmds = find_next_cmd(cmds);
 		}
 		if (fd_in != -1)
 			close(fd_in);
