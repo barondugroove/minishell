@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
+#    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/01/20 18:38:52 by benjamincha      ###   ########.fr        #
+#    Updated: 2023/02/02 17:46:38 by bchabot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ SRCS = srcs/main.c \
 		srcs/execution/execution_controller.c \
 		srcs/execution/execution_utils.c \
 		srcs/execution/redirections.c \
+		srcs/execution/redirections_utils.c \
 		srcs/builtins/export.c \
 		srcs/builtins/export_utils.c \
 		srcs/builtins/unset.c \

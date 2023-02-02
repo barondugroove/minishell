@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/31 16:00:51 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/02 17:43:43 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ void	print_list(t_tok *head)
 	printf("Output:\n");
 }
 
-int	clean_token_list(t_tok *head)
+int	clean_token_list(t_tok *head, t_tok *env)
 {
 	t_tok	*tok;
+	char	*str;
 
 	tok = head;
 	if (*tok->key == '|')
@@ -45,7 +46,12 @@ int	clean_token_list(t_tok *head)
 	}
 	while (tok)
 	{
-
+		str = get_path(env, tok->value);
+		if (access(str, X_OK) == 0)
+		{
+			free(tok->key);
+			tok->key = ft_strdup("C");
+		}
 		// REDIR ERRORS VVV
 		if (tok->next && tok->next->next
 			&& (*tok->key == '<' || *tok->key == '>')
@@ -111,7 +117,7 @@ t_tok	*parsing_controller(t_tok *env, char *prompt)
 			add_token(env, &tok_head, str);
 		str = tokenizer(NULL);
 	}
-	if (clean_token_list(tok_head))
+	if (clean_token_list(tok_head, env))
 	{
 		printf("syntax error\n");
 		g_exit_code = 2;

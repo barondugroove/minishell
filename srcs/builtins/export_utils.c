@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:23:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/31 19:23:02 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/02 18:46:14 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ t_tok	*dup_env(t_tok **env_head)
 	t_tok	*export;
 
 	tmp = *env_head;
-	export = newtoken(ft_strdup(tmp->key), ft_strdup(tmp->value));
-	tmp = tmp->next;
 	while (tmp)
 	{
 		newtoken_back(&export, ft_strdup(tmp->value), ft_strdup(tmp->key));

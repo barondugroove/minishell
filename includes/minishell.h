@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/01 14:57:45 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/02 17:39:10 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,14 @@ void				execution_controller(t_tok *env, t_tok *tok_head);
 int					has_pipe(t_tok *cmds);
 
 // REDIRECTION
-void				handle_redirection(t_tok *cmds);
+void				handle_redirection(t_allocated *data);
 int					has_redir(t_tok *cmds);
 char				*get_file(t_tok *cmds, int nbr);
+t_tok				*get_next_redir(t_tok *cmds, int nbr);
+int					check_file(char *file, int dir);
+int					has_redir(t_tok *cmds);
+char				*get_file(t_tok *cmds, int nbr);
+int					redir_nbr(t_tok *cmds);
 
 // EXECUTION_UTILS
 int					nb_cmds(t_tok *cmds);
@@ -82,7 +87,7 @@ char				**convert_envp(t_tok *head);
 // FREE_UTILS
 void				free_list(t_tok *head);
 void				free_tab(char **tab);
-void				free_truc(t_allocated *truc);
+void				free_allocated(t_allocated *truc);
 
 // PARSING
 t_tok				*parsing_controller(t_tok *env, char *prompt);

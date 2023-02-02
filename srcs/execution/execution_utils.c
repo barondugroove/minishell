@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/31 20:43:54 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/02 18:16:54 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ int	nb_cmds(t_tok *cmds)
 int	is_builtin(char *cmd)
 {
 	if (ft_strncmp(cmd, "echo", 5) == 0)
-		return (1);
+		return (2);
 	if (ft_strncmp(cmd, "cd", 3) == 0)
 		return (1);
 	if (ft_strncmp(cmd, "pwd", 4) == 0)

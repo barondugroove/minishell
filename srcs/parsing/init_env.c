@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 17:26:43 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/14 13:47:52 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/02 18:46:19 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,7 @@ t_tok	*init_env(char **envp)
 	char	*value;
 	int		i;
 
-	i = 1;
-	key = ft_strtok(envp[0], "=");
-	value = ft_strtok(NULL, "\0");
-	env_head = newtoken(ft_strdup(value), ft_strdup(key));
+	i = 0;
 	while (envp[i])
 	{
 		key = ft_strtok(envp[i], "=");

@@ -6,13 +6,13 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/01 15:19:21 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/02 18:10:37 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_builtins(t_allocated *truc, t_tok *cmds)
+int	execute_builtins(t_allocated *data, t_tok *cmds)
 {
 	char	**args;
 	int		status;
@@ -20,32 +20,32 @@ int	execute_builtins(t_allocated *truc, t_tok *cmds)
 	status = 0;
 	args = get_cmd(cmds);
 	if (ft_strncmp(cmds->value, "export", 7) == 0)
-		status = export(&truc->env, args);
+		status = export(&data->env, args);
 	else if (ft_strncmp(cmds->value, "cd", 3) == 0)
-		status = cd(args, truc->env);
+		status = cd(args, data->env);
 	else if (ft_strncmp(cmds->value, "pwd", 4) == 0)
-		status = pwd(truc->env, args);
+		status = pwd(data->env, args);
 	else if (ft_strncmp(cmds->value, "env", 4) == 0)
-		print_env(&truc->env);
+		print_env(&data->env);
 	else if (ft_strncmp(cmds->value, "echo", 5) == 0)
 		echo(args);
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
-		unset(&truc->env, args);
+		unset(&data->env, args);
 	else if (ft_strncmp(cmds->value, "exit", 5) == 0)
 		status = exit_builtin(args);
 	free_tab(args);
 	return (status);
 }
 
-void	execute_cmd(t_allocated *truc, t_tok *cmds)
+void	execute_cmd(t_allocated *data, t_tok *cmds)
 {
 	char	**args;
 	char	**envp;
 	char	*path;
 
 	args = get_cmd(cmds);
-	path = get_path(truc->env, args[0]);
-	envp = convert_envp(truc->env);
+	path = get_path(data->env, args[0]);
+	envp = convert_envp(data->env);
 	if (!path || (execve(path, args, envp) == -1))
 	{
 		ft_putstr_fd(args[0], 2);
@@ -54,7 +54,7 @@ void	execute_cmd(t_allocated *truc, t_tok *cmds)
 		free(path);
 		free_tab(args);
 		free_tab(envp);
-		free_truc(truc);
+		free_allocated(data);
 		exit(127);
 	}
 }
@@ -93,14 +93,15 @@ void	duplicator(int *fd_pipe, int fd_save, int cmd_id, int cmd_nbr)
 	}
 }
 
-void	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
+void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 {
 	int	pid;
 	int	status;
 	int	fd_save;
 
 	fd_save = -1;
-	if (cmd_id != 0 && cmd_id != truc->cmd_nbr - 1)
+	signal(SIGINT, SIG_DFL);
+	if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1)
 	{
 		fd_save = dup(fd_pipe[0]);
 		close(fd_pipe[0]);
@@ -112,21 +113,21 @@ void	child_process(t_allocated *truc, t_tok *cmd, int *fd_pipe, int cmd_id)
 		printf("pid error");
 	else if (pid == 0)
 	{
-		duplicator(fd_pipe, fd_save, cmd_id, truc->cmd_nbr);
+		duplicator(fd_pipe, fd_save, cmd_id, data->cmd_nbr);
 		if (has_redir(cmd))
-			handle_redirection(cmd);
+			handle_redirection(data);
 		if (is_builtin(cmd->value))
 		{
-			status = execute_builtins(truc, cmd);
-			free_truc(truc);
+			status = execute_builtins(data, cmd);
+			free_allocated(data);
 			exit(status);
 		}
-		execute_cmd(truc, cmd);
+		execute_cmd(data, cmd);
 	}
-	else if (cmd_id != 0 && cmd_id != truc->cmd_nbr - 1)
+	else if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1)
 		close(fd_save);
-	signal(SIGINT, child_c_handler);
-	truc->pids[cmd_id] = pid;
+	//signal(SIGINT, child_c_handler);
+	data->pids[cmd_id] = pid;
 }
 
 int	has_pipe(t_tok *cmds)
@@ -143,16 +144,17 @@ int	has_pipe(t_tok *cmds)
 	return (0);
 }
 
-int	execute_simple_command(t_allocated *truc, t_tok *cmd)
+int	execute_simple_command(t_allocated *data, t_tok *cmd)
 {
 	int	pid;
 	int	status;
 
+	signal(SIGINT, child_c_handler);
 	if (is_builtin(cmd->value))
 	{
-		if (has_redir(truc->cmd_head))
-			handle_redirection(truc->cmd_head);
-		g_exit_code = execute_builtins(truc, cmd);
+		if (has_redir(data->cmd_head))
+			handle_redirection(data);
+		g_exit_code = execute_builtins(data, cmd);
 		return (0);
 	}
 	pid = fork();
@@ -160,9 +162,9 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 		printf("pid error");
 	else if (pid == 0)
 	{
-		if (has_redir(truc->cmd_head))
-			handle_redirection(truc->cmd_head);
-		execute_cmd(truc, cmd);
+		if (has_redir(data->cmd_head))
+			handle_redirection(data);
+		execute_cmd(data, cmd);
 	}
 	else
 	{
@@ -170,7 +172,6 @@ int	execute_simple_command(t_allocated *truc, t_tok *cmd)
 		if (WIFEXITED(status))
 			g_exit_code = WEXITSTATUS(status);
 	}
-	signal(SIGINT, child_c_handler);
 	return (status);
 }
 
@@ -190,7 +191,7 @@ t_tok	*find_next_cmd(t_tok *cmds)
 void	execution_controller(t_tok *env, t_tok *cmd_head)
 {
 	t_tok		*cmds;
-	t_allocated	truc;
+	t_allocated	data;
 	int			fd_pipe[2];
 	int			status;
 	int			i;
@@ -198,37 +199,37 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	if (!cmd_head)
 		return ;
 	cmds = find_next_cmd(cmd_head);
-	truc.env = env;
-	truc.cmd_head = cmd_head;
-	truc.cmd_nbr = nb_cmds(cmds);
-	truc.pids = malloc(sizeof(int) * truc.cmd_nbr);
+	data.env = env;
+	data.cmd_head = cmd_head;
+	data.cmd_nbr = nb_cmds(cmds);
+	data.pids = malloc(sizeof(int) * data.cmd_nbr);
 	i = 0;
-	if (truc.cmd_nbr == 1)
+	if (data.cmd_nbr == 1)
 	{
-		execute_simple_command(&truc, cmds);
-		free(truc.pids);
+		execute_simple_command(&data, cmds);
+		free(data.pids);
 		return ;
 	}
 	if (pipe(fd_pipe) == -1)
 		printf("error pipe\n");
-	while (i < truc.cmd_nbr)
+	while (i < data.cmd_nbr)
 	{
 		// if (i == 0)
-		// 	printf("first cmd is : %s\n", cmds->value);
+		//  	printf("first cmd is : %s\n", cmds->value);
 		// else
-		// 	printf("next cmd is : %s\n", cmds->value);
-		child_process(&truc, cmds, fd_pipe, i);
+		//  	printf("next cmd is : %s\n", cmds->value);
+		child_process(&data, cmds, fd_pipe, i);
 		cmds = find_next_cmd(cmds->next);
 		i++;
 	}
 	close(fd_pipe[0]);
 	close(fd_pipe[1]);
 	i = 0;
-	while (i < truc.cmd_nbr)
+	while (i < data.cmd_nbr)
 	{
-		waitpid(truc.pids[i++], &status, 0);
+		waitpid(data.pids[i++], &status, 0);
 		if (WIFEXITED(status))
 			g_exit_code = WEXITSTATUS(status);
 	}
-	free(truc.pids);
+	free(data.pids);
 }
