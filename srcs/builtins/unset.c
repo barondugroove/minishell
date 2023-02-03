@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:41:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/31 20:29:38 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/03 16:51:06 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	check_errors_unset(char *arg)
 	return (0);
 }
 
-void	unset(t_tok **env_head, char **key)
+int	unset(t_tok **env_head, char **key)
 {
 	t_tok	*tmp;
 	int		i;
@@ -72,6 +72,7 @@ void	unset(t_tok **env_head, char **key)
 			if (check_errors_unset(key[i]))
 			{
 				error_message_unset(key[i]);
+				return (1);
 				break ;
 			}
 			if (ft_strncmp(tmp->key, key[i], ft_strlen(tmp->key)) == 0)
@@ -85,4 +86,5 @@ void	unset(t_tok **env_head, char **key)
 		}
 		i++;
 	}
+	return (0);
 }

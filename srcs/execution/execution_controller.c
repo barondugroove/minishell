@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/02 18:10:37 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/03 16:54:10 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	execute_builtins(t_allocated *data, t_tok *cmds)
 	else if (ft_strncmp(cmds->value, "echo", 5) == 0)
 		echo(args);
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
-		unset(&data->env, args);
+		status = unset(&data->env, args);
 	else if (ft_strncmp(cmds->value, "exit", 5) == 0)
 		status = exit_builtin(args);
 	free_tab(args);
@@ -149,13 +149,14 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 	int	pid;
 	int	status;
 
+	status = 0;
 	signal(SIGINT, child_c_handler);
 	if (is_builtin(cmd->value))
 	{
 		if (has_redir(data->cmd_head))
 			handle_redirection(data);
 		g_exit_code = execute_builtins(data, cmd);
-		return (0);
+		return (status);
 	}
 	pid = fork();
 	if (pid == -1)
@@ -215,9 +216,9 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	while (i < data.cmd_nbr)
 	{
 		// if (i == 0)
-		//  	printf("first cmd is : %s\n", cmds->value);
+		// 	printf("first cmd is : %s\n", cmds->value);
 		// else
-		//  	printf("next cmd is : %s\n", cmds->value);
+		// 	printf("next cmd is : %s\n", cmds->value);
 		child_process(&data, cmds, fd_pipe, i);
 		cmds = find_next_cmd(cmds->next);
 		i++;
