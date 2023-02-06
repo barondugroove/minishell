@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/03 16:54:10 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/06 13:04:10 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 	}
 	else if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1)
 		close(fd_save);
-	//signal(SIGINT, child_c_handler);
+	signal(SIGINT, child_c_handler);
 	data->pids[cmd_id] = pid;
 }
 

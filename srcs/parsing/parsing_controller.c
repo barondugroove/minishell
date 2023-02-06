@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/02 20:34:05 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/06 15:14:47 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	clean_token_list(t_tok *head, t_tok *env)
 	while (tok)
 	{
 		str = get_path(env, tok->value);
-		if (access(str, X_OK) == 0)
+		if (access(str, F_OK | X_OK) == 0)
 		{
 			free(tok->key);
 			tok->key = ft_strdup("C");
