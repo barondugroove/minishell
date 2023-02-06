@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/06 18:44:18 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/07 00:42:21 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ int	clean_token_list(t_tok *head, t_tok *env)
 	return (0);
 }
 
-// Need to cat ce qui as de collé apres le $?. genre: echo $?HELLO = 0HELLO
 void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 {
 	char	*newStr;
@@ -116,7 +115,10 @@ void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 	var = malloc(sizeof(char) * (varlen + 1));
 	ft_strlcpy(var, end - varlen, varlen + 1);
 	if (*(var + 1) && *(var + 1) == '?')
+	{
 		value = ft_itoa(g_exit_code);
+		end = var + 2;
+	}
 	else
 		value = ft_getenv(env, var + 1);
 	newStr = malloc(sizeof(char) * ((ft_strlen(value) + ft_strlen(end)) + 1));
@@ -140,7 +142,7 @@ void	check_var_env(t_tok *env, char **prompt)
 	{
 		if (*ptr == '$' && *(ptr + 1) && *(ptr + 1) != '"' && (quote == '\0' || quote == '"'))
 			replace_var_env(env, prompt, ptr);
-		if ((*ptr == '"' || *ptr == '\'') && quote == '\0')
+		else if ((*ptr == '"' || *ptr == '\'') && quote == '\0')
 			quote = *ptr;
 		else if (*ptr == quote && quote != '\0')
 			quote = '\0';
@@ -156,17 +158,18 @@ t_tok	*parsing_controller(t_tok *env, char **prompt)
 	check_var_env(env, prompt);
 	tok_head = NULL;
 	str = tokenizer(*prompt);
+	if (!str)
+		return (NULL);
 	while (str)
 	{
-		if (str && *str == ERROR_CHAR)
+		if (*str == ERROR_CHAR)
 		{
 			printf("Parsing error: quote not closed\n");
 			g_exit_code = 2;
 			free_list(tok_head);
 			return (NULL);
 		}
-		if (str && *str)
-			add_token(&tok_head, str);
+		add_token(&tok_head, str);
 		str = tokenizer(NULL);
 	}
 	if (clean_token_list(tok_head, env))
