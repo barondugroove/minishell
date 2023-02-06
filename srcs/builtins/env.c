@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 18:19:29 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/01/31 20:43:55 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/06 18:14:00 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	print_env(t_tok **head)
 	tok = *head;
 	while (tok)
 	{
-		if (*tok->value != '\x7F' && ft_strcmp(tok->key, "_") != 0)
+		if (*tok->value != '\x7F')
 			printf("%s=%s\n", tok->key, tok->value);
 		tok = tok->next;
 	}
