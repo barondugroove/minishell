@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/06 15:14:47 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/06 16:53:10 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,68 @@ int	clean_token_list(t_tok *head, t_tok *env)
 	return (0);
 }
 
-t_tok	*parsing_controller(t_tok *env, char *prompt)
+// Need to cat ce qui as de collé apres le $?. genre: echo $?HELLO = 0HELLO
+void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 {
-	char	*str;
-	t_tok	*tok_head;
+	char	*newStr;
+	char	*end;
+	char	*value;
+	char	*var;
+	int		varlen;
 
+	end = ptr;
+	varlen = 0;
+	while (*end != '"' && *end != ' ' && *end != '\0')
+	{
+		varlen++;
+		end++;
+	}
+	var = malloc(sizeof(char) * (varlen + 1));
+	ft_strlcpy(var, end - varlen, varlen + 1);
+	if (*(var + 1) && *(var + 1) == '?')
+		value = ft_itoa(g_exit_code);
+	else
+		value = ft_getenv(env, var + 1);
+	newStr = malloc(sizeof(char) * ((ft_strlen(value) + ft_strlen(end)) + 1));
+	ft_strlcpy(newStr, *prompt, ptr - *prompt + 1);
+	if (value)
+		ft_strcat(newStr, value);
+	ft_strcat(newStr, end);
+
+	printf("new:%s\n",newStr);
+
+	free(*prompt);
+	*prompt = newStr;
+	free(var);
+}
+
+void	check_var_env(t_tok *env, char **prompt)
+{
+	char	*ptr;
+	char	quote;
+
+	quote = '\0';
+	ptr = *prompt;
+	while (*ptr)
+	{
+		if (*ptr == '$' && *(ptr + 1) && *(ptr + 1) != '"' && (quote == '\0' || quote == '"'))
+			replace_var_env(env, prompt, ptr);
+		if ((*ptr == '"' || *ptr == '\'') && quote == '\0')
+			quote = *ptr;
+		else if (*ptr == quote && quote != '\0')
+			quote = '\0';
+		ptr++;
+	}
+}
+
+t_tok	*parsing_controller(t_tok *env, char **prompt)
+{
+	t_tok	*tok_head;
+	char	*str;
+
+	check_var_env(env, prompt);
 	tok_head = NULL;
-	str = tokenizer(prompt);
+	str = tokenizer(*prompt);
 	while (str)
 	{
 		if (str && *str == ERROR_CHAR)
@@ -114,7 +169,7 @@ t_tok	*parsing_controller(t_tok *env, char *prompt)
 			return (NULL);
 		}
 		if (str && *str)
-			add_token(env, &tok_head, str);
+			add_token(&tok_head, str);
 		str = tokenizer(NULL);
 	}
 	if (clean_token_list(tok_head, env))
