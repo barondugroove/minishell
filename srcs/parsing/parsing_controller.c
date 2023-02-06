@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/06 16:53:10 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/06 18:38:04 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,9 +124,6 @@ void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 	if (value)
 		ft_strcat(newStr, value);
 	ft_strcat(newStr, end);
-
-	printf("new:%s\n",newStr);
-
 	free(*prompt);
 	*prompt = newStr;
 	free(var);
