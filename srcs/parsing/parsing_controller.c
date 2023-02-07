@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/07 16:05:12 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/07 18:13:59 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,8 @@ void	check_var_env(t_tok *env, char **prompt)
 	ptr = *prompt;
 	while (*ptr)
 	{
-		if (*ptr == '$' && *(ptr + 1) && *(ptr + 1) != '"' && (quote == '\0' || quote == '"'))
+		if (*ptr == '$' && *(ptr + 1) && *(ptr + 1) != '"' && *(ptr + 1) != ' ' && *(ptr + 1) != '$'
+			&& (quote == '\0' || quote == '"'))
 			replace_var_env(env, prompt, ptr);
 		else if ((*ptr == '"' || *ptr == '\'') && quote == '\0')
 			quote = *ptr;
