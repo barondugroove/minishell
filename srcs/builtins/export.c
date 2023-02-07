@@ -3,33 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/07 02:40:27 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/07 20:21:32 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	print_export(t_tok **head)
+void	print_export(t_tok *head)
 {
 	t_tok	*tok;
-	t_tok	*env_copy;
 
-	env_copy = dup_env(head);
-	sort_export(&env_copy);
-	tok = env_copy;
+	sort_export(&head);
+	tok = head;
 	while (tok)
 	{
 		if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0)
-			&& *tok->value != '\0')
+			&& tok->value && *tok->value != '\x7F')
 			printf("declare -x %s=\"%s\"\n", tok->key, tok->value);
 		else if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0))
 			printf("declare -x %s\n", tok->key);
 		tok = tok->next;
 	}
-	free_list(env_copy);
 }
 
 void	error_message_export(char *arg)
@@ -80,7 +77,9 @@ int	add_existing_var(t_tok **env, char *args)
 		{
 			if (has_equal(args) == 2)
 				tmp->value = ft_strjoin(tmp->value, value);
-			else if (has_equal(args) == 1)
+			else if (!value && has_equal(args) == 1)
+				tmp->value = ft_strdup("\0");
+			else
 				tmp->value = ft_strdup(value);
 			return (0);
 		}
@@ -115,7 +114,7 @@ int	export(t_tok **env, char **args)
 	status = 0;
 	if (!args[1])
 	{
-		print_export(env);
+		print_export(*env);
 		return (status);
 	}
 	while (args[++i])

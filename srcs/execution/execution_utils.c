@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/07 03:13:00 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/07 19:41:09 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*get_path(t_tok *env_tok, char *cmd)
 	{
 		i = 0;
 		env = ft_split(ft_getenv(env_tok, "PATH"), ':');
-		while (env[i])
+		while (env && env[i])
 		{
 			str = strjoin_pipex(env[i++], cmd);
 			if (!access(str, X_OK))

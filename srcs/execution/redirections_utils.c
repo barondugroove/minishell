@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 14:47:47 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/07 15:14:58 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/07 20:30:30 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	redir_nbr(t_tok *cmds)
 int	check_file(char *file, int dir)
 {
 	struct stat    path_stat;
-	
+
 	if (dir == 0 && !access(file, F_OK))
 	{
 		stat(file, &path_stat);
