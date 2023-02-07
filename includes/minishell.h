@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/06 16:31:39 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/07 02:04:48 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <unistd.h>
 
 # define ERROR_CHAR '\x7F'
@@ -61,14 +63,16 @@ void				echo(char **args);
 int					unset(t_tok **env_head, char **key);
 int					exit_builtin(char **args);
 void				ft_exit(long long code);
-t_tok				*find_next_cmd(t_tok *cmds);
+t_tok				*find_next_cmd(t_tok *cmds, int nbr);
 
 // EXECUTION
 void				execution_controller(t_tok *env, t_tok *tok_head);
 int					has_pipe(t_tok *cmds);
+int					is_regular_file(const char *path);
+int    				check_directory(char *command);
 
 // REDIRECTION
-void				handle_redirection(t_allocated *data);
+void				handle_redirection(t_allocated *data, t_tok *cmd);
 int					has_redir(t_tok *cmds);
 char				*get_file(t_tok *cmds, int nbr);
 t_tok				*get_next_redir(t_tok *cmds, int nbr);

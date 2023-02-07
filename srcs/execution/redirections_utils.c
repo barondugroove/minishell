@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 14:47:47 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/06 15:09:44 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/07 15:14:58 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ int	has_redir(t_tok *cmds)
 	t_tok	*tmp;
 
 	tmp = cmds;
-	while (tmp->next && *tmp->key != '|')
+	while (tmp && *tmp->key != '|')
 	{
-		if (*tmp->key == '>')
-			return (3);
-		else if (ft_strcmp(tmp->key, ">>") == 0)
+		if (ft_strcmp(tmp->key, ">>") == 0)
 			return (4);
 		else if (ft_strcmp(tmp->key, "<<") == 0)
 			return (2);
+		else if (*tmp->key == '>')
+			return (3);
 		else if (*tmp->key == '<')
 			return (1);
 		tmp = tmp->next;
@@ -65,22 +65,31 @@ int	redir_nbr(t_tok *cmds)
 
 int	check_file(char *file, int dir)
 {
-	if (dir == 0 && access(file, F_OK | R_OK) == 0)
+	struct stat    path_stat;
+	
+	if (dir == 0 && !access(file, F_OK))
+	{
+		stat(file, &path_stat);
+		if (!(path_stat.st_mode & S_IWUSR))
+		{
+			ft_putstr_fd("minishell: Permission denied\n", 2);
+			g_exit_code = 126;
+			ft_exit(g_exit_code);
+        }
 		return (0);
-	else if (dir == 1)
+	}
+	if (dir == 1)
 	{
 		if (access(file, F_OK) == -1)
 			return (0);
-		if (access(file, W_OK) == -1)
+		stat(file, &path_stat);
+		if (!(path_stat.st_mode & S_IWUSR))
 		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(file, 2);
-			ft_putstr_fd(": Permission denied\n", 2);
-			ft_exit(1);
-			return (1);
+    		ft_putstr_fd("minishell: Permission denied\n", 2);
+	        g_exit_code = 1;
+			ft_exit(g_exit_code);
 		}
-		else
-			return (0);
+		return (0);
 	}
 	error_file(file, errno);
 	ft_exit(1);

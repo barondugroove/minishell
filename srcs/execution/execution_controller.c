@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/06 13:04:10 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/07 04:07:25 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,14 @@ void	execute_cmd(t_allocated *data, t_tok *cmds)
 
 	args = get_cmd(cmds);
 	path = get_path(data->env, args[0]);
+	if (path)
+		check_directory(path);
+	else
+		check_directory(cmds->value);
 	envp = convert_envp(data->env);
 	if (!path || (execve(path, args, envp) == -1))
 	{
-		ft_putstr_fd(args[0], 2);
+		ft_putstr_fd(cmds->value, 2);
 		ft_putstr_fd(": command not found", 2);
 		ft_putstr_fd("\n", 2);
 		free(path);
@@ -115,7 +119,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 	{
 		duplicator(fd_pipe, fd_save, cmd_id, data->cmd_nbr);
 		if (has_redir(cmd))
-			handle_redirection(data);
+			handle_redirection(data, cmd);
 		if (is_builtin(cmd->value))
 		{
 			status = execute_builtins(data, cmd);
@@ -154,7 +158,7 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 	if (is_builtin(cmd->value))
 	{
 		if (has_redir(data->cmd_head))
-			handle_redirection(data);
+			handle_redirection(data, cmd);
 		g_exit_code = execute_builtins(data, cmd);
 		return (status);
 	}
@@ -164,7 +168,7 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 	else if (pid == 0)
 	{
 		if (has_redir(data->cmd_head))
-			handle_redirection(data);
+			handle_redirection(data, cmd);
 		execute_cmd(data, cmd);
 	}
 	else
@@ -176,16 +180,25 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 	return (status);
 }
 
-t_tok	*find_next_cmd(t_tok *cmds)
+t_tok	*find_next_cmd(t_tok *cmds, int nbr)
 {
+	int i;
+
+	i = 0;
 	if (!cmds)
 		return NULL;
-	while (cmds->next)
+	while (cmds && *cmds->key != '|')
 	{
-		if (*cmds->key == *K_CMD && ft_strcmp(cmds->value, "<") != 0)
-			break ;
+		if (*cmds->key == *K_CMD)
+		{
+			if (i == nbr)
+				break ;
+			i++;
+		}
 		cmds = cmds->next;
 	}
+	if (*cmds->key == '|')
+		cmds = cmds->next;
 	return (cmds);
 }
 
@@ -199,12 +212,12 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 
 	if (!cmd_head)
 		return ;
-	cmds = find_next_cmd(cmd_head);
+	i = 0;
+	cmds = find_next_cmd(cmd_head, i);
 	data.env = env;
 	data.cmd_head = cmd_head;
 	data.cmd_nbr = nb_cmds(cmds);
 	data.pids = malloc(sizeof(int) * data.cmd_nbr);
-	i = 0;
 	if (data.cmd_nbr == 1)
 	{
 		execute_simple_command(&data, cmds);
@@ -215,12 +228,8 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 		printf("error pipe\n");
 	while (i < data.cmd_nbr)
 	{
-		// if (i == 0)
-		// 	printf("first cmd is : %s\n", cmds->value);
-		// else
-		// 	printf("next cmd is : %s\n", cmds->value);
+		cmds = find_next_cmd(cmds, i);
 		child_process(&data, cmds, fd_pipe, i);
-		cmds = find_next_cmd(cmds->next);
 		i++;
 	}
 	close(fd_pipe[0]);
