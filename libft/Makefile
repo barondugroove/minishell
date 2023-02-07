@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
+#    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/31 14:29:55 by bchabot           #+#    #+#              #
-#    Updated: 2023/01/24 14:23:11 by benjamincha      ###   ########.fr        #
+#    Updated: 2023/02/07 00:22:55 by rlaforge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,7 @@ SRCS =	ft_isalpha.c \
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 NAME = libft.a
 
