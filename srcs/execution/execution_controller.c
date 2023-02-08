@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/07 04:07:25 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/08 18:24:00 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,6 @@ void	execute_cmd(t_allocated *data, t_tok *cmds)
 
 void	duplicator(int *fd_pipe, int fd_save, int cmd_id, int cmd_nbr)
 {
-	if (cmd_nbr == 1)
-	{
-		close(fd_pipe[0]);
-		close(fd_pipe[1]);
-		return ;
-	}
 	if (cmd_id == 0)
 	{
 		if (dup2(fd_pipe[1], STDOUT_FILENO) == -1)

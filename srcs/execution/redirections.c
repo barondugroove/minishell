@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/07 20:28:02 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/08 18:07:30 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,30 +149,13 @@ void	handle_redirection(t_allocated *data, t_tok *cmd)
 	int		nbr;
 	t_tok	*tmp;
 
-	nbr = redir_nbr(data->cmd_head);
 	if (redir_start(data->cmd_head))
 		tmp = get_next_redir(data->cmd_head, 1);
 	else
 		tmp = get_next_redir(cmd, 1);
+	nbr = redir_nbr(tmp);
 	while (nbr--)
 	{
-		// ft_putstr_fd("cmd is : ", 2);
-		// ft_putstr_fd(cmd->value, 2);
-		// ft_putstr_fd("\n", 2);
-		// ft_putstr_fd("file is : ", 2);
-		// ft_putstr_fd(tmp->next->value, 2);
-		// ft_putstr_fd("\n", 2);
-		// ft_putstr_fd("redir is : ", 2);
-		// ft_putstr_fd(tmp->value, 2);
-		// ft_putstr_fd("\n", 2);
-		// ft_putstr_fd("nbr is : ", 2);
-		// ft_putnbr_fd(nbr, 2);
-		// ft_putstr_fd("\n", 2);
-		// ft_putstr_fd("redir type is : ", 2);
-		// ft_putstr_fd(tmp->key, 2);
-		// ft_putstr_fd("\n", 2);
-		// ft_putstr_fd("\n", 2);
-		// ft_putstr_fd("\n", 2);
 		if (has_redir(tmp) > 2)
 			set_redir_out(tmp, has_redir(tmp), nbr);
 		else if (has_redir(tmp) < 3 && has_redir(tmp) != 0)
