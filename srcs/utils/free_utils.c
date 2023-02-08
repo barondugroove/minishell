@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:18:25 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/02 16:55:22 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/08 18:13:02 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	free_list(t_tok *head)
 		free(tmp);
 	}
 	free(head);
+	head = NULL;
 }
 
 void	free_tab(char **tab)

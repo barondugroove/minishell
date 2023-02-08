@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/07 19:45:38 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/08 18:46:51 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,37 @@ void	print_list(t_tok *head)
 	printf("Output:\n");
 }
 
+int	check_redir_error(t_tok *tok)
+{
+	t_tok	*buf;
+
+	if (tok->next && tok->next->next
+		&& (*tok->key == '<' || *tok->key == '>')
+		&& (*tok->next->key == '<' || *tok->next->key == '>')
+		&& (*tok->next->next->key == '<' || *tok->next->next->key == '>'))
+		return (1);
+	if (tok->next && ((*tok->key == '<' && *tok->next->key == '>')
+			|| (*tok->key == '>' && *tok->next->key == '<')))
+		return (1);
+	if (*tok->key == '<' || *tok->key == '>')
+	{
+		if (tok->next && *tok->next->key == *tok->key)
+		{
+			free(tok->key);
+			if (*tok->next->key == '>')
+				tok->key = ft_strdup(">>");
+			else
+				tok->key = ft_strdup("<<");
+			buf = tok->next;
+			tok->next = tok->next->next;
+			free(buf->key);
+			free(buf->value);
+			free(buf);
+		}
+	}
+	return (0);
+}
+
 int	clean_token_list(t_tok *head, t_tok *env)
 {
 	t_tok	*tok;
@@ -52,35 +83,8 @@ int	clean_token_list(t_tok *head, t_tok *env)
 			free(tok->key);
 			tok->key = ft_strdup("C");
 		}
-		// REDIR ERRORS VVV
-		if (tok->next && tok->next->next
-			&& (*tok->key == '<' || *tok->key == '>')
-			&& (*tok->next->key == '<' || *tok->next->key == '>')
-			&& (*tok->next->next->key == '<' || *tok->next->next->key == '>'))
+		if (check_redir_error(tok))
 			return (1);
-		if (tok->next && ((*tok->key == '<' && *tok->next->key == '>')
-				|| (*tok->key == '>' && *tok->next->key == '<')))
-			return (1);
-		// REDIR ERRORS ^^^
-
-		if (*tok->key == '<' || *tok->key == '>')
-		{
-			if (tok->next && *tok->next->key == *tok->key)
-			{
-				//printf("\nDOUBLE REDIR\n\n");
-				free(tok->key);
-				if (*tok->next->key == '>')
-					tok->key = ft_strdup(">>");
-				else
-					tok->key = ft_strdup("<<");
-				t_tok	*buf;
-				buf = tok->next;
-				tok->next = tok->next->next;
-				free(buf->key);
-				free(buf->value);
-				free(buf);
-			}
-		}
 		if (*tok->key == '|')
 		{
 			if (!tok->next)
@@ -93,13 +97,12 @@ int	clean_token_list(t_tok *head, t_tok *env)
 		}
 		tok = tok->next;
 	}
-	//print_list(head);
 	return (0);
 }
 
 void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 {
-	char	*newStr;
+	char	*new_str;
 	char	*end;
 	char	*value;
 	char	*var;
@@ -121,13 +124,13 @@ void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 	}
 	else
 		value = ft_getenv(env, var + 1);
-	newStr = malloc(sizeof(char) * ((ft_strlen(value) + ft_strlen(end)) + 1));
-	ft_strlcpy(newStr, *prompt, ptr - *prompt + 1);
+	new_str = malloc(sizeof(char) * ((ft_strlen(value) + ft_strlen(end)) + 1));
+	ft_strlcpy(new_str, *prompt, ptr - *prompt + 1);
 	if (value)
-		ft_strcat(newStr, value);
-	ft_strcat(newStr, end);
+		ft_strcat(new_str, value);
+	ft_strcat(new_str, end);
 	free(*prompt);
-	*prompt = newStr;
+	*prompt = new_str;
 	free(var);
 }
 
@@ -140,12 +143,10 @@ void	check_var_env(t_tok *env, char **prompt)
 	ptr = *prompt;
 	while (*ptr)
 	{
-		if (*ptr == '$' && *(ptr + 1) && *(ptr + 1) != '"' && *(ptr + 1) != ' ' && *(ptr + 1) != '$'
+		if (*ptr == '$' && *(ptr + 1) && *(ptr + 1) != '"'
+			&& *(ptr + 1) != ' ' && *(ptr + 1) != '$'
 			&& (quote == '\0' || quote == '"'))
-			{
-				replace_var_env(env, prompt, ptr);
-				ptr = *prompt;
-			}
+			replace_var_env(env, prompt, ptr);
 		else if ((*ptr == '"' || *ptr == '\'') && quote == '\0')
 			quote = *ptr;
 		else if (*ptr == quote && quote != '\0')
