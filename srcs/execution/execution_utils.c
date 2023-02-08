@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/07 19:41:09 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/08 19:26:40 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ char	*get_path(t_tok *env_tok, char *cmd)
 		{
 			str = strjoin_pipex(env[i++], cmd);
 			if (!access(str, X_OK))
+			{
+				free_tab(env);
 				return (str);
+			}
 			free(str);
 		}
 		free_tab(env);
