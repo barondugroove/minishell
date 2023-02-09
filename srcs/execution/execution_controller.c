@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/09 11:20:38 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/09 20:53:31 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,11 +176,11 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 
 t_tok	*find_next_cmd(t_tok *cmds, int nbr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!cmds)
-		return NULL;
+		return (NULL);
 	while (cmds && *cmds->key != '|')
 	{
 		if (*cmds->key == *K_CMD)

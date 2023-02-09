@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:41:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/07 18:28:14 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/09 19:23:45 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ int	check_errors_unset(char *arg)
 	while (arg[i])
 	{
 		if ((!ft_isalpha(arg[i]) && i == 0) || arg[i] <= 32)
+		{
+			error_message_unset(arg);
 			return (1);
+		}
 		else if ((ft_isdigit(arg[i]) && i == 0))
 			return (1);
 		i++;
@@ -70,11 +73,7 @@ int	unset(t_tok **env_head, char **key)
 		while (tmp)
 		{
 			if (check_errors_unset(key[i]))
-			{
-				error_message_unset(key[i]);
 				return (1);
-				break ;
-			}
 			if (ft_strncmp(tmp->key, key[i], ft_strlen(tmp->key)) == 0)
 			{
 				remove_node(env_head, tmp);

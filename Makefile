@@ -6,7 +6,7 @@
 #    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/02/02 17:46:38 by bchabot          ###   ########.fr        #
+#    Updated: 2023/02/09 20:13:08 by bchabot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,9 +28,11 @@ SRCS = srcs/main.c \
 		srcs/builtins/env.c \
 		srcs/builtins/echo.c \
 		srcs/builtins/exit.c \
+		srcs/builtins/exit_utils.c \
 		srcs/parsing/init_env.c \
 		srcs/utils/utils.c \
-		srcs/utils/free_utils.c
+		srcs/utils/free_utils.c \
+		srcs/utils/error_msgs.c
 
 CC = @gcc
 

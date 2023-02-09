@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/09 11:26:01 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/09 20:50:30 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,128 +14,82 @@
 
 /***************************************************\
 ||                                                 ||
-||   Need to handle multiple redir like :          ||
-||    - ls > lol >> lol2                           ||
-||    creates both files but only fill lol2        ||
-||                                                 ||
 ||   Need to handle here_doc                       ||
-||   Need to handle multiple file args like :      ||
-||    - cat <./files/infile_big ./files/infile     ||
 ||                                                 ||
 \***************************************************/
 
-int is_dir(const char *path)
+int	is_dir(const char *path)
 {
-    struct stat path_stat;
-    stat(path, &path_stat);
-    return S_ISDIR(path_stat.st_mode);
+	struct stat	path_stat;
+
+	stat(path, &path_stat);
+	return (S_ISDIR(path_stat.st_mode));
 }
 
-
-int is_regular_file(const char *path)
+int	is_regular_file(const char *path)
 {
-    struct stat path_stat;
-    stat(path, &path_stat);
-    return S_ISREG(path_stat.st_mode);
+	struct stat	path_stat;
+
+	stat(path, &path_stat);
+	return (S_ISREG(path_stat.st_mode));
 }
 
-int    check_directory(char *command)
+int	check_directory(char *command)
 {
-    struct stat    path_stat;
+	struct stat	path_stat;
 
-	if (is_dir(command) == 1 && (command[0] == '/' || ft_strncmp(command, "./", 2) == 0))
-    {
-		ft_putstr_fd("minishell: Is a directory\n", 2);
+	if (is_dir(command) == 1 && (command[0] == '/' || ft_strncmp(command, "./",
+				2) == 0))
+	{
+		is_dir_msg(command, 126);
 		return (126);
-		ft_exit(g_exit_code);
-    }
-    else if (!access(command, F_OK) && (command[0] == '/' || ft_strncmp(command, "./", 2) == 0))
-    {
+	}
+	else if (!access(command, F_OK) && \
+	(command[0] == '/' || ft_strncmp(command, "./", 2) == 0))
+	{
 		stat(command, &path_stat);
-    	if (!(path_stat.st_mode & S_IXUSR))
-       	{
-            ft_putstr_fd("minishell: Permission denied\n", 2);
-            return (126);
-			g_exit_code = 126;
-			ft_exit(g_exit_code);
-        }
+		if (!(path_stat.st_mode & S_IXUSR))
+		{
+			permission_denied_msg(command, 126);
+			return (126);
+		}
 	}
-    else if (access(command, F_OK) == -1 && (command[0] == '/' || ft_strncmp(command, "./", 2) == 0))
+	else if (access(command, F_OK) == -1 \
+	&& (command[0] == '/' || ft_strncmp(command, "./", 2) == 0))
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(command, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		no_file_msg(command, 127);
 		return (127);
-		g_exit_code = 127;
-		ft_exit(g_exit_code);
 	}
-	else if (is_regular_file(command) != -1 && !access(command, F_OK))
-	{
-		ft_putstr_fd(command, 2);
-		ft_putstr_fd(": command not found", 2);
-		ft_putstr_fd("\n", 2);
-		return (127);
-		g_exit_code = 127;
-		ft_exit(g_exit_code);
-	}
-    return (0);
+	return (0);
 }
 
-void	set_redir_out(t_tok *tmp, int dir, int nbr)
+void	set_redir_out(t_tok *tmp, int dir)
 {
-	int		fd_out;
+	int	fd_out;
 
 	fd_out = -1;
-	(void)nbr;
-	// ft_putstr_fd("outfile is : ", 2);
-	// ft_putstr_fd(tmp->next->value, 2);
-	// ft_putstr_fd("\n", 2);
-	// ft_putstr_fd("dir is :", 2);
-	// ft_putnbr_fd(dir, 2);
-	// ft_putstr_fd("\n", 2);
-	// ft_putstr_fd("nbr is : ", 2);
-	// ft_putnbr_fd(nbr, 2);
-	// ft_putstr_fd("\n", 2);
-	if (check_file(tmp->next->value, 1))
-		return ;
+	check_file(tmp->next->value, 1);
 	if (dir == 3)
 		fd_out = open(tmp->next->value, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	else
 		fd_out = open(tmp->next->value, O_CREAT | O_WRONLY | O_APPEND, 0644);
-//	if (nbr == 0)
-		dup2(fd_out, 1);
+	dup2(fd_out, 1);
 	if (fd_out != -1)
 		close(fd_out);
 	return ;
 }
 
-void	set_redir_in(t_tok *cmd, t_tok *tmp, int dir, int nbr)
+void	set_redir_in(t_tok *cmd, t_tok *tmp)
 {
-	int		fd_in;
+	int	fd_in;
 
-	(void)dir;
-	(void)nbr;
 	fd_in = -1;
-	// ft_putstr_fd("cmd is : ", 2);
-	// ft_putstr_fd(cmd->value, 2);
-	// ft_putstr_fd("\n", 2);
-	// ft_putstr_fd("infile file is : ", 2);
-	// ft_putstr_fd(tmp->next->value, 2);
-	// ft_putstr_fd("\n", 2);
-	// ft_putstr_fd("is builtin is is : ", 2);
-	// ft_putnbr_fd(is_builtin(cmd->value), 2);
-	// ft_putstr_fd("\n", 2);
-	// ft_putstr_fd("nbr is : ", 2);
-	// ft_putnbr_fd(nbr, 2);
-	// ft_putstr_fd("\n", 2);
-	if (check_file(tmp->next->value, 0))
-		return ;
+	check_file(tmp->next->value, 0);
 	if (is_builtin(cmd->value) != 2)
 		fd_in = open(tmp->next->value, O_RDONLY, 0644);
 	else
 		return ;
-//	if (nbr == 0)
-		dup2(fd_in, 0);
+	dup2(fd_in, 0);
 	if (fd_in != -1)
 		close(fd_in);
 	return ;
@@ -146,7 +100,7 @@ int	redir_start(t_tok *cmd)
 	t_tok	*tmp;
 
 	tmp = cmd;
-	while(tmp)
+	while (tmp)
 	{
 		if (*tmp->key == '<' || *tmp->key == '>')
 			return (1);
@@ -163,17 +117,17 @@ void	handle_redirection(t_allocated *data, t_tok *cmd)
 	t_tok	*tmp;
 
 	if (redir_start(data->cmd_head))
-		tmp = get_next_redir(data->cmd_head, 1);
+		tmp = get_next_redir(data->cmd_head);
 	else
-		tmp = get_next_redir(cmd, 1);
+		tmp = get_next_redir(cmd);
 	nbr = redir_nbr(tmp);
 	while (nbr--)
 	{
 		if (has_redir(tmp) > 2)
-			set_redir_out(tmp, has_redir(tmp), nbr);
+			set_redir_out(tmp, has_redir(tmp));
 		else if (has_redir(tmp) < 3 && has_redir(tmp) != 0)
-			set_redir_in(cmd, tmp, has_redir(tmp), nbr);
+			set_redir_in(cmd, tmp);
 		if (nbr)
-			tmp = get_next_redir(tmp->next, nbr);
+			tmp = get_next_redir(tmp->next);
 	}
 }
