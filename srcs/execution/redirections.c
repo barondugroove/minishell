@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/09 01:50:00 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/09 11:26:01 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	set_redir_out(t_tok *tmp, int dir, int nbr)
 	int		fd_out;
 
 	fd_out = -1;
+	(void)nbr;
 	// ft_putstr_fd("outfile is : ", 2);
 	// ft_putstr_fd(tmp->next->value, 2);
 	// ft_putstr_fd("\n", 2);
@@ -101,7 +102,7 @@ void	set_redir_out(t_tok *tmp, int dir, int nbr)
 		fd_out = open(tmp->next->value, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	else
 		fd_out = open(tmp->next->value, O_CREAT | O_WRONLY | O_APPEND, 0644);
-	if (nbr == 0)
+//	if (nbr == 0)
 		dup2(fd_out, 1);
 	if (fd_out != -1)
 		close(fd_out);
@@ -113,6 +114,7 @@ void	set_redir_in(t_tok *cmd, t_tok *tmp, int dir, int nbr)
 	int		fd_in;
 
 	(void)dir;
+	(void)nbr;
 	fd_in = -1;
 	// ft_putstr_fd("cmd is : ", 2);
 	// ft_putstr_fd(cmd->value, 2);
@@ -132,7 +134,7 @@ void	set_redir_in(t_tok *cmd, t_tok *tmp, int dir, int nbr)
 		fd_in = open(tmp->next->value, O_RDONLY, 0644);
 	else
 		return ;
-	if (nbr == 0)
+//	if (nbr == 0)
 		dup2(fd_in, 0);
 	if (fd_in != -1)
 		close(fd_in);
