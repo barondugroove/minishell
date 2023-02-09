@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:17:14 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/03 17:37:15 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/09 01:32:24 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,33 @@ void	ft_exit(long long code)
 	exit(code);
 }
 
+int	is_valid_number(const char *nptr)
+{
+	int					i;
+	unsigned long long	nbr;
+	int					neg;
+
+	i = 0;
+	nbr = 0;
+	neg = 0;
+	if (nptr[0] == '+' || nptr[0] == '-')
+	{
+		if (nptr[0] == '-')
+			neg = 1;
+		i++;
+	}
+	while (nptr[i] && (nptr[i] >= '0') && (nptr[i] <= '9'))
+	{
+		nbr = nbr * 10 + (nptr[i] - '0');
+		if (neg == 0 && nbr > 9223372036854775807)
+			return (0);
+		if (neg == 1 && nbr > 9223372036854775808ULL)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 long long	ft_atoll(const char *str)
 {
 	int			i;
@@ -36,6 +63,7 @@ long long	ft_atoll(const char *str)
 	i = 0;
 	neg = 1;
 	nbr = 0;
+
 	while (str[i] <= 32)
 		++i;
 	if (str[i] == '+' || str[i] == '-')
@@ -68,7 +96,7 @@ int	check_args(char **args)
 	if (args[2])
 	{
 		ft_putstr_fd("exit\n", 1);
-		ft_putstr_fd(" too many arguments\n", 2);
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return (1);
 	}
 	i = 1;
@@ -80,7 +108,7 @@ int	check_args(char **args)
 			if (!ft_isdigit(args[i][j]) && (args[i][j] != '+' && args[i][j] != '-'))
 			{
 				numeric_argument_required(args[i]);
-				ft_exit(2);
+				return (2);
 			}
 			j++;
 		}
@@ -89,19 +117,25 @@ int	check_args(char **args)
 	return (0);
 }
 
-int	exit_builtin(char **args)
+int	exit_builtin(char **args, t_allocated *data)
 {
 	long long	arg_nbr;
+	int			status;
 
 	g_exit_code = 0;
 	if (!args[1])
-		ft_exit(0);
-	if (check_args(args))
-		return (1);
+		return (0);
+	status = check_args(args);
+	if (status)
+		return (status);
+	if (!is_valid_number(args[1]))
+	{
+		numeric_argument_required(args[1]);
+		return (2);
+	}
+	free_allocated(data);
 	arg_nbr = ft_atoll(args[1]);
-	if (arg_nbr > INT_MAX || arg_nbr < INT_MIN)
-		ft_exit(1);
-	else
-		ft_exit(arg_nbr);
+	free_tab(args);
+	ft_exit(arg_nbr);
 	return (0);
 }

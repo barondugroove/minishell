@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/08 19:24:09 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/09 01:50:06 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,18 @@ int	clean_token_list(t_tok *head, t_tok *env)
 		str = get_path(env, tok->value);
 		if (str && is_regular_file(str))
 		{
+			free(str);
 			free(tok->key);
 			tok->key = ft_strdup("C");
 		}
 		if (check_redir_error(tok))
 			return (1);
+		if (*tok->key == '<' || *tok->key == '>')
+		{
+			free(tok->next->key);
+			tok->next->key = ft_strdup("F");
+			tok = tok->next;
+		}
 		if (*tok->key == '|')
 		{
 			if (!tok->next)

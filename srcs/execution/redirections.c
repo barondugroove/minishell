@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/08 18:07:30 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/09 01:50:00 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,29 +43,40 @@ int    check_directory(char *command)
 {
     struct stat    path_stat;
 
-    if (!access(command, F_OK))
+	if (is_dir(command) == 1 && (command[0] == '/' || ft_strncmp(command, "./", 2) == 0))
+    {
+		ft_putstr_fd("minishell: Is a directory\n", 2);
+		return (126);
+		ft_exit(g_exit_code);
+    }
+    else if (!access(command, F_OK) && (command[0] == '/' || ft_strncmp(command, "./", 2) == 0))
     {
 		stat(command, &path_stat);
     	if (!(path_stat.st_mode & S_IXUSR))
        	{
-            ft_putstr_fd("minishell: Permission denied", 2);
-            g_exit_code = 126;
+            ft_putstr_fd("minishell: Permission denied\n", 2);
+            return (126);
+			g_exit_code = 126;
 			ft_exit(g_exit_code);
         }
 	}
-	else if (is_dir(command))
-    {
-		g_exit_code = 126;
-		ft_putstr_fd("minishell: Is a directory\n", 2);
+    else if (access(command, F_OK) == -1 && (command[0] == '/' || ft_strncmp(command, "./", 2) == 0))
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(command, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		return (127);
+		g_exit_code = 127;
 		ft_exit(g_exit_code);
-		return (1);
-    }
-    else
+	}
+	else if (is_regular_file(command) != -1 && !access(command, F_OK))
 	{
 		ft_putstr_fd(command, 2);
 		ft_putstr_fd(": command not found", 2);
 		ft_putstr_fd("\n", 2);
-		exit(127);
+		return (127);
+		g_exit_code = 127;
+		ft_exit(g_exit_code);
 	}
     return (0);
 }

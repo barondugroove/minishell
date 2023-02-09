@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/07 02:04:48 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/09 01:08:10 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int					pwd(t_tok *env, char **args);
 int					cd(char **args, t_tok *head);
 void				echo(char **args);
 int					unset(t_tok **env_head, char **key);
-int					exit_builtin(char **args);
+int					exit_builtin(char **args, t_allocated *data);
 void				ft_exit(long long code);
 t_tok				*find_next_cmd(t_tok *cmds, int nbr);
 

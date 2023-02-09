@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/08 18:24:00 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/09 01:51:07 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	execute_builtins(t_allocated *data, t_tok *cmds)
 	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
 		status = unset(&data->env, args);
 	else if (ft_strncmp(cmds->value, "exit", 5) == 0)
-		status = exit_builtin(args);
+		status = exit_builtin(args, data);
 	free_tab(args);
 	return (status);
 }
@@ -42,13 +42,13 @@ void	execute_cmd(t_allocated *data, t_tok *cmds)
 	char	**args;
 	char	**envp;
 	char	*path;
+	int		status;
 
 	args = get_cmd(cmds);
+	status = check_directory(cmds->value);
+	if (status)
+		exit(status);
 	path = get_path(data->env, args[0]);
-	if (path)
-		check_directory(path);
-	else
-		check_directory(cmds->value);
 	envp = convert_envp(data->env);
 	if (!path || (execve(path, args, envp) == -1))
 	{

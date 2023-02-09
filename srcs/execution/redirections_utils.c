@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 14:47:47 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/08 18:07:30 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/09 01:46:18 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ t_tok	*get_next_redir(t_tok *cmds, int nbr)
 			// ft_putstr_fd("next redir is : ", 2);
 			// ft_putstr_fd(tmp->value, 2);
 			// ft_putstr_fd("\n", 2);
-			if (*tmp->next->key == *K_ARG)
+			if (*tmp->next->key == 'F')
 				return (tmp);
 		}
 		tmp = tmp->next;
