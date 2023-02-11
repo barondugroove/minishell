@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/09 19:20:36 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/11 16:43:33 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,11 @@ int	clean_token_list(t_tok *head, t_tok *env)
 	}
 	return (0);
 }
+
+
+//ec"h"o "$USER"os l"'"encule et son '$HOME' c"'"est $HOME			Quotes not closed
+//ec"h"o "$USER"os l"'"encule et son '$HOME' c"'"est $HOME"			romilos l'encule et son  c"est /home/romil
+//ec"h"o "$USER"os l"'"encule et son $HOME c"'"est $HOME		romilos l'encule et son $HOME c'est /home/romil
 
 void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 {

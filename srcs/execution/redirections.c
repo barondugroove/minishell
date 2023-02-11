@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/09 20:50:30 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/11 19:46:06 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	check_directory(char *command)
 {
 	struct stat	path_stat;
 
-	if (is_dir(command) == 1 && (command[0] == '/' || ft_strncmp(command, "./",
-				2) == 0))
+	if ((command[0] == '/' || ft_strncmp(command, "./",
+				2) == 0) && is_dir(command) == 1)
 	{
 		is_dir_msg(command, 126);
 		return (126);
