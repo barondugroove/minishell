@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/09 20:53:34 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/13 15:45:41 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,9 @@ void				check_file(char *file, int dir);
 int					has_redir(t_tok *cmds);
 char				*get_file(t_tok *cmds, int nbr);
 int					redir_nbr(t_tok *cmds);
+
+// HEREDOC
+void				heredoc_process(t_tok *cmd);
 
 // EXECUTION_UTILS
 int					nb_cmds(t_tok *cmds);
