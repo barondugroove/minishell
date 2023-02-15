@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 14:47:47 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/13 15:21:56 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 14:47:13 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ t_tok	*get_next_redir(t_tok *cmds)
 	{
 		if (*tmp->key == '>' || *tmp->key == '<')
 		{
-			if (*tmp->next->key == 'F')
+			if (*tmp->next->key == 'A')
 				return (tmp);
 		}
 		tmp = tmp->next;

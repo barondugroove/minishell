@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/13 15:14:37 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 14:58:13 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,19 @@ int	execute_builtins(t_allocated *data, t_tok *cmds)
 
 	status = 0;
 	args = get_cmd(cmds);
-	if (ft_strncmp(cmds->value, "export", 7) == 0)
-		status = export(&data->env, args);
-	else if (ft_strncmp(cmds->value, "cd", 3) == 0)
+	if (is_builtin(cmds->value) == 1)
 		status = cd(args, data->env);
-	else if (ft_strncmp(cmds->value, "pwd", 4) == 0)
-		status = pwd(data->env, args);
-	else if (ft_strncmp(cmds->value, "env", 4) == 0)
-		print_env(&data->env);
-	else if (ft_strncmp(cmds->value, "echo", 5) == 0)
+	else if (is_builtin(cmds->value) == 2)
 		echo(args);
-	else if (ft_strncmp(cmds->value, "unset", 6) == 0)
+	else if (is_builtin(cmds->value) == 3)
+		status = pwd(data->env, args);
+	else if (is_builtin(cmds->value) == 4)
+		status = export(&data->env, args);
+	else if (is_builtin(cmds->value) == 5)
 		status = unset(&data->env, args);
-	else if (ft_strncmp(cmds->value, "exit", 5) == 0)
+	else if (is_builtin(cmds->value) == 6)
+		print_env(&data->env);
+	else if (is_builtin(cmds->value) == 7)
 		status = exit_builtin(args, data);
 	free_tab(args);
 	return (status);
@@ -47,7 +47,7 @@ void	execute_cmd(t_allocated *data, t_tok *cmds)
 	args = get_cmd(cmds);
 	status = check_directory(cmds->value);
 	if (status)
-		exit(status);
+		ft_exit(status);
 	path = get_path(data->env, args[0]);
 	envp = convert_envp(data->env);
 	if (!path || (execve(path, args, envp) == -1))
@@ -99,7 +99,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 
 	fd_save = -1;
 	signal(SIGINT, SIG_DFL);
-	if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1)
+	if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1 && has_redir(cmd) != 2)
 	{
 		fd_save = dup(fd_pipe[0]);
 		close(fd_pipe[0]);
@@ -108,10 +108,11 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 	}
 	pid = fork();
 	if (pid == -1)
-		printf("pid error");
+		ft_putstr_fd("pid error", 2);
 	else if (pid == 0)
 	{
-		duplicator(fd_pipe, fd_save, cmd_id, data->cmd_nbr);
+		if (has_redir(cmd) != 2)
+			duplicator(fd_pipe, fd_save, cmd_id, data->cmd_nbr);
 		if (has_redir(cmd))
 			handle_redirection(data, cmd);
 		if (is_builtin(cmd->value))
@@ -158,7 +159,7 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 	}
 	pid = fork();
 	if (pid == -1)
-		printf("pid error");
+		ft_putstr_fd("pid error", 2);
 	else if (pid == 0)
 	{
 		if (has_redir(data->cmd_head))
@@ -191,7 +192,7 @@ t_tok	*find_next_cmd(t_tok *cmds, int nbr)
 		}
 		cmds = cmds->next;
 	}
-	if (*cmds->key == '|')
+	if (cmds && *cmds->key == '|')
 		cmds = cmds->next;
 	return (cmds);
 }
@@ -207,7 +208,8 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	if (!cmd_head)
 		return ;
 	i = 0;
-	cmds = find_next_cmd(cmd_head, i);
+	cmds = cmd_head;
+	//cmds = find_next_cmd(cmd_head, i);
 	data.env = env;
 	data.cmd_head = cmd_head;
 	data.cmd_nbr = nb_cmds(cmds);

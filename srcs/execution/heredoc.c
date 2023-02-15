@@ -6,72 +6,51 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:22:58 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/13 19:44:07 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 14:45:39 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	how_many_heredoc(t_tok *cmd)
-{
-	t_tok	*tmp;
-	int		i;
-
-	tmp = cmd;
-	i = 0;
-	while (tmp && *tmp->key != '|')
-	{
-		if (ft_strcmp(tmp->key, "<<") == 0)
-			i++;
-		tmp = tmp->next;
-	}
-	return (i);
-}
-
 void	launch_heredoc(char *delim, int *fd_pipe)
 {
-	char	*str;
+	char	*line;
 
-	str = get_next_line(0);
 	while (1)
 	{
-		if (ft_strcmp(str, delim) == 0)
+		line = readline("> ");
+		if (!line || !ft_strcmp(line, delim))
 			break ;
-		write(fd_pipe[1], str, ft_strlen(str));
-		str = get_next_line(0);
+		ft_putstr_fd(line, fd_pipe[1]);
+		ft_putstr_fd("\n", fd_pipe[1]);
 	}
+	exit(0);
 }
 
-t_tok	*next_heredoc(t_tok *cmds)
+int	heredoc_process(t_tok *cmd)
 {
-	t_tok	*tmp;
-
-	tmp = cmds;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->key, "<<") == 0)
-		{
-			if (*tmp->next->key == 'F')
-				return (tmp);
-		}
-		tmp = tmp->next;
-	}
-	return (tmp);
-}
-
-void	heredoc_process(t_tok *cmd)
-{
-	t_tok	*tmp;
 	int		pipe_heredoc[2];
-	int		nbr;
+	int		pid;
+	int		status;
 
-
-	tmp = cmd;
-	nbr = how_many_heredoc(tmp);
+	signal(SIGINT, SIG_DFL);
 	pipe(pipe_heredoc);
-	while (nbr--)
+	pid = fork();
+	if (pid == -1)
+		ft_putstr_fd("pid error", 2);
+	else if (pid == 0)
 	{
-		launch_heredoc(tmp->next->value, pipe_heredoc);
-		tmp = next_heredoc(tmp);
+		launch_heredoc(cmd->next->value, pipe_heredoc);
+		close(pipe_heredoc[1]);
+		close(pipe_heredoc[0]);
 	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			g_exit_code = WEXITSTATUS(status);
+		close(pipe_heredoc[1]);
+	}
+	signal(SIGINT, child_c_handler);
+	return (pipe_heredoc[0]);
 }

@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/13 19:42:59 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 15:07:55 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	set_redir_out(t_tok *tmp, int dir)
 	return ;
 }
 
-void	set_redir_in(t_tok *cmd, t_tok *tmp, int dir)
+void	set_redir_in(t_tok *cmd, t_tok *tmp, int dir, int nbr)
 {
 	int	fd_in;
 
@@ -88,9 +88,12 @@ void	set_redir_in(t_tok *cmd, t_tok *tmp, int dir)
 		check_file(tmp->next->value, 0);
 	if(dir == 1 && is_builtin(cmd->value) != 2)
 		fd_in = open(tmp->next->value, O_RDONLY, 0644);
+	else if (dir == 2)
+		fd_in = heredoc_process(tmp);
 	else
 		return ;
-	dup2(fd_in, 0);
+	if (nbr == 0)
+		dup2(fd_in, 0);
 	if (fd_in != -1)
 		close(fd_in);
 	return ;
@@ -127,7 +130,7 @@ void	handle_redirection(t_allocated *data, t_tok *cmd)
 		if (has_redir(tmp) > 2)
 			set_redir_out(tmp, has_redir(tmp));
 		else if (has_redir(tmp) < 3 && has_redir(tmp) != 0)
-			set_redir_in(cmd, tmp, has_redir(tmp));
+			set_redir_in(cmd, tmp, has_redir(tmp), nbr);
 		if (nbr)
 			tmp = get_next_redir(tmp->next);
 	}

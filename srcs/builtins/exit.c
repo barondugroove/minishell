@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:17:14 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/09 20:53:32 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/14 16:05:54 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,11 @@ int	exit_builtin(char **args, t_allocated *data)
 
 	g_exit_code = 0;
 	if (!args[1])
-		return (0);
+	{
+		free_allocated(data);
+		free_tab(args);
+		ft_exit(0);
+	}
 	status = check_args(args);
 	if (status)
 		return (status);

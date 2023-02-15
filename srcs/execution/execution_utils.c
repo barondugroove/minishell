@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/13 15:14:38 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 14:54:10 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,8 @@ int	nb_cmds(t_tok *cmds)
 			i++;
 		tmp = tmp->next;
 	}
+	if (i == 0)
+		no_cmd_msg(cmds->key, 127);
 	return (i);
 }
 
@@ -145,14 +147,14 @@ int	is_builtin(char *cmd)
 	if (ft_strncmp(cmd, "cd", 3) == 0)
 		return (1);
 	if (ft_strncmp(cmd, "pwd", 4) == 0)
-		return (1);
+		return (3);
 	if (ft_strncmp(cmd, "export", 7) == 0)
-		return (1);
+		return (4);
 	if (ft_strncmp(cmd, "unset", 6) == 0)
-		return (1);
+		return (5);
 	if (ft_strncmp(cmd, "env", 4) == 0)
-		return (1);
+		return (6);
 	if (ft_strncmp(cmd, "exit", 5) == 0)
-		return (1);
+		return (7);
 	return (0);
 }
