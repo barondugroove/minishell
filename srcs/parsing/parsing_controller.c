@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 00:13:05 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/16 00:30:32 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,25 @@ int	clean_token_list(t_tok *head, t_tok *env)
 }
 
 
-//ec"h"o "$USER"os l"'"encule et son '$HOME' c"'"est $HOME			Quotes not closed
-//ec"h"o "$USER"os l"'"encule et son '$HOME' c"'"est $HOME"			romilos l'encule et son  c"est /home/romil
-//ec"h"o "$USER"os l"'"encule et son $HOME c"'"est $HOME		romilos l'encule et son $HOME c'est /home/romil
+//ec"h"o "$USER"os l"'"encule et son '$HOME' c"'"est $HOME
+
+void	cat_var_to_prompt(char **prompt, char *ptr, char *value, char *end)
+{
+	char	*str;
+	
+	str = malloc(sizeof(char) * (ft_strlen(*prompt)
+				+ ft_strlen(value) + ft_strlen(end) + 1));
+	str[ft_strlen(*prompt) + ft_strlen(value) + ft_strlen(end)] = '\0';
+	ft_strlcpy(str, *prompt, ptr - *prompt + 1);
+	if (value)
+		ft_strcat(str, value);
+	ft_strcat(str, end);
+	free(*prompt);
+	*prompt = str;
+}
 
 void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 {
-	char	*new_str;
 	char	*end;
 	char	*value;
 	char	*var;
@@ -122,11 +134,8 @@ void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 
 	end = ptr;
 	varlen = 0;
-	while (*end != '"' && *end != ' ' && *end != '\0')
-	{
+	while (*end != '"' && *end != ' ' && *end != '\0' && end++)
 		varlen++;
-		end++;
-	}
 	var = malloc(sizeof(char) * (varlen + 1));
 	ft_strlcpy(var, end - varlen, varlen + 1);
 	if (*(var + 1) && *(var + 1) == '?')
@@ -136,15 +145,8 @@ void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 	}
 	else
 		value = ft_getenv(env, var + 1);
-	new_str = malloc(sizeof(char) * (ft_strlen(*prompt) + ft_strlen(value) + ft_strlen(end) + 1));
-	new_str[ft_strlen(*prompt) + ft_strlen(value) + ft_strlen(end)] = '\0';
-	ft_strlcpy(new_str, *prompt, ptr - *prompt + 1);
-	if (value)
-		ft_strcat(new_str, value);
-	ft_strcat(new_str, end);
-	free(*prompt);
-	*prompt = new_str;
 	free(var);
+	cat_var_to_prompt(prompt, ptr, value, end);
 }
 
 void	check_var_env(t_tok *env, char **prompt)
@@ -203,8 +205,3 @@ t_tok	*parsing_controller(t_tok *env, char **prompt)
 	}
 	return (tok_head);
 }
-
-// e"c"'h'o "parse test"| ls -la |grep "c'est trop cool" | wc -l | "voici un pipe : |"  mais il est entre '"' du coup il est pas pi|pe.
-// e"c"'h'o |"parse test" ls -la |grep| "c'est trop cool"| wc -l | "voici un pipe : |"  mais il est entre '"' du coup il est pas pi|pe.
-
-// 'e'"c"''"ho"|ls|w'c'
