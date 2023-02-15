@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 23:29:47 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/07 01:36:36 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/15 18:14:05 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ void	echo(char **args)
 	while (args[i])
 	{
 		if (!is_n(args[i]) || i != 1)
-			printf("%s", args[i]);
+			ft_putstr_fd(args[i], 1);
 		if (is_n(args[i]) && i != 1)
-			printf(" ");
+			ft_putstr_fd(" ", 1);
 		else if (args[i + 1] && !is_n(args[i]))
-			printf(" ");
+			ft_putstr_fd(" ", 1);
 		i++;
 	}
 	if (!args[1] || !is_n(args[1]))
-		printf("\n");
+		ft_putstr_fd("\n", 1);
 }

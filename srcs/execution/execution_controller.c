@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/15 16:56:21 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 18:15:30 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,6 +202,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	t_tok		*cmds;
 	t_allocated	data;
 	int			fd_pipe[2];
+	int			fd_reset[2];
 	int			status;
 	int			i;
 
@@ -215,8 +216,12 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	data.pids = malloc(sizeof(int) * data.cmd_nbr);
 	if (data.cmd_nbr == 1)
 	{
+		fd_reset[0] = dup(0);
+		fd_reset[1] = dup(1);
 		execute_simple_command(&data, cmds);
 		free(data.pids);
+		dup2(fd_reset[0], 0);
+		dup2(fd_reset[1], 1);
 		return ;
 	}
 	if (pipe(fd_pipe) == -1)
@@ -225,6 +230,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	{
 		cmds = find_next_cmd(cmds, i);
 		child_process(&data, cmds, fd_pipe, i);
+		data.cmd_head = cmds;
 		i++;
 	}
 	close(fd_pipe[0]);
