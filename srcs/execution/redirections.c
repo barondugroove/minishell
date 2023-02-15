@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/15 16:35:34 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 16:59:35 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,9 @@ void	handle_redirection(t_allocated *data, t_tok *cmd)
 	{
 		if (has_redir(tmp) == 2)
 			heredoc_process(data, tmp);
-		if (has_redir(tmp) == 1)
+		if (has_redir(tmp) > 2)
 			set_redir_out(tmp, has_redir(tmp));
-		else if (has_redir(tmp) < 3 && has_redir(tmp) != 0)
+		else if (has_redir(tmp) == 1)
 			set_redir_in(cmd, tmp, has_redir(tmp));
 		if (nbr)
 			tmp = get_next_redir(tmp->next);
