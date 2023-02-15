@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/15 14:58:13 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 16:38:48 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,6 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 		return ;
 	i = 0;
 	cmds = cmd_head;
-	//cmds = find_next_cmd(cmd_head, i);
 	data.env = env;
 	data.cmd_head = cmd_head;
 	data.cmd_nbr = nb_cmds(cmds);

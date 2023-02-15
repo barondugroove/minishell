@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/14 11:55:35 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 16:36:34 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char				*get_file(t_tok *cmds, int nbr);
 int					redir_nbr(t_tok *cmds);
 
 // HEREDOC
-int					heredoc_process(t_tok *cmd);
+int					heredoc_process(t_allocated *data, t_tok *cmd);
 
 // EXECUTION_UTILS
 int					nb_cmds(t_tok *cmds);
