@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 14:17:18 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/16 17:39:16 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// APRES LA REDIR C TOUJOURS UN FILE WALLAH
-// ET SI JAI UNE REDIR AU DEBUT, IL YA PLUS DE COMMANDE DU TOUT :(
-// GENRE <Makefile cat
-// PAS COOL
 
 void	print_list(t_tok *head)
 {
@@ -86,12 +81,6 @@ int	clean_token_list(t_tok *head, t_tok *env)
 		}
 		if (check_redir_error(tok))
 			return (1);
-		// if ((*tok->key == '<' || *tok->key == '>') && tok->next)
-		// {
-		// 	free(tok->next->key);
-		// 	tok->next->key = ft_strdup("F");
-		// 	tok = tok->next;
-		// }
 		if (*tok->key == '|')
 		{
 			if (!tok->next)
@@ -106,9 +95,6 @@ int	clean_token_list(t_tok *head, t_tok *env)
 	}
 	return (0);
 }
-
-
-//ec"h"o "$USER"os l"'"encule et son '$HOME' c"'"est $HOME
 
 void	cat_var_to_prompt(char **prompt, char *ptr, char *value, char *end)
 {
@@ -140,25 +126,11 @@ void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 	ft_strlcpy(var, end - varlen, varlen + 1);
 	if (*(var + 1) && *(var + 1) == '?')
 	{
-		//printf("varlen:%d\n", varlen);
-		//printf("var:%s\n", var);
 		value = ft_itoa(g_exit_code);
-
-		//printf("g_exit_code:%d\n", g_exit_code);
-		//printf("value:%s\n", value);
 		end = ptr + 2;
-		//printf("end:%s\n", end);
 	}
 	else
-	{
-		//printf("varlen:%d\n", varlen);
-		//printf("var:%s\n", var);
 		value = ft_getenv(env, var + 1);
-
-		//printf("g_exit_code:%d\n", g_exit_code);
-		//printf("value:%s\n", value);
-		//printf("end:%s\n", end);
-	}
 	cat_var_to_prompt(prompt, ptr, value, end);
 	free(var);
 }
