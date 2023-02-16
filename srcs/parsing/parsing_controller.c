@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/15 14:46:02 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 22:44:35 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,6 @@ int	clean_token_list(t_tok *head, t_tok *env)
 		}
 		if (check_redir_error(tok))
 			return (1);
-		// if ((*tok->key == '<' || *tok->key == '>') && tok->next)
-		// {
-		// 	free(tok->next->key);
-		// 	tok->next->key = ft_strdup("F");
-		// 	tok = tok->next;
-		// }
 		if (*tok->key == '|')
 		{
 			if (!tok->next)
@@ -106,7 +100,6 @@ int	clean_token_list(t_tok *head, t_tok *env)
 	}
 	return (0);
 }
-
 
 //ec"h"o "$USER"os l"'"encule et son '$HOME' c"'"est $HOME			Quotes not closed
 //ec"h"o "$USER"os l"'"encule et son '$HOME' c"'"est $HOME"			romilos l'encule et son  c"est /home/romil

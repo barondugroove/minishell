@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/09 01:11:16 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/16 00:27:58 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,6 @@ void	print_export(t_tok *head)
 			printf("declare -x %s\n", tok->key);
 		tok = tok->next;
 	}
-}
-
-void	error_message_export(char *arg)
-{
-	ft_putstr_fd("minishell: export: ", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putstr_fd(": not a valid identifier\n", 2);
-	return ;
 }
 
 int	check_errors_export(char *arg)
@@ -76,10 +68,10 @@ int	add_existing_var(t_tok **env, char *args)
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
 			if (has_equal(args) == 2)
-				tmp->value = ft_strjoin(tmp->value, value);
+				tmp->value = ft_strjoin(tmp->value, value + 1);
 			else if (!value && has_equal(args) == 1)
 				tmp->value = ft_strdup("\0");
-			else
+			else if (!tmp->value)
 				tmp->value = ft_strdup(value);
 			return (0);
 		}
@@ -112,7 +104,7 @@ int	export(t_tok **env, char **args)
 
 	i = 0;
 	status = 0;
-	if (!args[1])
+	if (args[1] == NULL)
 	{
 		print_export(*env);
 		return (status);

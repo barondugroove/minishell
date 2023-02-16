@@ -3,44 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2023/01/31 14:41:22 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 23:51:48 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_tok	*newtoken(char *data, char *key)
+char	*test_relative_path(t_tok *env_tok, char *cmd)
 {
-	t_tok	*tok;
+	char	**env;
+	char	*str;
+	int		i;
 
-	tok = malloc(sizeof(t_tok));
-	if (tok)
+	i = 0;
+	env = ft_split(ft_getenv(env_tok, "PATH"), ':');
+	while (env && env[i])
 	{
-		tok->value = data;
-		tok->key = key;
-		tok->next = NULL;
+		str = strjoin_pipex(env[i++], cmd);
+		if (!access(str, X_OK))
+		{
+			free_tab(env);
+			return (str);
+		}
+		free(str);
 	}
-	return (tok);
-}
-
-void	newtoken_back(t_tok **head, char *data, char *key)
-{
-	t_tok	*tok;
-	t_tok	*tmp;
-
-	tok = newtoken(data, key);
-	if (!head || !*head)
-	{
-		*head = tok;
-		return ;
-	}
-	tmp = *head;
-	while (tmp && tmp->next)
-		tmp = tmp->next;
-	tmp->next = tok;
+	free_tab(env);
+	return (NULL);
 }
 
 char	*c_to_str(char c)
@@ -68,6 +59,46 @@ char	*strjoin_pipex(char *s1, char *s2)
 	ft_strlcat(str, "/", length);
 	ft_strlcat(str, s2, length);
 	return (str);
+}
+
+char	*fill_tab(t_tok *node)
+{
+	char	*str;
+	int		length;
+
+	length = ft_strlen(node->key) + ft_strlen(node->value) + 2;
+	str = malloc(sizeof(char) * length);
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, node->key, length);
+	ft_strlcat(str, "=", length);
+	ft_strlcat(str, node->value, length);
+	return (str);
+}
+
+char	**convert_envp(t_tok *head)
+{
+	t_tok	*node;
+	char	**envp;
+	int		i;
+
+	node = head;
+	i = 0;
+	while (node)
+	{
+		i++;
+		node = node->next;
+	}
+	envp = malloc((i + 1) * sizeof(char *));
+	node = head;
+	i = 0;
+	while (node)
+	{
+		envp[i++] = fill_tab(node);
+		node = node->next;
+	}
+	envp[i] = NULL;
+	return (envp);
 }
 
 /*

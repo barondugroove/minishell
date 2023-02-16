@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/15 16:36:34 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 23:53:18 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char				*get_file(t_tok *cmds, int nbr);
 int					redir_nbr(t_tok *cmds);
 
 // HEREDOC
-int					heredoc_process(t_allocated *data, t_tok *cmd);
+void				heredoc_process(t_allocated *data, t_tok *cmd);
 
 // EXECUTION_UTILS
 int					nb_cmds(t_tok *cmds);
@@ -113,6 +113,7 @@ char				*strjoin_pipex(char *s1, char *s2);
 char				*ft_getenv(t_tok *env_head, char *key);
 void				set_pwd(t_tok *head, char *key, char *path);
 void				child_c_handler(int sig);
+char				*test_relative_path(t_tok *env_tok, char *cmd);
 
 // ERROR MESSAGES
 void				no_file_msg(char *file, int code);
@@ -120,5 +121,6 @@ void				permission_denied_msg(char *file, int code);
 void				is_dir_msg(char *file, int code);
 void				no_cmd_msg(char *file, int code);
 void				numeric_argument_required(char *arg);
+void				error_message_export(char *arg);
 
 #endif

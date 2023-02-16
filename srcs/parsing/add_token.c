@@ -52,7 +52,7 @@ void	clean_token(t_tok **tok_head, char *str)
 void	add_token(t_tok **tok_head, char *str)
 {
 	if (ft_strchr(str, '"') || ft_strchr(str, '\'') || ft_strchr(str, '|')
-			|| ft_strchr(str, '<') || ft_strchr(str, '>'))
+		|| ft_strchr(str, '<') || ft_strchr(str, '>'))
 	{
 		while (*str == '|' || *str == '<' || *str == '>')
 		{

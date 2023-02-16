@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_msgs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 19:46:05 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/13 15:14:28 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/15 23:53:06 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,12 @@ void	no_cmd_msg(char *file, int code)
 	ft_putstr_fd(file, 2);
 	ft_putstr_fd(": command not found\n", 2);
 	g_exit_code = code;
+}
+
+void	error_message_export(char *arg)
+{
+	ft_putstr_fd("minishell: export: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd(": not a valid identifier\n", 2);
+	return ;
 }

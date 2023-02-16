@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/15 17:32:22 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/16 01:46:35 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 char	*get_path(t_tok *env_tok, char *cmd)
 {
-	char	**env;
 	char	*str;
-	int		i;
 
 	if (!cmd || !env_tok)
 		return (NULL);
@@ -26,24 +24,30 @@ char	*get_path(t_tok *env_tok, char *cmd)
 		if (!access(str, X_OK))
 			return (str);
 		free(str);
+		return (NULL);
 	}
 	else
+		str = test_relative_path(env_tok, cmd);
+	return (str);
+}
+
+int	nb_args(t_tok *cmds)
+{
+	t_tok	*tmp;
+	int		nbr;
+
+	tmp = cmds;
+	nbr = 0;
+	while (tmp && *tmp->key != '|')
 	{
-		i = 0;
-		env = ft_split(ft_getenv(env_tok, "PATH"), ':');
-		while (env && env[i])
-		{
-			str = strjoin_pipex(env[i++], cmd);
-			if (!access(str, X_OK))
-			{
-				free_tab(env);
-				return (str);
-			}
-			free(str);
-		}
-		free_tab(env);
+		if (*tmp->key == *K_CMD || *tmp->key == *K_ARG)
+			nbr++;
+		else if (*tmp->key == '>' || *tmp->key == '<' \
+		|| ft_strcmp(tmp->key, ">>") == 0)
+			tmp = tmp->next;
+		tmp = tmp->next;
 	}
-	return (NULL);
+	return (nbr);
 }
 
 char	**get_cmd(t_tok *cmds)
@@ -53,20 +57,11 @@ char	**get_cmd(t_tok *cmds)
 	int		nb;
 	int		i;
 
-	tok = cmds;
-	nb = 0;
-	i = 0;
 	if (!cmds)
 		return (NULL);
-	while (tok && *tok->key != '|')
-	{
-		if (*tok->key == *K_CMD || *tok->key == *K_ARG)
-			nb++;
-		else if (*tok->key == '>' || *tok->key == '<' \
-		|| ft_strcmp(tok->key, ">>") == 0)
-			tok = tok->next;
-		tok = tok->next;
-	}
+	tok = cmds;
+	nb = nb_args(tok);
+	i = 0;
 	args = malloc(sizeof(char *) * (nb + 1));
 	tok = cmds;
 	while (i != nb)
@@ -80,46 +75,6 @@ char	**get_cmd(t_tok *cmds)
 	}
 	args[nb] = NULL;
 	return (args);
-}
-
-char	*fill_tab(t_tok *node)
-{
-	char	*str;
-	int		length;
-
-	length = ft_strlen(node->key) + ft_strlen(node->value) + 2;
-	str = malloc(sizeof(char) * length);
-	if (!str)
-		return (NULL);
-	ft_strlcpy(str, node->key, length);
-	ft_strlcat(str, "=", length);
-	ft_strlcat(str, node->value, length);
-	return (str);
-}
-
-char	**convert_envp(t_tok *head)
-{
-	t_tok	*node;
-	char	**envp;
-	int		i;
-
-	node = head;
-	i = 0;
-	while (node)
-	{
-		i++;
-		node = node->next;
-	}
-	envp = malloc((i + 1) * sizeof(char *));
-	node = head;
-	i = 0;
-	while (node)
-	{
-		envp[i++] = fill_tab(node);
-		node = node->next;
-	}
-	envp[i] = NULL;
-	return (envp);
 }
 
 int	nb_cmds(t_tok *cmds)

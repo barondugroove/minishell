@@ -1,49 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_utils.c                                       :+:      :+:    :+:   */
+/*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/08 23:18:25 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/16 00:51:59 by benjamincha      ###   ########.fr       */
+/*   Created: 2023/02/15 23:21:57 by benjamincha       #+#    #+#             */
+/*   Updated: 2023/02/16 01:50:50 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	free_allocated(t_allocated *truc)
+t_tok	*newtoken(char *data, char *key)
 {
-	free_list(truc->env);
-	free_list(truc->cmd_head);
-	free(truc->pids);
+	t_tok	*tok;
+
+	tok = malloc(sizeof(t_tok));
+	if (tok)
+	{
+		tok->value = data;
+		tok->key = key;
+		tok->next = NULL;
+	}
+	return (tok);
 }
 
-void	free_list(t_tok *head)
+void	newtoken_back(t_tok **head, char *data, char *key)
 {
+	t_tok	*tok;
 	t_tok	*tmp;
 
-	tmp = head;
-	while (head)
+	tok = newtoken(data, key);
+	if (!head || !*head)
 	{
-		tmp = head;
-		head = head->next;
-		free(tmp->key);
-		free(tmp->value);
-		free(tmp);
-	}
-	free(head);
-	head = NULL;
-}
-
-void	free_tab(char **tab)
-{
-	int	i;
-
-	if (!tab)
+		*head = tok;
 		return ;
-	i = 0;
-	while (tab[i])
-		free(tab[i++]);
-	free(tab);
+	}
+	tmp = *head;
+	while (tmp && tmp->next)
+		tmp = tmp->next;
+	tmp->next = tok;
 }
