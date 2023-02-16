@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 01:58:50 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/16 02:17:58 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,12 @@ int	clean_token_list(t_tok *head, t_tok *env)
 		}
 		if (check_redir_error(tok))
 			return (1);
+		// if ((*tok->key == '<' || *tok->key == '>') && tok->next)
+		// {
+		// 	free(tok->next->key);
+		// 	tok->next->key = ft_strdup("F");
+		// 	tok = tok->next;
+		// }
 		if (*tok->key == '|')
 		{
 			if (!tok->next)
