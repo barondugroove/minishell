@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
+#    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/02/15 23:22:19 by benjamincha      ###   ########.fr        #
+#    Updated: 2023/02/16 23:10:11 by rlaforge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRCS = srcs/main.c \
 		srcs/parsing/parsing_controller.c \
 		srcs/parsing/tokenizer.c \
 		srcs/parsing/add_token.c \
+		srcs/parsing/check_var_env.c \
 		srcs/execution/execution_controller.c \
 		srcs/execution/execution_utils.c \
 		srcs/execution/redirections.c \

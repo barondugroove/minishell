@@ -3,35 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 17:39:16 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/16 23:08:41 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	print_list(t_tok *head)
-{
-	t_tok	*tok;
-
-	tok = head;
-	printf("Printlist:\n");
-	while (tok)
-	{
-		printf("%s: %s$\n", tok->key, tok->value);
-		tok = tok->next;
-	}
-	printf("Output:\n");
-}
-
 int	check_redir_error(t_tok *tok)
 {
 	t_tok	*buf;
 
-	if (tok->next && tok->next->next
-		&& (*tok->key == '<' || *tok->key == '>')
+	if (tok->next && tok->next->next && (*tok->key == '<' || *tok->key == '>')
 		&& (*tok->next->key == '<' || *tok->next->key == '>')
 		&& (*tok->next->next->key == '<' || *tok->next->next->key == '>'))
 		return (1);
@@ -42,11 +27,10 @@ int	check_redir_error(t_tok *tok)
 	{
 		if (tok->next && *tok->next->key == *tok->key)
 		{
-			free(tok->key);
 			if (*tok->next->key == '>')
-				tok->key = ft_strdup(">>");
+				replace_tok_value(&tok->key, ">>");
 			else
-				tok->key = ft_strdup("<<");
+				replace_tok_value(&tok->key, "<<");
 			buf = tok->next;
 			tok->next = tok->next->next;
 			free(buf->key);
@@ -57,28 +41,31 @@ int	check_redir_error(t_tok *tok)
 	return (0);
 }
 
+void	check_truc_path_bchabot(t_tok *tok, t_tok *env)
+{
+	//Faut trouver un bon nom
+	char	*str;
+	
+	str = get_path(env, tok->value);
+	if (str && is_regular_file(str))
+	{
+		free(str);
+		replace_tok_value(&tok->key, "C");
+	}
+}
+
 int	clean_token_list(t_tok *head, t_tok *env)
 {
 	t_tok	*tok;
-	char	*str;
 
 	tok = head;
 	if (*tok->key == '|')
 		return (1);
 	if (*tok->key != '<' && *tok->key != '>')
-	{
-		free(tok->key);
-		tok->key = ft_strdup("C");
-	}
+		replace_tok_value(&tok->key, "C");
 	while (tok)
 	{
-		str = get_path(env, tok->value);
-		if (str && is_regular_file(str))
-		{
-			free(str);
-			free(tok->key);
-			tok->key = ft_strdup("C");
-		}
+		check_truc_path_bchabot(tok, env);
 		if (check_redir_error(tok))
 			return (1);
 		if (*tok->key == '|')
@@ -86,78 +73,18 @@ int	clean_token_list(t_tok *head, t_tok *env)
 			if (!tok->next)
 				return (1);
 			else if (*tok->next->key == 'A')
-			{
-				free(tok->next->key);
-				tok->next->key = ft_strdup("C");
-			}
+				replace_tok_value(&tok->next->key, "C");
 		}
 		tok = tok->next;
 	}
 	return (0);
 }
 
-void	cat_var_to_prompt(char **prompt, char *ptr, char *value, char *end)
+void	parsing_error_msg(t_tok	*tok_head, char *str)
 {
-	char	*str;
-
-	str = malloc(sizeof(char) * (ft_strlen(*prompt)
-				+ ft_strlen(value) + ft_strlen(end) + 1));
-	str[ft_strlen(*prompt) + ft_strlen(value) + ft_strlen(end)] = '\0';
-	ft_strlcpy(str, *prompt, ptr - *prompt + 1);
-	if (value)
-		ft_strcat(str, value);
-	ft_strcat(str, end);
-	free(*prompt);
-	*prompt = str;
-}
-
-void	replace_var_env(t_tok *env, char **prompt, char *ptr)
-{
-	char	*end;
-	char	*value;
-	char	*var;
-	int		varlen;
-
-	end = ptr;
-	varlen = 0;
-	while (*end != '"' && *end != ' ' && *end != '\0' && end++)
-		varlen++;
-	var = malloc(sizeof(char) * (varlen + 1));
-	ft_strlcpy(var, end - varlen, varlen + 1);
-	if (*(var + 1) && *(var + 1) == '?')
-	{
-		value = ft_itoa(g_exit_code);
-		end = ptr + 2;
-	}
-	else
-		value = ft_getenv(env, var + 1);
-	cat_var_to_prompt(prompt, ptr, value, end);
-	free(var);
-}
-
-void	check_var_env(t_tok *env, char **prompt)
-{
-	char	*ptr;
-	char	quote;
-
-	quote = '\0';
-	ptr = *prompt;
-	while (*ptr)
-	{
-		if (*ptr == '$' && *(ptr + 1) && *(ptr + 1) != '"'
-			&& *(ptr + 1) != ' ' && *(ptr + 1) != '$'
-			&& quote != '\'')
-		{
-			replace_var_env(env, prompt, ptr);
-			ptr = *prompt;
-			quote = '\0';
-		}
-		else if (quote == '\0' && (*ptr == '"' || *ptr == '\''))
-			quote = *ptr;
-		else if (*ptr == quote && quote != '\0')
-			quote = '\0';
-		ptr++;
-	}
+	printf("%s\n", str);
+	g_exit_code = 2;
+	free_list(tok_head);
 }
 
 t_tok	*parsing_controller(t_tok *env, char **prompt)
@@ -174,9 +101,7 @@ t_tok	*parsing_controller(t_tok *env, char **prompt)
 	{
 		if (*str == ERROR_CHAR)
 		{
-			printf("Parsing error: quote not closed\n");
-			g_exit_code = 2;
-			free_list(tok_head);
+			parsing_error_msg(tok_head, "Parsing error: quote not closed\n");
 			return (NULL);
 		}
 		add_token(&tok_head, str);
@@ -184,9 +109,7 @@ t_tok	*parsing_controller(t_tok *env, char **prompt)
 	}
 	if (clean_token_list(tok_head, env))
 	{
-		printf("syntax error\n");
-		g_exit_code = 2;
-		free_list(tok_head);
+		parsing_error_msg(tok_head, "syntax error\n");
 		return (NULL);
 	}
 	return (tok_head);

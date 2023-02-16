@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/15 16:37:25 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/16 23:12:30 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,8 @@ void	minishell(char **envp)
 		signal(SIGINT, ctrl_c_handler);
 		prompt = readline("\033[0;34m🐚 Minishell \e[0m");
 		if (!prompt)
-		{
-			printf("exit\n");
 			break ;
-		}
-		else if (prompt[0] == '\0')
-		{
-			free(prompt);
-			continue ;
-		}
-		else
+		else if (prompt[0] != '\0')
 		{
 			add_history(prompt);
 			cmds = parsing_controller(env, &prompt);
@@ -63,6 +55,7 @@ void	minishell(char **envp)
 		free(prompt);
 	}
 	free_list(env);
+	printf("exit\n");
 }
 
 int	main(int ac, char **av, char **envp)
@@ -73,5 +66,3 @@ int	main(int ac, char **av, char **envp)
 	minishell(envp);
 	return (0);
 }
-
-//valgrind --suppressions=.vsupp --leak-check=full --show-leak-kinds=all --trace-children=yes ./minishell

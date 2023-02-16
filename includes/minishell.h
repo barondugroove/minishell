@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/15 23:53:18 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/16 23:13:26 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,11 @@ int					is_builtin(char *cmd);
 char				*get_path(t_tok *env_tok, char *cmd);
 char				**convert_envp(t_tok *head);
 
+// LIST_UTILS
+t_tok				*newtoken(char *data, char *key);
+void				newtoken_back(t_tok **head, char *data, char *key);
+void				replace_tok_value(char **val, char *new_val);
+
 // FREE_UTILS
 void				free_list(t_tok *head);
 void				free_tab(char **tab);
@@ -102,11 +107,10 @@ void				free_allocated(t_allocated *truc);
 t_tok				*parsing_controller(t_tok *env, char **prompt);
 char				*tokenizer(char *str);
 void				add_token(t_tok **tok_head, char *str);
+void				check_var_env(t_tok *env, char **prompt);
 
 // UTILS
 t_tok				*init_env(char **envp);
-t_tok				*newtoken(char *data, char *key);
-void				newtoken_back(t_tok **head, char *data, char *key);
 void				print_list(t_tok *head);
 char				*c_to_str(char c);
 char				*strjoin_pipex(char *s1, char *s2);
