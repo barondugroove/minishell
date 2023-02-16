@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 02:17:58 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/16 14:17:18 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	clean_token_list(t_tok *head, t_tok *env)
 void	cat_var_to_prompt(char **prompt, char *ptr, char *value, char *end)
 {
 	char	*str;
-	
+
 	str = malloc(sizeof(char) * (ft_strlen(*prompt)
 				+ ft_strlen(value) + ft_strlen(end) + 1));
 	str[ft_strlen(*prompt) + ft_strlen(value) + ft_strlen(end)] = '\0';
@@ -140,13 +140,27 @@ void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 	ft_strlcpy(var, end - varlen, varlen + 1);
 	if (*(var + 1) && *(var + 1) == '?')
 	{
+		//printf("varlen:%d\n", varlen);
+		//printf("var:%s\n", var);
 		value = ft_itoa(g_exit_code);
-		end = var + 2;
+
+		//printf("g_exit_code:%d\n", g_exit_code);
+		//printf("value:%s\n", value);
+		end = ptr + 2;
+		//printf("end:%s\n", end);
 	}
 	else
+	{
+		//printf("varlen:%d\n", varlen);
+		//printf("var:%s\n", var);
 		value = ft_getenv(env, var + 1);
-	free(var);
+
+		//printf("g_exit_code:%d\n", g_exit_code);
+		//printf("value:%s\n", value);
+		//printf("end:%s\n", end);
+	}
 	cat_var_to_prompt(prompt, ptr, value, end);
+	free(var);
 }
 
 void	check_var_env(t_tok *env, char **prompt)
