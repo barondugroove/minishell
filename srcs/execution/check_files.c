@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 22:48:01 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/16 01:50:47 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/17 02:31:42 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,27 @@
 int	is_dir(const char *path)
 {
 	struct stat	path_stat;
+	int			status;
 
-	stat(path, &path_stat);
-	return (S_ISDIR(path_stat.st_mode));
+	status = stat(path, &path_stat);
+	if (status)
+		return (0);
+	if (S_ISDIR(path_stat.st_mode) == 1)
+		return (1);
+	return (0);
 }
 
 int	is_regular_file(const char *path)
 {
 	struct stat	path_stat;
+	int			status;
 
-	stat(path, &path_stat);
-	return (S_ISREG(path_stat.st_mode));
+	status = stat(path, &path_stat);
+	if (status)
+		return (0);
+	if (S_ISREG(path_stat.st_mode) == 1)
+		return (1);
+	return (0);
 }
 
 int	right_test(char *command, int mode)
@@ -67,7 +77,7 @@ int	check_directory(char *command)
 	return (0);
 }
 
-void	check_file(char *file, int dir)
+int	check_file(char *file, int dir)
 {
 	int	status;
 
@@ -75,17 +85,17 @@ void	check_file(char *file, int dir)
 	{
 		status = right_test(file, S_IWUSR);
 		if (status)
-			ft_exit(status);
-		return ;
+			return (status);
+		return (0);
 	}
 	if (dir == 1)
 	{
 		if (access(file, F_OK) == -1)
-			return ;
+			return (0);
 		if (right_test(file, S_IWUSR))
-			ft_exit(1);
-		return ;
+			return (1);
+		return (0);
 	}
 	no_file_msg(file, 1);
-	ft_exit(1);
+	return (1);
 }

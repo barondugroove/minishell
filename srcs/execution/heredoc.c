@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:22:58 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/15 23:19:14 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/16 23:57:01 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ void	launch_heredoc(t_allocated *data, char *delim, int *fd_pipe)
 	}
 	close(fd_pipe[1]);
 	close(fd_pipe[0]);
-	free_allocated(data);
-	ft_exit(0);
-	return ;
+	ft_exit(data, 0);
 }
 
 void	wait_heredoc(int pid)

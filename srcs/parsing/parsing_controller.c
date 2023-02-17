@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 23:08:41 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/17 01:41:36 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,10 @@ int	check_redir_error(t_tok *tok)
 	return (0);
 }
 
-void	check_truc_path_bchabot(t_tok *tok, t_tok *env)
+void	is_tok_cmd(t_tok *tok, t_tok *env)
 {
-	//Faut trouver un bon nom
 	char	*str;
-	
+
 	str = get_path(env, tok->value);
 	if (str && is_regular_file(str))
 	{
@@ -65,7 +64,7 @@ int	clean_token_list(t_tok *head, t_tok *env)
 		replace_tok_value(&tok->key, "C");
 	while (tok)
 	{
-		check_truc_path_bchabot(tok, env);
+		is_tok_cmd(tok, env);
 		if (check_redir_error(tok))
 			return (1);
 		if (*tok->key == '|')

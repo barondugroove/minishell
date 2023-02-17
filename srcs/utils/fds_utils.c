@@ -1,33 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_env.c                                         :+:      :+:    :+:   */
+/*   fds_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/07 17:26:43 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 23:52:57 by benjamincha      ###   ########.fr       */
+/*   Created: 2023/02/17 02:36:33 by benjamincha       #+#    #+#             */
+/*   Updated: 2023/02/17 02:52:52 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_tok	*init_env(char **envp)
+void    close_multiple_fds(int fd[2])
 {
-	t_tok	*env_head;
-	char	*key;
-	char	*value;
-	int		i;
+    close(fd[0]);
+    close(fd[1]);
+}
 
-	i = 0;
-	env_head = NULL;
-	while (envp[i])
-	{
-		key = ft_strtok(envp[i], "=");
-		value = ft_strtok(NULL, "\0");
-		if (key && value)
-			newtoken_back(&env_head, ft_strdup(value), ft_strdup(key));
-		i++;
-	}
-	return (env_head);
+void    dup_multiple_fds(int fd[2], int fd_in, int fd_out)
+{
+    dup2(fd[0], fd_in);
+	dup2(fd[1], fd_out);
 }

@@ -3,19 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 23:21:57 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/16 23:07:15 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/16 23:58:53 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
 void	print_list(t_tok *head)
 {
-	// ATTENTION, A PAS LAISSER
 	t_tok	*tok;
 
 	tok = head;

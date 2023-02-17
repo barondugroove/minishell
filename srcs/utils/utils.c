@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 20:14:32 by rlaforge          #+#    #+#             */
-/*   Updated: 2023/02/16 23:05:37 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/16 23:54:56 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,18 +100,3 @@ char	**convert_envp(t_tok *head)
 	envp[i] = NULL;
 	return (envp);
 }
-
-/*
-void	print_list(t_tok *head)
-{
-	t_tok	*tok;
-
-	tok = head;
-	printf("PRINTLIST:\n");
-	while (tok)
-	{
-		printf("%s: %s$\n", tok->key, tok->value);
-		tok = tok->next;
-	}
-}
-*/

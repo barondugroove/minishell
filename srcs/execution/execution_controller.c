@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 01:50:52 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/17 02:52:49 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,47 +47,19 @@ void	execute_cmd(t_allocated *data, t_tok *cmds)
 	args = get_cmd(cmds);
 	status = check_directory(cmds->value);
 	if (status)
-		ft_exit(status);
+	{
+		free_tab(args);
+		ft_exit(data, status);
+	}
 	path = get_path(data->env, args[0]);
 	envp = convert_envp(data->env);
 	if (!path || (execve(path, args, envp) == -1))
 	{
-		ft_putstr_fd(cmds->value, 2);
-		ft_putstr_fd(": command not found", 2);
-		ft_putstr_fd("\n", 2);
+		no_cmd_msg(cmds->value, 127);
 		free(path);
 		free_tab(args);
 		free_tab(envp);
-		free_allocated(data);
-		exit(127);
-	}
-}
-
-void	duplicator(int *fd_pipe, int fd_save, int cmd_id, int cmd_nbr)
-{
-	if (cmd_id == 0)
-	{
-		if (dup2(fd_pipe[1], STDOUT_FILENO) == -1)
-			perror("dup2");
-		close(fd_pipe[0]);
-		close(fd_pipe[1]);
-	}
-	else if (cmd_id == cmd_nbr - 1)
-	{
-		if (dup2(fd_pipe[0], STDIN_FILENO) == -1)
-			perror("dup2");
-		close(fd_pipe[0]);
-		close(fd_pipe[1]);
-	}
-	else
-	{
-		if (dup2(fd_pipe[1], STDOUT_FILENO) == -1)
-			perror("dup2");
-		if (dup2(fd_save, STDIN_FILENO) == -1)
-			perror("dup2");
-		close(fd_save);
-		close(fd_pipe[0]);
-		close(fd_pipe[1]);
+		ft_exit(data, 127);
 	}
 }
 
@@ -102,8 +74,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 	if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1 && has_redir(cmd) != 2)
 	{
 		fd_save = dup(fd_pipe[0]);
-		close(fd_pipe[0]);
-		close(fd_pipe[1]);
+		close_multiple_fds(fd_pipe);
 		pipe(fd_pipe);
 	}
 	pid = fork();
@@ -118,8 +89,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 		if (is_builtin(cmd->value))
 		{
 			status = execute_builtins(data, cmd);
-			free_allocated(data);
-			exit(status);
+			ft_exit(data, status);
 		}
 		execute_cmd(data, cmd);
 	}
@@ -197,12 +167,27 @@ t_tok	*find_next_cmd(t_tok *cmds, int nbr)
 	return (cmds);
 }
 
+t_allocated	init_data(t_tok *env, t_tok *cmd_head)
+{
+	t_allocated	data;
+
+	data.env = env;
+	data.cmd_head = cmd_head;
+	data.cmd_nbr = nb_cmds(cmd_head);
+	data.pids = malloc(sizeof(int) * data.cmd_nbr);
+	if (data.cmd_nbr == 1)
+	{
+		data.fd_reset[0] = dup(0);
+		data.fd_reset[1] = dup(1);
+	}
+	return (data);
+}
+
 void	execution_controller(t_tok *env, t_tok *cmd_head)
 {
 	t_tok		*cmds;
 	t_allocated	data;
 	int			fd_pipe[2];
-	int			fd_reset[2];
 	int			status;
 	int			i;
 
@@ -210,18 +195,13 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 		return ;
 	i = 0;
 	cmds = cmd_head;
-	data.env = env;
-	data.cmd_head = cmd_head;
-	data.cmd_nbr = nb_cmds(cmds);
-	data.pids = malloc(sizeof(int) * data.cmd_nbr);
+	data = init_data(env, cmds);
 	if (data.cmd_nbr == 1)
 	{
-		fd_reset[0] = dup(0);
-		fd_reset[1] = dup(1);
 		execute_simple_command(&data, cmds);
 		free(data.pids);
-		dup2(fd_reset[0], 0);
-		dup2(fd_reset[1], 1);
+		dup_multiple_fds(data.fd_reset, 0, 1);
+		close_multiple_fds(data.fd_reset);
 		return ;
 	}
 	if (pipe(fd_pipe) == -1)
@@ -233,8 +213,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 		data.cmd_head = cmds;
 		i++;
 	}
-	close(fd_pipe[0]);
-	close(fd_pipe[1]);
+	close_multiple_fds(fd_pipe);
 	i = 0;
 	while (i < data.cmd_nbr)
 	{

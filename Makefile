@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+         #
+#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/02/16 23:10:11 by rlaforge         ###   ########.fr        #
+#    Updated: 2023/02/17 02:41:54 by benjamincha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SRCS = srcs/main.c \
 		srcs/utils/utils.c \
 		srcs/utils/list_utils.c \
 		srcs/utils/free_utils.c \
+		srcs/utils/fds_utils.c \
 		srcs/utils/error_msgs.c
 
 CC = @gcc

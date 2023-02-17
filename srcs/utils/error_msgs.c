@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 19:46:05 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 18:03:05 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/17 02:16:37 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	no_file_msg(char *file, int code)
 	ft_putstr_fd(file, 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
 	g_exit_code = code;
+	return ;
 }
 
 void	permission_denied_msg(char *file, int code)
@@ -26,6 +27,7 @@ void	permission_denied_msg(char *file, int code)
 	ft_putstr_fd(file, 2);
 	ft_putstr_fd(": Permission denied\n", 2);
 	g_exit_code = code;
+	return ;
 }
 
 void	is_dir_msg(char *file, int code)
@@ -34,6 +36,7 @@ void	is_dir_msg(char *file, int code)
 	ft_putstr_fd(file, 2);
 	ft_putstr_fd(": Is a directory\n", 2);
 	g_exit_code = code;
+	return ;
 }
 
 void	no_cmd_msg(char *file, int code)
@@ -41,6 +44,7 @@ void	no_cmd_msg(char *file, int code)
 	ft_putstr_fd(file, 2);
 	ft_putstr_fd(": command not found\n", 2);
 	g_exit_code = code;
+	return ;
 }
 
 void	error_message_export(char *arg)

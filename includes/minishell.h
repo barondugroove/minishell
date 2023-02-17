@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 23:13:26 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/17 02:43:05 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_allocated
 	t_tok			*cmd_head;
 	int				*pids;
 	int				cmd_nbr;
+	int				fd_reset[2];
 }					t_allocated;
 
 // BUILTINS
@@ -62,7 +63,7 @@ int					cd(char **args, t_tok *head);
 void				echo(char **args);
 int					unset(t_tok **env_head, char **key);
 int					exit_builtin(char **args, t_allocated *data);
-void				ft_exit(long long code);
+void				ft_exit(t_allocated *data, long long code);
 int					check_args(char **args);
 int					is_valid_number(const char *nptr);
 t_tok				*find_next_cmd(t_tok *cmds, int nbr);
@@ -78,10 +79,12 @@ void				handle_redirection(t_allocated *data, t_tok *cmd);
 int					has_redir(t_tok *cmds);
 char				*get_file(t_tok *cmds, int nbr);
 t_tok				*get_next_redir(t_tok *cmds);
-void				check_file(char *file, int dir);
+int					check_file(char *file, int dir);
 int					has_redir(t_tok *cmds);
 char				*get_file(t_tok *cmds, int nbr);
 int					redir_nbr(t_tok *cmds);
+void				duplicator(int *fd_pipe, int fd_save, \
+					int cmd_id, int cmd_nbr);
 
 // HEREDOC
 void				heredoc_process(t_allocated *data, t_tok *cmd);
@@ -101,7 +104,11 @@ void				replace_tok_value(char **val, char *new_val);
 // FREE_UTILS
 void				free_list(t_tok *head);
 void				free_tab(char **tab);
-void				free_allocated(t_allocated *truc);
+void				free_allocated(t_allocated *data);
+
+// FDS_UTILS
+void				dup_multiple_fds(int fd[2], int fd_in, int fd_out);
+void				close_multiple_fds(int fd[2]);
 
 // PARSING
 t_tok				*parsing_controller(t_tok *env, char **prompt);

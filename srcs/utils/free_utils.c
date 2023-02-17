@@ -6,17 +6,24 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:18:25 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/16 00:51:59 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/17 02:10:51 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	free_allocated(t_allocated *truc)
+void	free_allocated(t_allocated *data)
 {
-	free_list(truc->env);
-	free_list(truc->cmd_head);
-	free(truc->pids);
+	if (data->cmd_nbr == 1)
+	{
+		dup2(data->fd_reset[0], 0);
+		dup2(data->fd_reset[1], 1);
+		close(data->fd_reset[0]);
+		close(data->fd_reset[1]);
+	}
+	free_list(data->env);
+	free_list(data->cmd_head);
+	free(data->pids);
 }
 
 void	free_list(t_tok *head)
