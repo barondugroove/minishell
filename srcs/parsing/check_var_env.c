@@ -46,9 +46,10 @@ void	replace_var_env(t_tok *env, char **prompt, char *ptr)
 		end = ptr + 2;
 	}
 	else
-		value = ft_getenv(env, var + 1);
+		value = ft_strdup(ft_getenv(env, var + 1));
 	cat_var_to_prompt(prompt, ptr, value, end);
 	free(var);
+	free(value);
 }
 
 void	check_var_env(t_tok *env, char **prompt)

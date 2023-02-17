@@ -3,28 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 23:21:57 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/16 23:58:53 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/17 18:04:20 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	print_list(t_tok *head)
-{
-	t_tok	*tok;
-
-	tok = head;
-	printf("Printlist:\n");
-	while (tok)
-	{
-		printf("%s: %s$\n", tok->key, tok->value);
-		tok = tok->next;
-	}
-	printf("Output:\n");
-}
 
 void	replace_tok_value(char **val, char *new_val)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/17 02:52:49 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/17 18:04:10 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ void	execute_cmd(t_allocated *data, t_tok *cmds)
 	{
 		free_tab(args);
 		ft_exit(data, status);
+	}
+	if (data->cmd_nbr == 1)
+	{
+		close(data->fd_reset[0]);
+		close(data->fd_reset[1]);
 	}
 	path = get_path(data->env, args[0]);
 	envp = convert_envp(data->env);
@@ -156,9 +161,8 @@ t_tok	*find_next_cmd(t_tok *cmds, int nbr)
 	{
 		if (*cmds->key == *K_CMD)
 		{
-			if (i == nbr)
+			if (i++ == nbr)
 				break ;
-			i++;
 		}
 		cmds = cmds->next;
 	}
@@ -193,7 +197,6 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 
 	if (!cmd_head)
 		return ;
-	i = 0;
 	cmds = cmd_head;
 	data = init_data(env, cmds);
 	if (data.cmd_nbr == 1)
@@ -206,18 +209,18 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	}
 	if (pipe(fd_pipe) == -1)
 		printf("error pipe\n");
-	while (i < data.cmd_nbr)
+	i = -1;
+	while (++i < data.cmd_nbr)
 	{
 		cmds = find_next_cmd(cmds, i);
 		child_process(&data, cmds, fd_pipe, i);
 		data.cmd_head = cmds;
-		i++;
 	}
 	close_multiple_fds(fd_pipe);
-	i = 0;
-	while (i < data.cmd_nbr)
+	i = -1;
+	while (++i < data.cmd_nbr)
 	{
-		waitpid(data.pids[i++], &status, 0);
+		waitpid(data.pids[i], &status, 0);
 		if (WIFEXITED(status))
 			g_exit_code = WEXITSTATUS(status);
 	}

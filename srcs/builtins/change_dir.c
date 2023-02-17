@@ -3,40 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   change_dir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 20:08:33 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 23:59:45 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/17 18:04:14 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+static void	too_many_args(void)
+{
+	ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+	g_exit_code = 1;
+	return ;
+}
+
 void	set_pwd(t_tok *head, char *key, char *path)
 {
 	t_tok	*tmp;
 
+	if (!path)
+		return ;
 	tmp = head;
 	while (tmp && ft_strncmp(tmp->key, key, ft_strlen(key)) != 0)
 		tmp = tmp->next;
+	if (tmp == NULL)
+		return ;
 	free(tmp->value);
 	tmp->value = ft_strdup(path);
-}
-
-static void	no_file_directory(char *arg)
-{	
-	ft_putstr_fd("minishell: cd: ", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
-	g_exit_code = 1;
-	return ;
-}
-
-static void	too_many_args(void)
-{	
-	ft_putstr_fd("minishell: cd: too many arguments\n", 2);
-	g_exit_code = 1;
-	return ;
 }
 
 static int	args_nbr(char **args)
@@ -65,14 +60,17 @@ int	cd(char **args, t_tok *env)
 		getcwd(str, sizeof(str));
 		set_pwd(env, "PWD", str);
 		return (0);
-	}	
+	}
 	set_pwd(env, "OLDPWD", ft_getenv(env, "PWD"));
 	if (chdir(args[1]) < 0)
 	{
-		no_file_directory(args[1]);
+		no_file_msg(str, 1);
 		return (1);
 	}
-	getcwd(str, sizeof(str));
-	set_pwd(env, "PWD", str);
+	else
+	{
+		getcwd(str, sizeof(str));
+		set_pwd(env, "PWD", str);
+	}
 	return (0);
 }

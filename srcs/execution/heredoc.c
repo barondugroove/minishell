@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:22:58 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 23:57:01 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/17 18:04:17 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	heredoc_process(t_allocated *data, t_tok *cmd)
 		if (redir_nbr(cmd->next) == 0)
 			dup2(pipe_heredoc[0], 0);
 		close(pipe_heredoc[1]);
+		close(pipe_heredoc[0]);
 	}
 	signal(SIGINT, child_c_handler);
 	return ;

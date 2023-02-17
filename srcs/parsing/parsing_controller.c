@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/17 01:41:36 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/17 18:04:16 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ t_tok	*parsing_controller(t_tok *env, char **prompt)
 	{
 		if (*str == ERROR_CHAR)
 		{
-			parsing_error_msg(tok_head, "Parsing error: quote not closed\n");
+			parsing_error_msg(tok_head, \
+			"minishell : parsing error: quote not closed");
 			return (NULL);
 		}
 		add_token(&tok_head, str);
@@ -108,7 +109,7 @@ t_tok	*parsing_controller(t_tok *env, char **prompt)
 	}
 	if (clean_token_list(tok_head, env))
 	{
-		parsing_error_msg(tok_head, "syntax error\n");
+		parsing_error_msg(tok_head, "minishell : syntax error");
 		return (NULL);
 	}
 	return (tok_head);
