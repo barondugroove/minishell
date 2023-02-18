@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 22:48:01 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/17 02:31:42 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/18 20:33:32 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,30 +51,31 @@ int	right_test(char *command, int mode)
 	return (0);
 }
 
-int	check_directory(char *command)
+void	check_directory(char *command, char **args, t_allocated *data)
 {
-	int	status;
-
 	if ((command[0] == '/' || ft_strncmp(command, "./", 2) == 0) \
 		&& is_dir(command) == 1)
 	{
 		is_dir_msg(command, 126);
-		return (126);
+		free_tab(args);
+		ft_exit(data, 126);
 	}
 	else if (!access(command, F_OK) \
 		&& (command[0] == '/' || ft_strncmp(command, "./", 2) == 0))
 	{
-		status = right_test(command, S_IXUSR);
-		if (status)
-			return (status);
+		if (right_test(command, S_IXUSR))
+		{
+			free_tab(args);
+			ft_exit(data, 126);
+		}
 	}
 	else if (access(command, F_OK) == -1 && (command[0] == '/' \
 				|| ft_strncmp(command, "./", 2) == 0))
 	{
 		no_file_msg(command, 127);
-		return (127);
+		free_tab(args);
+		ft_exit(data, 127);
 	}
-	return (0);
 }
 
 int	check_file(char *file, int dir)

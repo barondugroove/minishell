@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/17 18:04:10 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/18 20:33:12 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	execute_builtins(t_allocated *data, t_tok *cmds)
 	char	**args;
 	int		status;
 
+	if (has_redir(cmds))
+		handle_redirection(data, cmds);
 	status = 0;
 	args = get_cmd(cmds);
 	if (is_builtin(cmds->value) == 1)
@@ -42,15 +44,11 @@ void	execute_cmd(t_allocated *data, t_tok *cmds)
 	char	**args;
 	char	**envp;
 	char	*path;
-	int		status;
 
+	if (has_redir(cmds))
+		handle_redirection(data, cmds);
 	args = get_cmd(cmds);
-	status = check_directory(cmds->value);
-	if (status)
-	{
-		free_tab(args);
-		ft_exit(data, status);
-	}
+	check_directory(cmds->value, args, data);
 	if (data->cmd_nbr == 1)
 	{
 		close(data->fd_reset[0]);
@@ -89,8 +87,6 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 	{
 		if (has_redir(cmd) != 2)
 			duplicator(fd_pipe, fd_save, cmd_id, data->cmd_nbr);
-		if (has_redir(cmd))
-			handle_redirection(data, cmd);
 		if (is_builtin(cmd->value))
 		{
 			status = execute_builtins(data, cmd);
@@ -127,8 +123,6 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 	signal(SIGINT, child_c_handler);
 	if (is_builtin(cmd->value))
 	{
-		if (has_redir(data->cmd_head))
-			handle_redirection(data, cmd);
 		g_exit_code = execute_builtins(data, cmd);
 		return (status);
 	}
@@ -136,11 +130,7 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 	if (pid == -1)
 		ft_putstr_fd("pid error", 2);
 	else if (pid == 0)
-	{
-		if (has_redir(data->cmd_head))
-			handle_redirection(data, cmd);
 		execute_cmd(data, cmd);
-	}
 	else
 	{
 		waitpid(pid, &status, 0);
@@ -159,11 +149,8 @@ t_tok	*find_next_cmd(t_tok *cmds, int nbr)
 		return (NULL);
 	while (cmds && *cmds->key != '|')
 	{
-		if (*cmds->key == *K_CMD)
-		{
-			if (i++ == nbr)
-				break ;
-		}
+		if (*cmds->key == *K_CMD && i++ == nbr)
+			break ;
 		cmds = cmds->next;
 	}
 	if (cmds && *cmds->key == '|')
@@ -203,7 +190,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	{
 		execute_simple_command(&data, cmds);
 		free(data.pids);
-		dup_multiple_fds(data.fd_reset, 0, 1);
+		//dup_multiple_fds(data.fd_reset, 0, 1);			//LIGNE INUTILE ??	Fait des Fds en trop sur une simple command. Tu dup des fds pour en close d'autres du coup ça décalle tout
 		close_multiple_fds(data.fd_reset);
 		return ;
 	}
@@ -214,7 +201,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	{
 		cmds = find_next_cmd(cmds, i);
 		child_process(&data, cmds, fd_pipe, i);
-		data.cmd_head = cmds;
+		//data.cmd_head = cmds;								//LIGNE INUTILE ??
 	}
 	close_multiple_fds(fd_pipe);
 	i = -1;
