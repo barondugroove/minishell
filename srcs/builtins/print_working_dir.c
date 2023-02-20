@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 19:32:16 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 14:47:26 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/20 20:00:28 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,16 @@ static void	invalid_option(char *arg)
 	return ;
 }
 
-int	pwd(t_tok *env, char **args)
+int	pwd(char **args)
 {
-	char	*str;
+	char	str[4096];
 
 	if (args[1] && args[1][0] == '-' && ft_strncmp(args[1], "-LP", 4) != 0)
 	{
 		invalid_option(args[1]);
 		return (1);
 	}
-	str = ft_strdup(ft_getenv(env, "PWD"));
+	getcwd(str, sizeof(str));
 	printf("%s\n", str);
-	free(str);
 	return (0);
 }

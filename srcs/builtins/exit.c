@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:17:14 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/16 23:43:26 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/20 19:58:39 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ int	exit_builtin(char **args, t_allocated *data)
 	long long	arg_nbr;
 	int			status;
 
-	g_exit_code = 0;
 	if (!args[1])
 	{
 		free_tab(args);
-		ft_exit(data, 0);
+		ft_exit(data, g_exit_code);
 	}
+	g_exit_code = 0;
 	status = check_args(args);
 	if (status)
 		return (status);

@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 20:08:33 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/17 18:04:14 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/20 19:57:07 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,13 @@ int	cd(char **args, t_tok *env)
 		set_pwd(env, "PWD", str);
 		return (0);
 	}
-	set_pwd(env, "OLDPWD", ft_getenv(env, "PWD"));
 	if (chdir(args[1]) < 0)
 	{
 		no_file_msg(str, 1);
 		return (1);
 	}
-	else
-	{
-		getcwd(str, sizeof(str));
-		set_pwd(env, "PWD", str);
-	}
+	set_pwd(env, "OLDPWD", getcwd(str, sizeof(str)));
+	getcwd(str, sizeof(str));
+	set_pwd(env, "PWD", str);
 	return (0);
 }

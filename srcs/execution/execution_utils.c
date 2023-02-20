@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/19 14:11:42 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/20 20:03:42 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*get_path(t_tok *env_tok, char *cmd)
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
 		str = ft_strdup(cmd);
-		if (!access(str, X_OK))
+		if (!access(str, X_OK) && is_regular_file(str))
 			return (str);
 		free(str);
 		return (NULL);

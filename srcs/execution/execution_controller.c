@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 16:53:50 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/20 20:10:20 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	execute_builtins(t_allocated *data, t_tok *cmds)
 	else if (is_builtin(cmds->value) == 2)
 		echo(args);
 	else if (is_builtin(cmds->value) == 3)
-		status = pwd(data->env, args);
+		status = pwd(args);
 	else if (is_builtin(cmds->value) == 4)
 		status = export(&data->env, args);
 	else if (is_builtin(cmds->value) == 5)
@@ -105,7 +105,6 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 	}
 	else if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1)
 		close(fd_save);
-
 	data->pids[cmd_id] = pid;
 }
 
@@ -211,7 +210,6 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	{
 		cmds = find_next_cmd(cmds, i);
 		child_process(&data, cmds, fd_pipe, i);
-		//data.cmd_head = cmds;								//LIGNE INUTILE ??
 	}
 	close_multiple_fds(fd_pipe);
 	i = -1;

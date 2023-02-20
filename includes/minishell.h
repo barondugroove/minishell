@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 16:53:07 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/20 20:07:10 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void			sort_export(t_tok **env_head);
 int				has_equal(char *arg);
 void			print_env(t_tok **head);
 t_tok			*dup_env(t_tok **env_head);
-int				pwd(t_tok *env, char **args);
+int				pwd(char **args);
 int				cd(char **args, t_tok *head);
 void			echo(char **args);
 int				unset(t_tok **env_head, char **key);
