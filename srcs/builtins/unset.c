@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:41:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/09 19:23:45 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/20 20:37:17 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,16 @@ int	check_errors_unset(char *arg)
 		return (1);
 	while (arg[i])
 	{
-		if ((!ft_isalpha(arg[i]) && i == 0) || arg[i] <= 32)
+		if ((!ft_isalpha(arg[i]) && i == 0 && arg[i] != '_') || arg[i] <= 32)
 		{
 			error_message_unset(arg);
 			return (1);
 		}
-		else if ((ft_isdigit(arg[i]) && i == 0))
+		else if ((!ft_isalpha(arg[i]) && arg[0] != '_'))
+		{
+			error_message_unset(arg);
 			return (1);
+		}
 		i++;
 	}
 	return (0);
