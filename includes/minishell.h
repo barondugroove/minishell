@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/18 20:40:33 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/20 16:53:07 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char			*c_to_str(char c);
 char			*strjoin_pipex(char *s1, char *s2);
 char			*ft_getenv(t_tok *env_head, char *key);
 void			set_pwd(t_tok *head, char *key, char *path);
-void			child_c_handler(int sig);
+void			child_signal_controller(void);
 char			*test_relative_path(t_tok *env_tok, char *cmd);
 
 // ERROR MESSAGES

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/17 18:04:12 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/20 16:52:57 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ void	child_c_handler(int sig)
 {
 	(void)sig;
 	g_exit_code = 130;
-	printf("\n");
+	printf("proutix\n");
+}
+
+void	child_signal_controller(void)
+{
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, child_c_handler);
 }
 
 void	ctrl_c_handler(int sig)

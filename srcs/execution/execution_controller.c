@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 14:13:47 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/20 16:53:50 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+
+void	ft_ctrl_back_child(int sig)
+{
+	(void)sig;
+	g_exit_code = 139;
+
+	printf("Quit (core dumped)\n");
+}
 
 int	execute_builtins(t_allocated *data, t_tok *cmds)
 {
@@ -73,7 +82,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 	int	fd_save;
 
 	fd_save = -1;
-	signal(SIGINT, SIG_DFL);
+
 	if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1 && has_redir(cmd) != 2)
 	{
 		fd_save = dup(fd_pipe[0]);
@@ -96,7 +105,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 	}
 	else if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1)
 		close(fd_save);
-	signal(SIGINT, child_c_handler);
+
 	data->pids[cmd_id] = pid;
 }
 
@@ -120,7 +129,8 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 	int	status;
 
 	status = 0;
-	signal(SIGINT, child_c_handler);
+
+	child_signal_controller();
 	if (is_builtin(cmd->value))
 	{
 		g_exit_code = execute_builtins(data, cmd);
