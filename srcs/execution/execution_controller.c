@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/18 20:33:12 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/20 14:13:47 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	{
 		execute_simple_command(&data, cmds);
 		free(data.pids);
-		//dup_multiple_fds(data.fd_reset, 0, 1);			//LIGNE INUTILE ??	Fait des Fds en trop sur une simple command. Tu dup des fds pour en close d'autres du coup ça décalle tout
+		dup_multiple_fds(data.fd_reset, 0, 1);
 		close_multiple_fds(data.fd_reset);
 		return ;
 	}

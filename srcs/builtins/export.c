@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/16 18:29:11 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/19 23:52:05 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ int	check_errors_export(char *arg)
 	int	i;
 
 	i = 0;
-	if (!arg)
+	if (!arg || arg[0] == '+')
 	{
 		error_message_export(arg);
 		return (1);
 	}
-	while (arg[i])
+	while (arg[i] && arg[i] != '=')
 	{
 		if ((!ft_isalpha(arg[i]) && i == 0) || arg[i] <= 32)
 		{
@@ -61,9 +61,11 @@ int	add_existing_var(t_tok **env, char *arg)
 	t_tok	*tmp;
 	char	*key;
 	char	*value;
+	char	*arg_copy;
 
 	tmp = *env;
-	key = ft_strtok(arg, "+=");
+	arg_copy = ft_strdup(arg);
+	key = ft_strtok(arg_copy, "+=");
 	value = ft_strtok(NULL, "\0");
 	if (check_errors_export(key))
 		return (1);
@@ -77,10 +79,12 @@ int	add_existing_var(t_tok **env, char *arg)
 				tmp->value = ft_strdup("\0");
 			else if (!tmp->value)
 				tmp->value = ft_strdup(value);
+			free(arg_copy);	
 			return (0);
 		}
 		tmp = tmp->next;
 	}
+	free(arg_copy);
 	return (1);
 }
 
@@ -92,24 +96,25 @@ int	add_var(t_tok **env, char *args)
 	int		status;
 
 	arg_copy = ft_strdup(args);
-	key = ft_strtok(arg_copy, "+=");
+	key = ft_strtok(arg_copy, "=");
 	value = ft_strtok(NULL, "\0");
 	status = 0;
-	if (check_errors_export(key))
+	if (check_errors_export(ft_strtok(key, "+")))
 		return (1);
 	if (is_existing(env, key))
-		status = add_existing_var(env, arg_copy);
-	if (!value)
-		newtoken_back(env, ft_strdup("\x7F"), ft_strdup(key));
-	else
+		status = add_existing_var(env, args);
+	else if (!value && has_equal(args) == 1)
+		newtoken_back(env, ft_strdup("\0"), ft_strdup(key));
+	else if (value && has_equal(args))
 		newtoken_back(env, ft_strdup(value), ft_strdup(key));
+	else
+		newtoken_back(env, ft_strdup("\x7F"), ft_strdup(key));
 	free(arg_copy);
 	return (status);
 }
 
 int	export(t_tok **env, char **args)
 {
-	char	*key;
 	int		i;
 	int		status;
 
@@ -118,11 +123,6 @@ int	export(t_tok **env, char **args)
 	if (!args[1])
 		print_export(*env);
 	while (args[++i])
-	{
-		key = ft_strtok(args[i], "+=");
-		if (check_errors_export(key))
-			return (1);
 		status = add_var(env, args[i]);
-	}
 	return (status);
 }

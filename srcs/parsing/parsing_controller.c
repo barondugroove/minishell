@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/17 18:04:16 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/20 00:01:44 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ int	clean_token_list(t_tok *head, t_tok *env)
 	t_tok	*tok;
 
 	tok = head;
-	if (*tok->key == '|')
+	if (tok && *tok->key == '|')
 		return (1);
-	if (*tok->key != '<' && *tok->key != '>')
+	if (tok && *tok->key != '<' && *tok->key != '>')
 		replace_tok_value(&tok->key, "C");
 	while (tok)
 	{
