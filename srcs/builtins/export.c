@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/19 23:52:05 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/20 15:25:44 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	print_export(t_tok *head)
 	tok = head;
 	while (tok)
 	{
-		if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0)
+		if (ft_strncmp(tok->key, "_", 2) != 0
 			&& tok->value && *tok->value != '\x7F')
 			printf("declare -x %s=\"%s\"\n", tok->key, tok->value);
-		else if (ft_strncmp(tok->key, "_", ft_strlen(tok->key) != 0))
+		else if (ft_strncmp(tok->key, "_", 2) != 0)
 			printf("declare -x %s\n", tok->key);
 		tok = tok->next;
 	}
@@ -41,12 +41,12 @@ int	check_errors_export(char *arg)
 	}
 	while (arg[i] && arg[i] != '=')
 	{
-		if ((!ft_isalpha(arg[i]) && i == 0) || arg[i] <= 32)
+		if ((!ft_isalpha(arg[i]) && i == 0 && arg[i] != '_') || arg[i] <= 32)
 		{
 			error_message_export(arg);
 			return (1);
 		}
-		else if ((!ft_isalpha(arg[i]) && arg[i] != '_'))
+		else if ((!ft_isalpha(arg[i]) && arg[0] != '_'))
 		{
 			error_message_export(arg);
 			return (1);
@@ -79,7 +79,7 @@ int	add_existing_var(t_tok **env, char *arg)
 				tmp->value = ft_strdup("\0");
 			else if (!tmp->value)
 				tmp->value = ft_strdup(value);
-			free(arg_copy);	
+			free(arg_copy);
 			return (0);
 		}
 		tmp = tmp->next;

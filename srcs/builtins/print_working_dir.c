@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   print_working_dir.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 19:32:16 by bchabot           #+#    #+#             */
-/*   Updated: 2023/01/25 16:34:33 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/20 14:47:26 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 static void	invalid_option(char *arg)
-{	
+{
 	ft_putstr_fd("minishell: pwd: ", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd(": invalid option\npwd: usage: pwd [-LP]\n", 2);
