@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 16:52:57 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/20 17:01:29 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	child_c_handler(int sig)
 {
 	(void)sig;
 	g_exit_code = 130;
-	printf("proutix\n");
+	printf("\n");
 }
 
 void	child_signal_controller(void)

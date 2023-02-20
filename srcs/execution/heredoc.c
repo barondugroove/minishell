@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:22:58 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 16:08:32 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/20 17:01:23 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	ft_ctrl_c_heredoc(int sig)
 	(void)sig;
 	g_exit_code = 130;
 
-	printf("toto\n");
+	// SIGNALS IN HEREDOC NOT FINISHED
+	printf("CTRL C IN HEREDOC\n");
 
 	close(0);
 }
