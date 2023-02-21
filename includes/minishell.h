@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 16:36:04 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 20:55:20 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,86 +53,90 @@ typedef struct s_allocated
 }					t_allocated;
 
 // BUILTINS
-int				export(t_tok **head, char **args);
-int				is_existing(t_tok **env, char *arg);
-void			sort_export(t_tok **env_head);
-int				has_equal(char *arg);
-void			print_env(t_tok **head);
-t_tok			*dup_env(t_tok **env_head);
-int				pwd(char **args);
-int				cd(char **args, t_tok *head);
-void			echo(char **args);
-int				unset(t_tok **env_head, char **key);
-int				exit_builtin(char **args, t_allocated *data);
-void			ft_exit(t_allocated *data, long long code);
-int				check_args(char **args);
-int				is_valid_number(const char *nptr);
-t_tok			*find_next_cmd(t_tok *cmds, int nbr);
+int			export(t_tok **head, char **args);
+int			is_existing(t_tok **env, char *arg);
+void		sort_export(t_tok **env_head);
+int			has_equal(char *arg);
+void		print_env(t_tok **head);
+t_tok		*dup_env(t_tok **env_head);
+int			pwd(char **args);
+int			cd(char **args, t_tok *head);
+void		echo(char **args);
+int			unset(t_tok **env_head, char **key);
+int			exit_builtin(char **args, t_allocated *data);
+void		ft_exit(t_allocated *data, long long code);
+int			check_args(char **args);
+int			is_valid_number(const char *nptr);
+t_tok		*find_next_cmd(t_tok *cmds, int nbr);
 
 // EXECUTION
-void			execution_controller(t_tok *env, t_tok *tok_head, char **prompt);
-int				has_pipe(t_tok *cmds);
-int				is_regular_file(const char *path);
-void			check_directory(char *command, char **args, t_allocated *data);
+void		execution_controller(t_tok *env, t_tok *head, char **prompt);
+int			has_pipe(t_tok *cmds);
+int			is_regular_file(const char *path);
+void		check_directory(char *command, char **args, t_allocated *data);
+void		child_process(t_allocated *data, t_tok *cmd, \
+			int *fd_pipe, int cmd_id);
+int			execute_builtins(t_allocated *data, t_tok *cmds, int mode);
+void		execute_cmd(t_allocated *data, t_tok *cmds, int mode);
 
 // REDIRECTION
-void			handle_redirection(t_allocated *data, t_tok *cmd, int mode);
-int				has_redir(t_tok *cmds);
-int				redir_start(t_tok *cmd);
-char			*get_file(t_tok *cmds, int nbr);
-t_tok			*get_next_redir(t_tok *cmds);
-int				check_file(char *file, int dir);
-int				has_redir(t_tok *cmds);
-char			*get_file(t_tok *cmds, int nbr);
-int				redir_nbr(t_tok *cmds);
-void			duplicator(int *fd_pipe, int fd_save, int cmd_id, int cmd_nbr);
+void		handle_redirection(t_allocated *data, t_tok *cmd, int mode);
+int			has_redir(t_tok *cmds);
+int			redir_start(t_tok *cmd);
+char		*get_file(t_tok *cmds, int nbr);
+t_tok		*get_next_redir(t_tok *cmds);
+int			check_file(char *file, int dir);
+int			has_redir(t_tok *cmds);
+char		*get_file(t_tok *cmds, int nbr);
+int			redir_nbr(t_tok *cmds);
+void		duplicator(int *fd_pipe, int fd_save, int cmd_id, int cmd_nbr);
 
 // HEREDOC
-void			heredoc_process(t_allocated *data, t_tok *cmd);
+void		heredoc_process(t_allocated *data, t_tok *cmd);
 
 // EXECUTION_UTILS
-int				nb_cmds(t_tok *cmds);
-char			**get_cmd(t_tok *cmds);
-int				is_builtin(char *cmd);
-char			*get_path(t_tok *env_tok, char *cmd);
-char			**convert_envp(t_tok *head);
+int			nb_cmds(t_tok *cmds);
+char		**get_cmd(t_tok *cmds);
+int			is_builtin(char *cmd);
+char		*get_path(t_tok *env_tok, char *cmd);
+char		**convert_envp(t_tok *head);
 
 // LIST_UTILS
-t_tok			*newtoken(char *data, char *key);
-void			newtoken_back(t_tok **head, char *data, char *key);
-void			replace_tok_value(char **val, char *new_val);
+t_tok		*newtoken(char *data, char *key);
+void		newtoken_back(t_tok **head, char *data, char *key);
+void		replace_tok_value(char **val, char *new_val);
 
 // FREE_UTILS
-void			free_list(t_tok *head);
-void			free_tab(char **tab);
-void			free_allocated(t_allocated *data);
+void		free_list(t_tok *head);
+void		free_tab(char **tab);
+void		free_allocated(t_allocated *data);
 
 // FDS_UTILS
-void			dup_multiple_fds(int fd[2], int fd_in, int fd_out);
-void			close_multiple_fds(int fd[2]);
+void		dup_multiple_fds(int fd[2], int fd_in, int fd_out);
+void		close_multiple_fds(int fd[2]);
 
 // PARSING
-t_tok			*parsing_controller(t_tok *env, char **prompt);
-char			*tokenizer(char *str);
-void			add_token(t_tok **tok_head, char *str);
-void			check_var_env(t_tok *env, char **prompt);
+t_tok		*parsing_controller(t_tok *env, char **prompt);
+char		*tokenizer(char *str);
+void		add_token(t_tok **tok_head, char *str);
+void		check_var_env(t_tok *env, char **prompt);
 
 // UTILS
-t_tok			*init_env(char **envp);
-void			print_list(t_tok *head);
-char			*c_to_str(char c);
-char			*strjoin_pipex(char *s1, char *s2);
-char			*ft_getenv(t_tok *env_head, char *key);
-void			set_pwd(t_tok *head, char *key, char *path);
-void			child_signal_controller(void);
-char			*test_relative_path(t_tok *env_tok, char *cmd);
+t_tok		*init_env(char **envp);
+void		print_list(t_tok *head);
+char		*c_to_str(char c);
+char		*strjoin_pipex(char *s1, char *s2);
+char		*ft_getenv(t_tok *env_head, char *key);
+void		set_pwd(t_tok *head, char *key, char *path);
+void		child_signal_controller(void);
+char		*test_relative_path(t_tok *env_tok, char *cmd);
 
 // ERROR MESSAGES
-void			no_file_msg(char *file, int code);
-void			permission_denied_msg(char *file, int code);
-void			is_dir_msg(char *file, int code);
-void			no_cmd_msg(char *file, int code);
-void			numeric_argument_required(char *arg);
-void			error_message_export(char *arg);
+void		no_file_msg(char *file, int code);
+void		permission_denied_msg(char *file, int code);
+void		is_dir_msg(char *file, int code);
+void		no_cmd_msg(char *file, int code);
+void		numeric_argument_required(char *arg);
+void		error_message_export(char *arg);
 
 #endif

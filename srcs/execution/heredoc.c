@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:22:58 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 18:40:33 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 20:28:40 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	ft_ctrl_c_heredoc(int sig)
 {
 	(void)sig;
 	g_exit_code = 130;
-	// SIGNALS IN HEREDOC NOT FINISHED
-	printf("CTRL C IN HEREDOC\n");
 	close(0);
 }
 

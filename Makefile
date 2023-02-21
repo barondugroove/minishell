@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
+#    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/02/17 02:41:54 by benjamincha      ###   ########.fr        #
+#    Updated: 2023/02/21 20:49:15 by bchabot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS = srcs/main.c \
 		srcs/execution/execution_utils.c \
 		srcs/execution/redirections.c \
 		srcs/execution/redirections_utils.c \
+		srcs/execution/execute_with_pipes.c \
 		srcs/execution/heredoc.c \
 		srcs/execution/check_files.c \
 		srcs/builtins/export.c \

@@ -6,26 +6,11 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 17:57:33 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 20:32:38 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-
-void	print_list(t_tok *head)
-{
-	t_tok	*tok;
-	tok = head;
-	printf("\nPRINTLIST:\n");
-	while (tok)
-	{
-		printf("%s: %s$\n", tok->key, tok->value);
-		tok = tok->next;
-	}
-	printf("--------------------\n");
-}
-
 
 int	check_redir_error(t_tok *tok)
 {
