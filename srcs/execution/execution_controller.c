@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 16:38:23 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 19:08:27 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ void	execute_cmd(t_allocated *data, t_tok *cmds, int mode)
 	char	**envp;
 	char	*path;
 
-	if (has_redir(cmds))
-		handle_redirection(data, cmds, mode);
+	handle_redirection(data, cmds, mode);
 	args = get_cmd(cmds);
 	check_directory(cmds->value, args, data);
 	if (data->cmd_nbr == 1)
@@ -81,8 +80,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 
 	fd_save = -1;
 
-	if (has_redir(cmd) == 2)
-		heredoc_process(data, cmd);
+	heredoc_process(data, cmd);
 	if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1)
 	{
 		fd_save = dup(fd_pipe[0]);
@@ -129,6 +127,7 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 	status = 0;
 
 	child_signal_controller();
+	heredoc_process(data, cmd);
 	if (is_builtin(cmd->value))
 	{
 		g_exit_code = execute_builtins(data, cmd, 0);
@@ -195,7 +194,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head, char **prompt)
 		return ;
 	cmds = cmd_head;
 	data = init_data(env, cmds, prompt);
-	if (data.cmd_nbr == 1)
+	if (data.cmd_nbr <= 1)
 	{
 		execute_simple_command(&data, cmds);
 		free(data.pids);

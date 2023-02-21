@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:22:58 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 12:46:41 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 18:40:33 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void	heredoc_process(t_allocated *data, t_tok *cmd)
 	int		pid;
 	t_tok	*tmp;
 
+	if (has_redir(cmd) != 2)
+		return ;
 	pipe(pipe_heredoc);
 	if (redir_start(data->cmd_head))
 		tmp = get_next_redir(data->cmd_head);

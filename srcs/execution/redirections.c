@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/21 11:28:32 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/21 18:40:37 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,16 @@ void	handle_redirection(t_allocated *data, t_tok *cmd, int mode)
 	int		status;
 	t_tok	*tmp;
 
+
 	status = 0;
 	if (redir_start(data->cmd_head))
 		tmp = get_next_redir(data->cmd_head);
 	else
 		tmp = get_next_redir(cmd);
+
+	if (!has_redir(tmp))
+		return ;
+
 	nbr = redir_nbr(tmp);
 	while (nbr--)
 	{

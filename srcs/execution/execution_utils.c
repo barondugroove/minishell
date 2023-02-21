@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:12:33 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/20 20:03:42 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 18:06:06 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ int	nb_cmds(t_tok *cmds)
 			i++;
 		tmp = tmp->next;
 	}
-	if (i == 0)
-		no_cmd_msg(cmds->key, 127);
 	return (i);
 }
 
