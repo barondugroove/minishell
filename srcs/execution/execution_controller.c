@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 20:10:20 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 11:30:10 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	ft_ctrl_back_child(int sig)
 	printf("Quit (core dumped)\n");
 }
 
-int	execute_builtins(t_allocated *data, t_tok *cmds)
+int	execute_builtins(t_allocated *data, t_tok *cmds, int mode)
 {
 	char	**args;
 	int		status;
 
 	if (has_redir(cmds))
-		handle_redirection(data, cmds);
+		handle_redirection(data, cmds, mode);
 	status = 0;
 	args = get_cmd(cmds);
 	if (is_builtin(cmds->value) == 1)
@@ -48,14 +48,14 @@ int	execute_builtins(t_allocated *data, t_tok *cmds)
 	return (status);
 }
 
-void	execute_cmd(t_allocated *data, t_tok *cmds)
+void	execute_cmd(t_allocated *data, t_tok *cmds, int mode)
 {
 	char	**args;
 	char	**envp;
 	char	*path;
 
 	if (has_redir(cmds))
-		handle_redirection(data, cmds);
+		handle_redirection(data, cmds, mode);
 	args = get_cmd(cmds);
 	check_directory(cmds->value, args, data);
 	if (data->cmd_nbr == 1)
@@ -83,7 +83,9 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 
 	fd_save = -1;
 
-	if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1 && has_redir(cmd) != 2)
+	if (has_redir(cmd) == 2)
+		heredoc_process(data, cmd);
+	if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1) // && has_redir(cmd) != 2)
 	{
 		fd_save = dup(fd_pipe[0]);
 		close_multiple_fds(fd_pipe);
@@ -94,14 +96,14 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 		ft_putstr_fd("pid error", 2);
 	else if (pid == 0)
 	{
-		if (has_redir(cmd) != 2)
+		// if (has_redir(cmd) != 2)
 			duplicator(fd_pipe, fd_save, cmd_id, data->cmd_nbr);
 		if (is_builtin(cmd->value))
 		{
-			status = execute_builtins(data, cmd);
+			status = execute_builtins(data, cmd, 1);
 			ft_exit(data, status);
 		}
-		execute_cmd(data, cmd);
+		execute_cmd(data, cmd, 1);
 	}
 	else if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1)
 		close(fd_save);
@@ -132,14 +134,14 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 	child_signal_controller();
 	if (is_builtin(cmd->value))
 	{
-		g_exit_code = execute_builtins(data, cmd);
+		g_exit_code = execute_builtins(data, cmd, 0);
 		return (status);
 	}
 	pid = fork();
 	if (pid == -1)
 		ft_putstr_fd("pid error", 2);
 	else if (pid == 0)
-		execute_cmd(data, cmd);
+		execute_cmd(data, cmd, 0);
 	else
 	{
 		waitpid(pid, &status, 0);

@@ -6,11 +6,27 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 14:47:47 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/15 22:48:49 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/21 01:53:16 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	redir_start(t_tok *cmd)
+{
+	t_tok	*tmp;
+
+	tmp = cmd;
+	while (tmp)
+	{
+		if (*tmp->key == '<' || *tmp->key == '>')
+			return (1);
+		else if (*tmp->key == *K_CMD)
+			return (0);
+		tmp = tmp->next;
+	}
+	return (0);
+}
 
 int	has_redir(t_tok *cmds)
 {

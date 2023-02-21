@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 15:25:44 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 02:20:13 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	check_errors_export(char *arg)
 			error_message_export(arg);
 			return (1);
 		}
-		else if ((!ft_isalpha(arg[i]) && arg[0] != '_'))
+		else if ((!ft_isalpha(arg[i]) && ft_isdigit(arg[i]) && !ft_isalpha(arg[0]) && arg[0] != '_'))
 		{
 			error_message_export(arg);
 			return (1);

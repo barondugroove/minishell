@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:22:58 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 17:01:23 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/21 02:03:54 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,18 @@ void	heredoc_process(t_allocated *data, t_tok *cmd)
 {
 	int		pipe_heredoc[2];
 	int		pid;
+	t_tok	*tmp;
 
 	pipe(pipe_heredoc);
+	if (redir_start(data->cmd_head))
+		tmp = get_next_redir(data->cmd_head);
+	else
+		tmp = get_next_redir(cmd);
 	pid = fork();
 	if (pid == -1)
 		ft_putstr_fd("pid error", 2);
 	else if (pid == 0)
-		launch_heredoc(data, cmd->next->value, pipe_heredoc);
+		launch_heredoc(data, tmp->next->value, pipe_heredoc);
 	else
 	{
 		wait_heredoc(pid);

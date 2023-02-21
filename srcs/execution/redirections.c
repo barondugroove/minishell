@@ -6,7 +6,7 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/17 02:46:58 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/21 11:28:32 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,23 +77,7 @@ int	set_redir_in(t_tok *cmd, t_tok *tmp, int dir)
 	return (0);
 }
 
-int	redir_start(t_tok *cmd)
-{
-	t_tok	*tmp;
-
-	tmp = cmd;
-	while (tmp)
-	{
-		if (*tmp->key == '<' || *tmp->key == '>')
-			return (1);
-		else if (*tmp->key == *K_CMD)
-			return (0);
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
-void	handle_redirection(t_allocated *data, t_tok *cmd)
+void	handle_redirection(t_allocated *data, t_tok *cmd, int mode)
 {
 	int		nbr;
 	int		status;
@@ -107,7 +91,7 @@ void	handle_redirection(t_allocated *data, t_tok *cmd)
 	nbr = redir_nbr(tmp);
 	while (nbr--)
 	{
-		if (has_redir(tmp) == 2)
+		if (has_redir(tmp) == 2 && mode == 0)
 			heredoc_process(data, tmp);
 		if (has_redir(tmp) > 2)
 			status = set_redir_out(tmp, has_redir(tmp));

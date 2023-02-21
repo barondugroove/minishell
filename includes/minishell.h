@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 20:07:10 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 03:05:13 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,9 @@ int				is_regular_file(const char *path);
 void			check_directory(char *command, char **args, t_allocated *data);
 
 // REDIRECTION
-void			handle_redirection(t_allocated *data, t_tok *cmd);
+void			handle_redirection(t_allocated *data, t_tok *cmd, int mode);
 int				has_redir(t_tok *cmds);
+int				redir_start(t_tok *cmd);
 char			*get_file(t_tok *cmds, int nbr);
 t_tok			*get_next_redir(t_tok *cmds);
 int				check_file(char *file, int dir);
