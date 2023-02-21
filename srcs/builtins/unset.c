@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:41:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 02:19:51 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/21 16:11:29 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,22 @@ static void	error_message_unset(char *arg)
 
 void	remove_node(t_tok **head, t_tok *node_to_remove)
 {
-	t_tok	*current;
+	t_tok	*buf;
 
-	current = *head;
+	buf = *head;
 	if (*head == NULL || node_to_remove == NULL)
 		return ;
-	if (*head == node_to_remove)
+	if (*head == node_to_remove && node_to_remove->next)
 	{
-		*head = node_to_remove->next;
+		*head = (*head)->next;
+		free(buf->key);
+		free(buf->value);
+		free(buf);
 		return ;
 	}
-	while (current->next != node_to_remove && current->next)
-		current = current->next;
-	current->next = node_to_remove->next;
+	while (buf->next && buf->next != node_to_remove)
+		buf = buf->next;
+	buf->next = node_to_remove->next;
 	free(node_to_remove->key);
 	free(node_to_remove->value);
 	free(node_to_remove);
@@ -44,22 +47,21 @@ int	check_errors_unset(char *arg)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	if (!arg)
 		return (1);
-	while (arg[i])
+	while (arg[++i])
 	{
-		if ((!ft_isalpha(arg[i]) && i == 0 && arg[i] != '_') || arg[i] <= 32)
+		if ((!ft_isalpha(arg[i]) && arg[0] != '_') || arg[i] <= 32)
 		{
 			error_message_unset(arg);
 			return (1);
 		}
-		else if ((!ft_isalpha(arg[i]) && ft_isdigit(arg[i]) && !ft_isalpha(arg[0]) && arg[0] != '_'))
+		else if (ft_isdigit(arg[i]) && !ft_isalpha(arg[0]) && arg[0] != '_')
 		{
 			error_message_unset(arg);
 			return (1);
 		}
-		i++;
 	}
 	return (0);
 }
@@ -70,14 +72,14 @@ int	unset(t_tok **env_head, char **key)
 	int		i;
 
 	tmp = *env_head;
-	i = 1;
-	while (key[i])
+	i = 0;
+	while (key[++i])
 	{
 		while (tmp)
 		{
 			if (check_errors_unset(key[i]))
 				return (1);
-			if (ft_strncmp(tmp->key, key[i], ft_strlen(tmp->key)) == 0)
+			if (!ft_strcmp(tmp->key, key[i]))
 			{
 				remove_node(env_head, tmp);
 				tmp = *env_head;
@@ -86,7 +88,6 @@ int	unset(t_tok **env_head, char **key)
 			else
 				tmp = tmp->next;
 		}
-		i++;
 	}
 	return (0);
 }

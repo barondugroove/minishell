@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 03:05:13 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/21 16:36:04 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define K_QUO "'"
 # define K_DQUO "\""
 
-extern int			g_exit_code;
+extern int	g_exit_code;
 
 typedef struct s_tok
 {
@@ -44,11 +44,12 @@ typedef struct s_tok
 
 typedef struct s_allocated
 {
-	t_tok			*env;
-	t_tok			*cmd_head;
-	int				*pids;
-	int				cmd_nbr;
-	int				fd_reset[2];
+	t_tok	*env;
+	t_tok	*cmd_head;
+	char	**prompt;
+	int		*pids;
+	int		cmd_nbr;
+	int		fd_reset[2];
 }					t_allocated;
 
 // BUILTINS
@@ -69,7 +70,7 @@ int				is_valid_number(const char *nptr);
 t_tok			*find_next_cmd(t_tok *cmds, int nbr);
 
 // EXECUTION
-void			execution_controller(t_tok *env, t_tok *tok_head);
+void			execution_controller(t_tok *env, t_tok *tok_head, char **prompt);
 int				has_pipe(t_tok *cmds);
 int				is_regular_file(const char *path);
 void			check_directory(char *command, char **args, t_allocated *data);

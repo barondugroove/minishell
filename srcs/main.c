@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 20:15:48 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 16:37:32 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ void	minishell(char **envp)
 		{
 			add_history(prompt);
 			cmds = parsing_controller(env, &prompt);
-			execution_controller(env, cmds);
+			execution_controller(env, cmds, &prompt);
 			free_list(cmds);
 		}
+		free(prompt);
 	}
 	free_list(env);
 	printf("exit\n");

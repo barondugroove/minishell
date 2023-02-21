@@ -3,21 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 11:30:10 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/21 16:38:23 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
 void	ft_ctrl_back_child(int sig)
 {
 	(void)sig;
 	g_exit_code = 139;
-
 	printf("Quit (core dumped)\n");
 }
 
@@ -85,7 +83,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 
 	if (has_redir(cmd) == 2)
 		heredoc_process(data, cmd);
-	if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1) // && has_redir(cmd) != 2)
+	if (cmd_id != 0 && cmd_id != data->cmd_nbr - 1)
 	{
 		fd_save = dup(fd_pipe[0]);
 		close_multiple_fds(fd_pipe);
@@ -96,8 +94,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 		ft_putstr_fd("pid error", 2);
 	else if (pid == 0)
 	{
-		// if (has_redir(cmd) != 2)
-			duplicator(fd_pipe, fd_save, cmd_id, data->cmd_nbr);
+		duplicator(fd_pipe, fd_save, cmd_id, data->cmd_nbr);
 		if (is_builtin(cmd->value))
 		{
 			status = execute_builtins(data, cmd, 1);
@@ -169,10 +166,11 @@ t_tok	*find_next_cmd(t_tok *cmds, int nbr)
 	return (cmds);
 }
 
-t_allocated	init_data(t_tok *env, t_tok *cmd_head)
+t_allocated	init_data(t_tok *env, t_tok *cmd_head, char **prompt)
 {
 	t_allocated	data;
 
+	data.prompt = prompt;
 	data.env = env;
 	data.cmd_head = cmd_head;
 	data.cmd_nbr = nb_cmds(cmd_head);
@@ -185,7 +183,7 @@ t_allocated	init_data(t_tok *env, t_tok *cmd_head)
 	return (data);
 }
 
-void	execution_controller(t_tok *env, t_tok *cmd_head)
+void	execution_controller(t_tok *env, t_tok *cmd_head, char **prompt)
 {
 	t_tok		*cmds;
 	t_allocated	data;
@@ -196,7 +194,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head)
 	if (!cmd_head)
 		return ;
 	cmds = cmd_head;
-	data = init_data(env, cmds);
+	data = init_data(env, cmds, prompt);
 	if (data.cmd_nbr == 1)
 	{
 		execute_simple_command(&data, cmds);

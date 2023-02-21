@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:18:25 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/17 18:04:24 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/21 16:39:01 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	free_allocated(t_allocated *data)
 	}
 	free_list(data->env);
 	free_list(data->cmd_head);
+	free(*data->prompt);
 	free(data->pids);
 }
 

@@ -3,24 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:22:58 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 02:03:54 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/21 12:46:41 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
 void	ft_ctrl_c_heredoc(int sig)
 {
 	(void)sig;
 	g_exit_code = 130;
-
 	// SIGNALS IN HEREDOC NOT FINISHED
 	printf("CTRL C IN HEREDOC\n");
-
 	close(0);
 }
 
@@ -40,17 +37,17 @@ void	launch_heredoc(t_allocated *data, char *delim, int *fd_pipe)
 		line = readline("> ");
 		if (!line)
 		{
-			ft_putstr_fd("bash: warning: here-document delimited by end-of-file (wanted '", 2);
+			ft_putstr_fd("bash: warning: \
+			here-document delimited by end-of-file (wanted '", 2);
 			ft_putstr_fd(delim, 2);
 			ft_putstr_fd("')", 2);
-			break;
+			break ;
 		}
 		if (!ft_strcmp(line, delim))
-			break;
+			break ;
 		ft_putstr_fd(line, fd_pipe[1]);
 		ft_putstr_fd("\n", fd_pipe[1]);
 	}
-
 	close_multiple_fds(fd_pipe);
 	ft_exit(data, 0);
 }
