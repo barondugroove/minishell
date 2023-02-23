@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 00:49:11 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/23 14:52:10 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head, char **prompt)
 		return ;
 	}
 	else if (data.cmd_nbr != 0)
-		multiple_executions(&data, cmds);
+		execute_multiple_command(&data, cmds);
 	else
 		handle_redirection(&data, cmds, 0);
 }

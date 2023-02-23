@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_with_pipes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:38:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/22 23:57:39 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/23 14:52:39 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 	data->pids[cmd_id] = pid;
 }
 
-void	multiple_executions(t_allocated *data, t_tok *cmds)
+void	execute_multiple_command(t_allocated *data, t_tok *cmds)
 {
 	int	fd_pipe[2];
 	int	status;

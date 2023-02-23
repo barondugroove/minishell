@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/22 23:59:57 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/23 15:24:08 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,11 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-# include <errno.h>
 # include <fcntl.h>
-# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <stddef.h>
-# include <stdio.h>
-# include <stdlib.h>
 # include <sys/wait.h>
-# include <sys/types.h>
 # include <sys/stat.h>
-# include <unistd.h>
 
 # define ERROR_CHAR '\x7F'
 # define K_CMD "C"
@@ -79,7 +72,7 @@ void		child_process(t_allocated *data, t_tok *cmd, \
 			int *fd_pipe, int cmd_id);
 int			execute_builtins(t_allocated *data, t_tok *cmds, int mode);
 void		execute_cmd(t_allocated *data, t_tok *cmds, int mode);
-void		multiple_executions(t_allocated *data, t_tok *cmds);
+void		execute_multiple_command(t_allocated *data, t_tok *cmds);
 
 // REDIRECTION
 void		handle_redirection(t_allocated *data, t_tok *cmd, int mode);
@@ -107,6 +100,7 @@ char		**convert_envp(t_tok *head);
 t_tok		*newtoken(char *data, char *key);
 void		newtoken_back(t_tok **head, char *data, char *key);
 void		replace_tok_value(char **val, char *new_val);
+void		remove_node(t_tok **head, t_tok *node_to_remove);
 
 // FREE_UTILS
 void		free_list(t_tok *head);
