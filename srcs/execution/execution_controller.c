@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 00:49:11 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/23 15:42:09 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	execute_cmd(t_allocated *data, t_tok *cmds, int mode)
 	char	*path;
 
 	handle_redirection(data, cmds, mode);
+	if (data->cmd_nbr == 0)
+		return ;
 	args = get_cmd(cmds);
 	check_directory(cmds->value, args, data);
 	if (data->cmd_nbr == 1)
@@ -116,16 +118,15 @@ void	execution_controller(t_tok *env, t_tok *cmd_head, char **prompt)
 		return ;
 	cmds = cmd_head;
 	data = init_data(env, cmds, prompt);
-	if (data.cmd_nbr == 1)
+	if (data.cmd_nbr <= 1)
 	{
 		execute_simple_command(&data, cmds);
 		free(data.pids);
 		dup_multiple_fds(data.fd_reset, 0, 1);
-		close_multiple_fds(data.fd_reset);
+		if (data.cmd_nbr == 1)
+			close_multiple_fds(data.fd_reset);
 		return ;
 	}
 	else if (data.cmd_nbr != 0)
 		multiple_executions(&data, cmds);
-	else
-		handle_redirection(&data, cmds, 0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/23 01:07:26 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/23 15:40:05 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,10 @@ void	handle_redirection(t_allocated *data, t_tok *cmd, int mode)
 		else if (has_redir(tmp) == 1)
 			status = set_redir_in(cmd, tmp, has_redir(tmp));
 		if (status)
+		{
+			close_multiple_fds(fd_pipe);
 			ft_exit(data, status);
+		}
 		if (nbr)
 			tmp = get_next_redir(tmp->next);
 	}
