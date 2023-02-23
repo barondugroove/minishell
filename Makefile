@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
+#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/02/21 20:49:15 by bchabot          ###   ########.fr        #
+#    Updated: 2023/02/22 23:55:23 by benjamincha      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SRCS = srcs/main.c \
 		srcs/parsing/init_env.c \
 		srcs/utils/utils.c \
 		srcs/utils/list_utils.c \
+		srcs/utils/signal_utils.c \
 		srcs/utils/free_utils.c \
 		srcs/utils/fds_utils.c \
 		srcs/utils/error_msgs.c

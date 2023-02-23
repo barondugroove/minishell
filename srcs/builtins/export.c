@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 12:56:04 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/22 22:54:45 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,62 +29,50 @@ void	print_export(t_tok *head)
 	}
 }
 
-int	check_errors_export(char *arg)
+int	check_arg(char *arg)
 {
 	int	i;
 
 	i = 0;
-	if (!arg || arg[0] == '+')
-	{
-		error_message_export(arg);
+	if (!arg)
 		return (1);
-	}
-	while (arg[i] && arg[i] != '=')
-	{
-		if ((!ft_isalpha(arg[i]) && arg[0] != '_') || arg[i] <= 32)
-		{
-			error_message_export(arg);
-			return (1);
-		}
-		else if (ft_isdigit(arg[i]) && !ft_isalpha(arg[0]) && arg[0] != '_')
-		{
-			error_message_export(arg);
-			return (1);
-		}
+	if (arg[0] == '=' || (!ft_isalpha(arg[i]) || arg[0] == '_'))
+		return (1);
+	i++;
+	while (arg[i] && (ft_isalnum(arg[i]) || arg[i] == '_'))
 		i++;
-	}
+	if (arg[i] == '+')
+		i++;
+	if (arg[i] && arg[i] != '=')
+		return (1);
+	if (arg[i] != '\0' && arg[i] != '=')
+		return (1);
 	return (0);
 }
 
-int	add_existing_var(t_tok **env, char *arg)
+int	add_existing_var(t_tok **env, char *arg, char *key, char *value)
 {
 	t_tok	*tmp;
-	char	*key;
-	char	*value;
-	char	*arg_copy;
 
 	tmp = *env;
-	arg_copy = ft_strdup(arg);
-	key = ft_strtok(arg_copy, "+=");
-	value = ft_strtok(NULL, "\0");
-	if (check_errors_export(key))
+	if (check_arg(key))
 		return (1);
 	while (tmp)
 	{
-		if (ft_strcmp(tmp->key, key) == 0)
+		if (!ft_strcmp(tmp->key, key) && ft_strcmp(key, "_"))
 		{
-			if (has_equal(arg) == 2)
-				tmp->value = ft_strjoin(tmp->value, value + 1);
+			if (has_equal(arg) == 2 && !ft_strcmp(tmp->value, "\x7F"))
+				tmp->value = ft_strdup(value);
+			else if (has_equal(arg) == 2 && tmp->value)
+				tmp->value = ft_strjoin(tmp->value, value);
 			else if (!value && has_equal(arg) == 1)
 				tmp->value = ft_strdup("\0");
 			else if (!tmp->value)
 				tmp->value = ft_strdup(value);
-			free(arg_copy);
 			return (0);
 		}
 		tmp = tmp->next;
 	}
-	free(arg_copy);
 	return (1);
 }
 
@@ -99,10 +87,13 @@ int	add_var(t_tok **env, char *args)
 	key = ft_strtok(arg_copy, "=");
 	value = ft_strtok(NULL, "\0");
 	status = 0;
-	if (check_errors_export(ft_strtok(key, "+")))
+	if (check_arg(key))
+	{
+		error_message_export(key);
 		return (1);
-	if (is_existing(env, key))
-		status = add_existing_var(env, args);
+	}
+	if (is_existing(env, ft_strtok(key, "+")))
+		status = add_existing_var(env, args, key, value);
 	else if (!value && has_equal(args) == 1)
 		newtoken_back(env, ft_strdup("\0"), ft_strdup(key));
 	else if (value && has_equal(args))

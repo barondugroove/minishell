@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_controller.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 20:46:17 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 00:49:11 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ int	execute_builtins(t_allocated *data, t_tok *cmds, int mode)
 	char	**args;
 	int		status;
 
-	if (has_redir(cmds))
-		handle_redirection(data, cmds, mode);
+	handle_redirection(data, cmds, mode);
 	status = 0;
 	args = get_cmd(cmds);
 	if (is_builtin(cmds->value) == 1)
@@ -72,7 +71,6 @@ int	execute_simple_command(t_allocated *data, t_tok *cmd)
 
 	status = 0;
 	child_signal_controller();
-	heredoc_process(data, cmd);
 	if (is_builtin(cmd->value))
 	{
 		g_exit_code = execute_builtins(data, cmd, 0);
@@ -113,15 +111,12 @@ void	execution_controller(t_tok *env, t_tok *cmd_head, char **prompt)
 {
 	t_tok		*cmds;
 	t_allocated	data;
-	int			fd_pipe[2];
-	int			status;
-	int			i;
 
 	if (!cmd_head)
 		return ;
 	cmds = cmd_head;
 	data = init_data(env, cmds, prompt);
-	if (data.cmd_nbr <= 1)
+	if (data.cmd_nbr == 1)
 	{
 		execute_simple_command(&data, cmds);
 		free(data.pids);
@@ -129,21 +124,8 @@ void	execution_controller(t_tok *env, t_tok *cmd_head, char **prompt)
 		close_multiple_fds(data.fd_reset);
 		return ;
 	}
-	if (pipe(fd_pipe) == -1)
-		printf("error pipe\n");
-	i = -1;
-	while (++i < data.cmd_nbr)
-	{
-		cmds = find_next_cmd(cmds, i);
-		child_process(&data, cmds, fd_pipe, i);
-	}
-	close_multiple_fds(fd_pipe);
-	i = -1;
-	while (++i < data.cmd_nbr)
-	{
-		waitpid(data.pids[i], &status, 0);
-		if (WIFEXITED(status))
-			g_exit_code = WEXITSTATUS(status);
-	}
-	free(data.pids);
+	else if (data.cmd_nbr != 0)
+		multiple_executions(&data, cmds);
+	else
+		handle_redirection(&data, cmds, 0);
 }

@@ -6,26 +6,32 @@
 /*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 14:47:47 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 01:53:16 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/23 01:07:22 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	redir_start(t_tok *cmd)
+t_tok	*redir_start(t_allocated *data, t_tok *cmd)
 {
 	t_tok	*tmp;
 
-	tmp = cmd;
+	tmp = data->cmd_head;
 	while (tmp)
 	{
 		if (*tmp->key == '<' || *tmp->key == '>')
-			return (1);
+		{
+			tmp = get_next_redir(data->cmd_head);
+			break ;
+		}
 		else if (*tmp->key == *K_CMD)
-			return (0);
+		{
+			tmp = get_next_redir(cmd);
+			break ;
+		}		
 		tmp = tmp->next;
 	}
-	return (0);
+	return (tmp);
 }
 
 int	has_redir(t_tok *cmds)
@@ -57,11 +63,9 @@ int	redir_nbr(t_tok *cmds)
 	i = 0;
 	while (tmp->next && *tmp->key != '|')
 	{
-		if (ft_strcmp(tmp->key, ">>") == 0)
+		if (*tmp->key == '>')
 			i++;
-		else if (*tmp->key == '>')
-			i++;
-		else if (*tmp->key == '<')
+		if (*tmp->key == '<')
 			i++;
 		tmp = tmp->next;
 	}
@@ -73,7 +77,7 @@ t_tok	*get_next_redir(t_tok *cmds)
 	t_tok	*tmp;
 
 	tmp = cmds;
-	while (tmp)
+	while (tmp && *tmp->key != '|')
 	{
 		if (*tmp->key == '>' || *tmp->key == '<')
 		{

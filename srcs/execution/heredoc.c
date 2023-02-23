@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:22:58 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 20:28:40 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 01:07:12 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	ft_ctrl_c_heredoc(int sig)
-{
-	(void)sig;
-	g_exit_code = 130;
-	close(0);
-}
 
 void	heredoc_signal_controller(void)
 {
@@ -29,7 +22,6 @@ void	launch_heredoc(t_allocated *data, char *delim, int *fd_pipe)
 {
 	char	*line;
 
-	heredoc_signal_controller();
 	while (1)
 	{
 		line = readline("> ");
@@ -38,7 +30,7 @@ void	launch_heredoc(t_allocated *data, char *delim, int *fd_pipe)
 			ft_putstr_fd("bash: warning: \
 			here-document delimited by end-of-file (wanted '", 2);
 			ft_putstr_fd(delim, 2);
-			ft_putstr_fd("')", 2);
+			ft_putstr_fd("')\n", 2);
 			break ;
 		}
 		if (!ft_strcmp(line, delim))
@@ -61,30 +53,29 @@ void	wait_heredoc(int pid)
 	return ;
 }
 
-void	heredoc_process(t_allocated *data, t_tok *cmd)
+int	heredoc_process(t_allocated *data, t_tok *cmd, int *fd_pipe)
 {
 	int		pipe_heredoc[2];
 	int		pid;
-	t_tok	*tmp;
 
+	heredoc_signal_controller();
 	if (has_redir(cmd) != 2)
-		return ;
+		return (1);
 	pipe(pipe_heredoc);
-	if (redir_start(data->cmd_head))
-		tmp = get_next_redir(data->cmd_head);
-	else
-		tmp = get_next_redir(cmd);
 	pid = fork();
 	if (pid == -1)
 		ft_putstr_fd("pid error", 2);
 	else if (pid == 0)
-		launch_heredoc(data, tmp->next->value, pipe_heredoc);
+	{
+		close_multiple_fds(fd_pipe);
+		launch_heredoc(data, cmd->next->value, pipe_heredoc);
+	}
 	else
 	{
 		wait_heredoc(pid);
-		if (redir_nbr(cmd->next) == 0)
+		if (redir_nbr(cmd->next) == 0 && data->cmd_nbr != 0)
 			dup2(pipe_heredoc[0], 0);
 		close_multiple_fds(pipe_heredoc);
 	}
-	return ;
+	return (0);
 }

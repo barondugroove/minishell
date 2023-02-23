@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:41:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 16:11:29 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/22 22:07:37 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,29 +43,6 @@ void	remove_node(t_tok **head, t_tok *node_to_remove)
 	free(node_to_remove);
 }
 
-int	check_errors_unset(char *arg)
-{
-	int	i;
-
-	i = -1;
-	if (!arg)
-		return (1);
-	while (arg[++i])
-	{
-		if ((!ft_isalpha(arg[i]) && arg[0] != '_') || arg[i] <= 32)
-		{
-			error_message_unset(arg);
-			return (1);
-		}
-		else if (ft_isdigit(arg[i]) && !ft_isalpha(arg[0]) && arg[0] != '_')
-		{
-			error_message_unset(arg);
-			return (1);
-		}
-	}
-	return (0);
-}
-
 int	unset(t_tok **env_head, char **key)
 {
 	t_tok	*tmp;
@@ -77,8 +54,11 @@ int	unset(t_tok **env_head, char **key)
 	{
 		while (tmp)
 		{
-			if (check_errors_unset(key[i]))
+			if (check_arg(key[i]))
+			{
+				error_message_unset(key[i]);
 				return (1);
+			}
 			if (!ft_strcmp(tmp->key, key[i]))
 			{
 				remove_node(env_head, tmp);

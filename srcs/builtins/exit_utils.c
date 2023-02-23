@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 20:12:45 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/13 15:14:31 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/22 21:57:51 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	is_digit(char *args)
 	return (0);
 }
 
-int	check_args(char **args)
+int	check_args_exit(char **args)
 {
 	int	i;
 

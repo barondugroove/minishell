@@ -3,39 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:36:07 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 18:40:36 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/22 23:55:18 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 int	g_exit_code = 0;
-
-void	child_c_handler(int sig)
-{
-	(void)sig;
-	g_exit_code = 130;
-	printf("\n");
-}
-
-void	child_signal_controller(void)
-{
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGINT, child_c_handler);
-}
-
-void	ctrl_c_handler(int sig)
-{
-	(void)sig;
-	g_exit_code = 130;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
 
 void	minishell(char **envp)
 {

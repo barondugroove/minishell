@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:18:25 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/21 16:39:01 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/22 23:49:45 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@ void	free_allocated(t_allocated *data)
 {
 	if (data->cmd_nbr == 1)
 	{
-		dup2(data->fd_reset[0], 0);
-		dup2(data->fd_reset[1], 1);
-		close(data->fd_reset[0]);
-		close(data->fd_reset[1]);
+		dup_multiple_fds(data->fd_reset, 0, 1);
+		close_multiple_fds(data->fd_reset);
 	}
 	free_list(data->env);
 	free_list(data->cmd_head);

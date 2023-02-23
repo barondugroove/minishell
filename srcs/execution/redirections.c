@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/21 20:28:14 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 01:07:26 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,19 +82,18 @@ void	handle_redirection(t_allocated *data, t_tok *cmd, int mode)
 	int		nbr;
 	int		status;
 	t_tok	*tmp;
+	int		fd_pipe[2];
 
 	status = 0;
-	if (redir_start(data->cmd_head))
-		tmp = get_next_redir(data->cmd_head);
-	else
-		tmp = get_next_redir(cmd);
+	tmp = redir_start(data, cmd);
 	if (!has_redir(tmp))
 		return ;
+	pipe(fd_pipe);
 	nbr = redir_nbr(tmp);
 	while (nbr--)
 	{
 		if (has_redir(tmp) == 2 && mode == 0)
-			heredoc_process(data, tmp);
+			heredoc_process(data, tmp, fd_pipe);
 		if (has_redir(tmp) > 2)
 			status = set_redir_out(tmp, has_redir(tmp));
 		else if (has_redir(tmp) == 1)
@@ -104,4 +103,5 @@ void	handle_redirection(t_allocated *data, t_tok *cmd, int mode)
 		if (nbr)
 			tmp = get_next_redir(tmp->next);
 	}
+	close_multiple_fds(fd_pipe);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:17:14 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/20 19:58:39 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/22 21:57:42 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	exit_builtin(char **args, t_allocated *data)
 		ft_exit(data, g_exit_code);
 	}
 	g_exit_code = 0;
-	status = check_args(args);
+	status = check_args_exit(args);
 	if (status)
 		return (status);
 	if (!is_valid_number(args[1]))
