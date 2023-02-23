@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 19:55:08 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 21:34:40 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,11 @@ void	execution_controller(t_tok *env, t_tok *cmd_head, char **prompt)
 		close_multiple_fds(data.fd_reset);
 		return ;
 	}
-	else if (data.cmd_nbr != 0)
+	else if (data.cmd_nbr != 0 && has_pipe(data.cmd_head))
 		execute_multiple_command(&data, cmds);
+	else
+	{
+		no_cmd_msg(cmd_head->value, 127);
+		free(data.pids);
+	}
 }

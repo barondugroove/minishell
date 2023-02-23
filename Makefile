@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+         #
+#    By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 12:26:21 by bchabot           #+#    #+#              #
-#    Updated: 2023/02/22 23:55:23 by benjamincha      ###   ########.fr        #
+#    Updated: 2023/02/23 20:41:06 by bchabot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/19 16:17:14 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/22 21:57:42 by benjamincha      ###   ########.fr       */
+/*   Created: 2023/01/19 16:17:14 by bchabot           #+#    #+#             */
+/*   Updated: 2023/02/23 20:41:58 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

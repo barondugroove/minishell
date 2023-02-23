@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/22 23:52:11 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/23 19:48:35 by bchabot          ###   ########.fr       */
+/*   Created: 2023/02/22 23:52:11 by bchabot           #+#    #+#             */
+/*   Updated: 2023/02/23 20:42:19 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	ft_ctrl_c_heredoc(int sig)
 {
-	(void)sig;
 	g_exit_code = -2;
+	(void)sig;
 	close(0);
 }
 

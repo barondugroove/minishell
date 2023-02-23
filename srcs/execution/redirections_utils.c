@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 14:47:47 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 01:07:22 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/23 20:41:29 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_tok	*redir_start(t_allocated *data, t_tok *cmd)
 		{
 			tmp = get_next_redir(cmd);
 			break ;
-		}		
+		}
 		tmp = tmp->next;
 	}
 	return (tmp);

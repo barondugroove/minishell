@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 19:51:08 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 21:32:12 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ void		set_pwd(t_tok *head, char *key, char *path);
 char		*test_relative_path(t_tok *env_tok, char *cmd);
 
 // SIGNAL_UTILS
+void		heredoc_signal_controller(void);
 void		child_signal_controller(void);
 void		child_c_handler(int sig);
 void		ctrl_c_handler(int sig);
