@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 17:41:14 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 20:00:08 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,9 @@ int	clean_token_list(t_tok *head, t_tok *env)
 		is_tok_cmd(tok, env);
 		if (check_redir_error(tok))
 			return (1);
-		else if ((!check_redir_error(tok) && (*tok->key == '<' || *tok->key == '>')) && tok->next)
-		{
-			tok = tok->next;
-			replace_tok_value(&tok->key, "A");
-		}
+		else if ((!check_redir_error(tok)
+				&& (*tok->key == '<' || *tok->key == '>')) && tok->next)
+			replace_tok_value(&tok->next->key, "A");
 		if (*tok->key == '|')
 		{
 			if (!tok->next || *tok->next->key == '|')
