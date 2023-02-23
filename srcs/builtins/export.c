@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:36:36 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 15:33:14 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 16:28:11 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ int	add_existing_var(t_tok **env, char *arg, char *key, char *value)
 		if (!ft_strcmp(tmp->key, key) && ft_strcmp(key, "_"))
 		{
 			if (has_equal(arg) == 2 && !ft_strcmp(tmp->value, "\x7F"))
+			{
+				free(tmp->value);
 				tmp->value = ft_strdup(value);
+			}
 			else if (has_equal(arg) == 2 && tmp->value)
 				tmp->value = ft_strjoin(tmp->value, value);
 			else if (!value && has_equal(arg) == 1)

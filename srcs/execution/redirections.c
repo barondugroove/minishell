@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/23 15:40:05 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 16:40:09 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,21 @@ int	set_redir_in(t_tok *cmd, t_tok *tmp, int dir)
 	return (0);
 }
 
-void	handle_redirection(t_allocated *data, t_tok *cmd, int mode)
+int	handle_redirection(t_allocated *data, t_tok *cmd, int *fd_pipe, int mode)
+{
+	int	status;
+
+	status = 0;
+	if (has_redir(cmd) == 2 && mode == 0)
+		heredoc_process(data, cmd, fd_pipe);
+	if (has_redir(cmd) > 2)
+		status = set_redir_out(cmd, has_redir(cmd));
+	else if (has_redir(cmd) == 1)
+		status = set_redir_in(cmd, cmd, has_redir(cmd));
+	return (status);
+}
+
+void	redirection_controller(t_allocated *data, t_tok *cmd, int mode)
 {
 	int		nbr;
 	int		status;
@@ -92,12 +106,7 @@ void	handle_redirection(t_allocated *data, t_tok *cmd, int mode)
 	nbr = redir_nbr(tmp);
 	while (nbr--)
 	{
-		if (has_redir(tmp) == 2 && mode == 0)
-			heredoc_process(data, tmp, fd_pipe);
-		if (has_redir(tmp) > 2)
-			status = set_redir_out(tmp, has_redir(tmp));
-		else if (has_redir(tmp) == 1)
-			status = set_redir_in(cmd, tmp, has_redir(tmp));
+		status = handle_redirection(data, tmp, fd_pipe, mode);
 		if (status)
 		{
 			close_multiple_fds(fd_pipe);

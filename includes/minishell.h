@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 12:26:12 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 15:45:57 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 16:40:58 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ void		execute_cmd(t_allocated *data, t_tok *cmds, int mode);
 void		execute_multiple_command(t_allocated *data, t_tok *cmds);
 
 // REDIRECTION
-void		handle_redirection(t_allocated *data, t_tok *cmd, int mode);
+int			handle_redirection(t_allocated *data, t_tok *cmd, int *fd_pipe, int mode);
+void		redirection_controller(t_allocated *data, t_tok *cmd, int mode);
 int			has_redir(t_tok *cmds);
 t_tok		*redir_start(t_allocated *data, t_tok *cmd);
 char		*get_file(t_tok *cmds, int nbr);

@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 15:47:39 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 16:41:44 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	execute_builtins(t_allocated *data, t_tok *cmds, int mode)
 	char	**args;
 	int		status;
 
-	handle_redirection(data, cmds, mode);
+	redirection_controller(data, cmds, mode);
 	status = 0;
 	args = get_cmd(cmds);
 	if (is_builtin(cmds->value) == 1)
@@ -44,7 +44,7 @@ void	execute_cmd(t_allocated *data, t_tok *cmds, int mode)
 	char	**envp;
 	char	*path;
 
-	handle_redirection(data, cmds, mode);
+	redirection_controller(data, cmds, mode);
 	if (data->cmd_nbr == 0)
 		return ;
 	args = get_cmd(cmds);
