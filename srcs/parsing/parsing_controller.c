@@ -6,7 +6,7 @@
 /*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 15:39:11 by rlaforge         ###   ########.fr       */
+/*   Updated: 2023/02/23 16:39:38 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	clean_token_list(t_tok *head, t_tok *env)
 			return (1);
 		if (*tok->key == '|')
 		{
-			if (!tok->next)
+			if (!tok->next || *tok->next->key == '|')
 				return (1);
 			else if (*tok->next->key == 'A')
 				replace_tok_value(&tok->next->key, "C");
