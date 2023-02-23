@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   signal_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
+/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 23:52:11 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/23 00:35:51 by benjamincha      ###   ########.fr       */
+/*   Updated: 2023/02/23 19:48:35 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	ft_ctrl_c_heredoc(int sig)
+{
+	(void)sig;
+	g_exit_code = -2;
+	close(0);
+}
 
 void	child_signal_controller(void)
 {
@@ -40,11 +47,4 @@ void	ctrl_c_handler(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-}
-
-void	ft_ctrl_c_heredoc(int sig)
-{
-	(void)sig;
-	g_exit_code = 130;
-	close(0);
 }

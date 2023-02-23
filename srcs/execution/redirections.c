@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 13:45:58 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/23 16:40:09 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 19:51:50 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	handle_redirection(t_allocated *data, t_tok *cmd, int *fd_pipe, int mode)
 
 	status = 0;
 	if (has_redir(cmd) == 2 && mode == 0)
-		heredoc_process(data, cmd, fd_pipe);
+		status = heredoc_process(data, cmd, fd_pipe);
 	if (has_redir(cmd) > 2)
 		status = set_redir_out(cmd, has_redir(cmd));
 	else if (has_redir(cmd) == 1)

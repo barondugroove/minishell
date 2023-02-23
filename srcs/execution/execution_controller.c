@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 16:41:44 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 19:55:08 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,11 @@ void	execute_cmd(t_allocated *data, t_tok *cmds, int mode)
 
 	redirection_controller(data, cmds, mode);
 	if (data->cmd_nbr == 0)
-		return ;
+		ft_exit(data, 0);
 	args = get_cmd(cmds);
 	check_directory(cmds->value, args, data);
-	if (data->cmd_nbr == 1)
-	{
-		close(data->fd_reset[0]);
-		close(data->fd_reset[1]);
-	}
+	if (data->cmd_nbr <= 1)
+		close_multiple_fds(data->fd_reset);
 	path = get_path(data->env, args[0]);
 	envp = convert_envp(data->env);
 	if (!path || (execve(path, args, envp) == -1))
@@ -101,7 +98,7 @@ t_allocated	init_data(t_tok *env, t_tok *cmd_head, char **prompt)
 	data.cmd_head = cmd_head;
 	data.cmd_nbr = nb_cmds(cmd_head);
 	data.pids = malloc(sizeof(int) * data.cmd_nbr);
-	if (data.cmd_nbr == 1)
+	if (data.cmd_nbr <= 1)
 	{
 		data.fd_reset[0] = dup(0);
 		data.fd_reset[1] = dup(1);
@@ -123,8 +120,7 @@ void	execution_controller(t_tok *env, t_tok *cmd_head, char **prompt)
 		execute_simple_command(&data, cmds);
 		free(data.pids);
 		dup_multiple_fds(data.fd_reset, 0, 1);
-		if (data.cmd_nbr == 1)
-			close_multiple_fds(data.fd_reset);
+		close_multiple_fds(data.fd_reset);
 		return ;
 	}
 	else if (data.cmd_nbr != 0)

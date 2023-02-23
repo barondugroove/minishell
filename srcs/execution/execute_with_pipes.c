@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 20:38:41 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 15:50:06 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 19:52:52 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	child_process(t_allocated *data, t_tok *cmd, int *fd_pipe, int cmd_id)
 		close_multiple_fds(fd_pipe);
 		pipe(fd_pipe);
 	}
-	heredoc_process(data, cmd, fd_pipe);
+	heredoc_process(data, cmd->next, fd_pipe);
 	pid = fork();
 	if (pid == -1)
 		ft_putstr_fd("pid error", 2);
