@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 23:18:25 by benjamincha       #+#    #+#             */
-/*   Updated: 2023/02/23 19:44:46 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 19:58:24 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	free_allocated(t_allocated *data)
 {
-
 	if (data->cmd_nbr <= 1)
 	{
 		dup_multiple_fds(data->fd_reset, 0, 1);
