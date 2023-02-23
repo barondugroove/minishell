@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   change_dir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: benjaminchabot <benjaminchabot@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 20:08:33 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/20 19:57:07 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 01:24:06 by benjamincha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	cd(char **args, t_tok *env)
 	}
 	if (chdir(args[1]) < 0)
 	{
-		no_file_msg(str, 1);
+		no_file_msg(args[1], 1);
 		return (1);
 	}
 	set_pwd(env, "OLDPWD", getcwd(str, sizeof(str)));
