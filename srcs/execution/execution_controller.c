@@ -6,7 +6,7 @@
 /*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:25:27 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/23 15:42:09 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 15:47:39 by bchabot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,5 @@ void	execution_controller(t_tok *env, t_tok *cmd_head, char **prompt)
 		return ;
 	}
 	else if (data.cmd_nbr != 0)
-		multiple_executions(&data, cmds);
+		execute_multiple_command(&data, cmds);
 }

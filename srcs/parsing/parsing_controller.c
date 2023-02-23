@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_controller.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bchabot <bchabot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rlaforge <rlaforge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 17:36:49 by bchabot           #+#    #+#             */
-/*   Updated: 2023/02/21 20:32:38 by bchabot          ###   ########.fr       */
+/*   Updated: 2023/02/23 15:39:11 by rlaforge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,13 @@
 
 int	check_redir_error(t_tok *tok)
 {
-	t_tok	*buf;
-
 	if (tok->next && tok->next->next && (*tok->key == '<' || *tok->key == '>')
 		&& (*tok->next->key == '<' || *tok->next->key == '>')
 		&& (*tok->next->next->key == '<' || *tok->next->next->key == '>'))
 		return (1);
 	if (tok->next && ((*tok->key == '<' && *tok->next->key == '>')
 			|| (*tok->key == '>' && *tok->next->key == '<')))
-		return (1);
+		return (1);	
 	if (*tok->key == '<' || *tok->key == '>')
 	{
 		if (tok->next && *tok->next->key == *tok->key)
@@ -31,13 +29,12 @@ int	check_redir_error(t_tok *tok)
 				replace_tok_value(&tok->key, ">>");
 			else
 				replace_tok_value(&tok->key, "<<");
-			buf = tok->next;
-			tok->next = tok->next->next;
-			free(buf->key);
-			free(buf->value);
-			free(buf);
+			remove_node(&tok, tok->next);
 		}
 	}
+	if (((*tok->key == '<' || *tok->key == '>')
+			&& (!tok->next || *tok->next->key == '|')))
+		return (1);
 	return (0);
 }
 
