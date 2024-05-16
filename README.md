@@ -2,9 +2,9 @@
 <div align="center">
   <h1>🤏 Minishell 🐚</h1>
   <h3>As beautiful as a shell</h3>
-  <a href="https://open.spotify.com/track/18pedqpot9iF1Z7Ol3YHmc" target="_blank"><img src=https://f4.bcbits.com/img/a1843066470_10.jpg width="35%">
-  </a></img>
 </div>
+
+![minishell](https://github.com/barondugroove/minishell/assets/96781563/346696f5-4443-4bb8-9e2f-fddc550802ec)
 
 ## 📖 Description
 
